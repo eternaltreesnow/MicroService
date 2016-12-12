@@ -1,0 +1,28 @@
+{
+  "name": "auth_login",
+  "version": "1.0.0",
+  "description": "This is the login part of Authorization",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eternaltreesnow/MicroService/AuthLogin"
+  },
+  "keywords": [
+    "microservice",
+    "node",
+    "authorization"
+  ],
+  "author": "dickzheng",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "morgan": "^1.7.0",
+    "mysql": "^2.12.0",
+    "q": "^1.4.1",
+    "sql-query": "^0.1.26"
+  }
+}
