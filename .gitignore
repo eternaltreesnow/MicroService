@@ -48,3 +48,6 @@ Temporary Items
 
 # node_modules
 /**/node_modules/*
+
+# log file
+/**/log_*

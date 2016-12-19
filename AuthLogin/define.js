@@ -15,4 +15,8 @@ module.exports = function define() {
     this.VALID_SUCCESS = '600';
     this.VALID_LACK_PARAM = '601';
     this.VALID_PARAM_TYPE_ERROR = '602';
+    this.LOGIN_LACK_PARAM_USERNAME = '1001';
+    this.LOGIN_LACK_PARAM_PWD = '1002';
+    this.LOGIN_WORNG_PWD = '1003';
+    this.LOGIN_SUCCESS = '1004';
 }
