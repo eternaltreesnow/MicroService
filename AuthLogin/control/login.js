@@ -14,31 +14,55 @@ Login.login = function(req, res) {
     Logger.console('login controller');
     let username = req.body.username;
     let password = req.body.password;
+    let src = req.body.src;
 
+    // 检查用户名&密码
     loginModel.checkParam(username, password)
-        .then(result => {
-            if(result.result === KeyDefine.RESULT_SUCCESS) {
-                Logger.console(result.desc);
+        .then(checkResult => {
+            Logger.console(checkResult.desc);
+            if(checkResult.code === KeyDefine.RESULT_SUCCESS) {
+                // 登录请求
                 loginModel.login(username, password)
-                    .then(result => {
-                        if(result.result === KeyDefine.LOGIN_SUCCESS) {
-                            let userId = result.data;
-                            session.register(userId)
-                                .then(result => {
-
-                                }, error => {
-
+                    .then(loginResult => {
+                        Logger.console(loginResult.desc);
+                        if(loginResult.code === KeyDefine.LOGIN_SUCCESS) {
+                            let userData = loginResult.data;
+                            // 注册session
+                            session.register(userData)
+                                .then(sessionResult => {
+                                    Logger.console(sessionResult.desc);
+                                    if(sessionResult.code === KeyDefine.RESULT_SUCCESS) {
+                                        // 将session信息存储到redis和cookie中
+                                        req.session.data = JSON.stringify(sessionResult.data);
+                                        if(src && src.length > 0) {
+                                            res.redirect(src);
+                                        } else {
+                                            res.send(req.session);
+                                        }
+                                    } else {
+                                        res.send(sessionResult);
+                                    }
+                                }, sessionError => {
+                                    res.send(sessionError);
                                 });
                         } else {
-                            res.send(result);
+                            res.send(loginResult);
                         }
-                    }, error => {
-                        res.send(error);
+                    }, loginError => {
+                        res.send(loginError);
                     });
+            } else {
+                res.send(checkResult);
             }
-        }, error => {
-            res.send(error);
+        }, checkError => {
+            res.send(checkError);
         });
+};
+
+Login.loginView = function(req, res) {
+    res.render('../view/login', {
+        src: req.query.src
+    });
 };
 
 module.exports = Login;

@@ -25,7 +25,7 @@ DBPool.getConnection = function() {
             defer.reject(err);
         } else {
             Logger.console('Mysql get connection successfully.');
-            Logger.log('Mysql get connection successfully.');
+            // Logger.log('Mysql get connection successfully.');
             defer.resolve(connection);
         }
     });

@@ -7,10 +7,12 @@ const verify = require('./control/verify');
 
 let router = Express.Router();
 
-router.post('/login', login);
+router.post('/login', login.login);
 
-router.post('/register', register);
+router.get('/login', login.loginView);
 
-router.get('/verify', verify);
+// router.post('/register', register);
+
+router.get('/verify', verify.verify);
 
 module.exports = router;

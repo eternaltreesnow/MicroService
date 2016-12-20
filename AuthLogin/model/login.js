@@ -19,20 +19,20 @@ loginModel.checkParam = (username, password) => {
     let defer = Q.defer();
 
     let result = {
-        result: KeyDefine.RESULT_FAILED,
+        code: KeyDefine.RESULT_FAILED,
         desc: 'Unknowed error'
     };
 
     if(username === undefined || username.length === 0) {
-        result.result = KeyDefine.LACK_PARAM_USERNAME;
+        result.code = KeyDefine.LACK_PARAM_USERNAME;
         result.desc = 'Lack of username';
         defer.reject(result);
     } else if(password === undefined || password.length === 0) {
-        result.result = KeyDefine.LACK_PARAM_PWD;
+        result.code = KeyDefine.LACK_PARAM_PWD;
         result.desc = 'Lack of password';
         defer.reject(result);
     } else if(username.length > 0 && password.length > 0) {
-        result.result = KeyDefine.RESULT_SUCCESS;
+        result.code = KeyDefine.RESULT_SUCCESS;
         result.desc = 'Params valid';
         defer.resolve(result);
     } else {
@@ -48,8 +48,8 @@ loginModel.login = (username, password) => {
     let result = {
         request: KeyDefine.ACTION_LOGIN,
         target: KeyDefine.TABLE_NAME,
-        result: KeyDefine.RESULT_FAILED,
-        desc: 'Unknowed error',
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Login Model: Unknowed error',
         data: null
     };
 
@@ -65,27 +65,30 @@ loginModel.login = (username, password) => {
             connection.query(queryOption, (err, rows) => {
                 Logger.console(queryOption);
                 if(err) {
-                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME + ': ' + err);
+                    Logger.console('Login Model: Error in QUERY ' + KeyDefine.TABLE_NAME + ': ' + err);
                     defer.reject(err);
                 } else if(rows.length <= 0) {
-                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME + ': username=' + username);
-                    result.result = KeyDefine.RESULT_EMPTY;
-                    result.desc = 'Empty in QUERY ' + KeyDefine.TABLE_NAME + ': username=' + username;
+                    Logger.console('Login Model: Empty in QUERY ' + KeyDefine.TABLE_NAME + ': username=' + username);
+                    result.code = KeyDefine.RESULT_EMPTY;
+                    result.desc = 'Login Model: Empty in QUERY ' + KeyDefine.TABLE_NAME + ': username=' + username;
                     defer.resolve(result);
                 } else {
-                    Logger.console('Success in QUERY ' + KeyDefine.TABLE_NAME + ': username=' + username);
-                    Logger.console('Result: ' + JSON.stringify(rows));
+                    Logger.console('Login Model: Success in QUERY ' + KeyDefine.TABLE_NAME + ': username=' + username);
+                    Logger.console('Login Model: Result: ' + JSON.stringify(rows));
 
                     if(password === rows[0].password) {
-                        Logger.console('Password matched: username=' + username);
-                        result.result = KeyDefine.LOGIN_SUCCESS;
-                        result.desc = 'Password matched, login successfully';
-                        result.data = rows[0].id;
+                        Logger.console('Login Model: Password matched: username=' + username);
+                        result.code = KeyDefine.LOGIN_SUCCESS;
+                        result.desc = 'Login Model: Password matched, login successfully';
+                        result.data = {
+                            userId: rows[0].id,
+                            username: rows[0].username
+                        };
                         defer.resolve(result);
                     } else {
-                        Logger.console('Password don\'t match: username=' + username);
-                        result.result = KeyDefine.LOGIN_WORNG_PWD;
-                        result.desc = 'Password don\'t match';
+                        Logger.console('Login Model: Password don\'t match: username=' + username);
+                        result.code = KeyDefine.LOGIN_WORNG_PWD;
+                        result.desc = 'Login Model: Password don\'t match';
                         defer.resolve(result);
                     }
                 }
@@ -97,3 +100,4 @@ loginModel.login = (username, password) => {
     return defer.promise;
 };
 
+module.exports = loginModel;
