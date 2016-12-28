@@ -20,4 +20,6 @@ module.exports = function define() {
     this.LOGIN_LACK_PARAM_PWD = '1002';
     this.LOGIN_WORNG_PWD = '1003';
     this.LOGIN_SUCCESS = '1004';
+    this.LOGIN_STATUS_ON = '1005';
+    this.LOGIN_STATUS_OFF = '1006';
 }

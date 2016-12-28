@@ -15,4 +15,10 @@ router.get('/login', login.loginView);
 
 router.get('/verify', verify.verify);
 
+router.get('/test1', (req, res) => {
+    console.log('test1');
+    res.send('200');
+    res.end();
+});
+
 module.exports = router;

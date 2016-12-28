@@ -32,8 +32,15 @@ Login.login = function(req, res) {
                                 .then(sessionResult => {
                                     Logger.console(sessionResult.desc);
                                     if(sessionResult.code === KeyDefine.RESULT_SUCCESS) {
+                                        console.log(req.session.id);
+                                        let sessionId = req.session.id;
+                                        let sessionData = JSON.stringify(sessionResult.data);
                                         // 将session信息存储到redis和cookie中
-                                        req.session.data = JSON.stringify(sessionResult.data);
+                                        req.session.data = sessionData;
+
+                                        // TODO: send http req to session setter api
+
+
                                         if(src && src.length > 0) {
                                             res.redirect(src);
                                         } else {

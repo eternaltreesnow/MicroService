@@ -33,7 +33,7 @@ let redisClient = function() {
         Logger.console('Redis connection closed');
     });
 
-    return defer.promise();
+    return defer.promise;
 }
 
 module.exports = redisClient;
