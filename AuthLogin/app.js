@@ -1,13 +1,13 @@
 'use strict'
 
 const Express = require('express');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const redisStore = require('connect-redis')(session);
 const router = require('./router');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const Logger = require('./log/logger');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const redisStore = require('connect-redis')(session);
 
 const app = Express();
 
@@ -40,9 +40,6 @@ app.use(morgan('dev'));
 
 app.use('/', router);
 
-// initial logger file
-// Logger.init();
-
-const server = app.listen('10000', () => {
+const server = app.listen('10002', () => {
     Logger.console('Auth server listening on: ' + server.address().port);
 });

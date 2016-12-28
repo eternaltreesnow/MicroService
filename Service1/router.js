@@ -58,17 +58,22 @@ router.get('/session', (req, res) => {
 });
 
 router.get('/test', (req, res) => {
-    Request('http://localhost:10000/test1', function(err, response, body) {
-        console.log(response.statusCode);
-        res.sendStatus(response.statusCode);
-        res.end();
+    Request('http://localhost:10003/test1', function(err, response, body) {
+        if(err) {
+            console.log(err);
+            res.send(err);
+            res.end();
+        } else {
+            console.log(response.statusCode);
+            res.sendStatus(response.statusCode);
+            res.end();
+        }
     });
 });
 
 router.get('/test1', (req, res) => {
     console.log('test1');
-    res.sendStatus('200');
-    res.end();
+    res.end(JSON.stringify('200'));
 });
 
 module.exports = router;
