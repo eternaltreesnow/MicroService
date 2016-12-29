@@ -29,7 +29,7 @@ Logger.log = function(content) {
 };
 
 Logger.console = function(content) {
-    console.log(new Date().toLocaleString('zh-CN') + ': ' + content);
+    console.log(new Date().toLocaleString('zh-CN') + ': ', content);
 };
 
 module.exports = Logger;

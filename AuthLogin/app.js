@@ -32,7 +32,7 @@ app.use(session({
         prefix: 'session:'
     }),
     cookie: {
-        maxAge: 180 * 1000 // 过期时间(ms)
+        maxAge: 20 * 60 * 1000 // 过期时间(ms)
     }
 }));
 
@@ -40,6 +40,6 @@ app.use(morgan('dev'));
 
 app.use('/', router);
 
-const server = app.listen('10002', () => {
+const server = app.listen('10001', () => {
     Logger.console('Auth server listening on: ' + server.address().port);
 });

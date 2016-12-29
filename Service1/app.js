@@ -21,6 +21,6 @@ app.use(morgan('dev'));
 
 app.use('/', router);
 
-const server = app.listen('10001', () => {
+const server = app.listen('10002', () => {
     Logger.console('Service 1 listening on: ' + server.address().port);
 });

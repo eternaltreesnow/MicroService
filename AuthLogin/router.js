@@ -16,28 +16,4 @@ router.get('/login', login.loginView);
 
 router.get('/verify', verify.verify);
 
-router.get('/test1', (req, res) => {
-    console.log(req.headers);
-    res.send();
-});
-
-router.get('/test', (req, res) => {
-    Request('http://localhost:10002/test1', function(err, response, body) {
-        if(err) {
-            console.log('BODY: ');
-            console.log(body);
-            console.log('RESPONSE: ');
-            console.log(response);
-            console.log('ERROR: ');
-            console.log(err);
-            res.send(err);
-            res.end();
-        } else {
-            console.log(response.statusCode);
-            res.sendStatus(response.statusCode);
-            res.end();
-        }
-    });
-});
-
 module.exports = router;

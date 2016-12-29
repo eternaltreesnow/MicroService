@@ -25,7 +25,6 @@ Verify.verify = function(sessionId) {
                 } else {
                     Logger.console('Verify Model: Reach session data');
                     let session = JSON.parse(reply);
-                    console.log(session);
                     if(session && session.data) {
                         result.code = KeyDefine.RESULT_SUCCESS;
                         result.data = session.data;
