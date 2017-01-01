@@ -3,7 +3,7 @@
 const Express = require('express');
 const http = require('http');
 const Request = require('request');
-const Logger = require('./log/logger');
+const Logger = require('./util/logger');
 const Define = require('./define');
 
 const service = require('./control/service');

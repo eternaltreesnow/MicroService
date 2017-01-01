@@ -5,6 +5,7 @@ const router = require('./router');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const Logger = require('./util/logger');
+const serverOS = require('./util/isWindows');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const redisStore = require('connect-redis')(session);
@@ -42,11 +43,11 @@ app.use('/', router);
 
 process.on('uncaughtException', function(e) {
     if (/\blisten EACCES\b/.test(e.message) && (serverOS.isOSX || serverOS.isLinux)) {
-        logger.error('This is OSX/Linux, you may need to use "sudo" prefix to start server.\n');
+        Logger.console('This is OSX/Linux, you may need to use "sudo" prefix to start server.\n');
     }
 
-    logger.error(e && e.stack);
-})
+    Logger.console(e && e.stack);
+});
 
 const server = app.listen('10001', () => {
     Logger.console('Auth server listening on: ' + server.address().port);

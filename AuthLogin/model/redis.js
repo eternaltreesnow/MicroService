@@ -2,7 +2,7 @@
 
 const redis = require('redis');
 const Q = require('q');
-const Logger = require('../log/logger');
+const Logger = require('../util/logger');
 
 const RDS_CONFIG = {
     host: '54.187.245.212',

@@ -2,7 +2,7 @@
 
 const Q = require('q');
 const Define = require('../define');
-const Logger = require('../log/logger');
+const Logger = require('../util/logger');
 
 let KeyDefine = new Define;
 

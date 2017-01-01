@@ -2,7 +2,7 @@
 
 const Q = require('q');
 const mysql = require('mysql');
-const Logger = require('../log/logger');
+const Logger = require('../util/logger');
 
 const DBConfig = {
     database: 'auth',

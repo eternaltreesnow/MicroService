@@ -3,7 +3,7 @@
 const Q = require('q');
 const Define = require('../define');
 const DBPool = require('./dbpool');
-const Logger = require('../log/logger');
+const Logger = require('../util/logger');
 const sqlQuery = require('sql-query').Query();
 
 let KeyDefine = new Define;

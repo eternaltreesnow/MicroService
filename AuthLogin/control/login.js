@@ -1,7 +1,7 @@
 'use strict'
 
 const Q = require('q');
-const Logger = require('../log/logger');
+const Logger = require('../util/logger');
 const Define = require('../define');
 const loginModel = require('../model/login');
 const session = require('./session');
