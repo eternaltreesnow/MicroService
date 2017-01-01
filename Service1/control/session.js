@@ -21,12 +21,13 @@ Session.check = function(sessionId) {
 
 Session.set = function(session) {
     let code = KeyDefine.RESULT_FAILED;
-    let sessionId = session.sessionId
+    let sessionId = session.sessionId;
     let sessionData = session.sessionData;
     if(Cache.set(sessionId, sessionData)) {
         Logger.console('Session Cache: ' + sessionId + ': ' + sessionData);
         code = KeyDefine.RESULT_SUCCESS;
     }
+    Logger.console('Session: ' + sessionId + ': ' + Cache.get(sessionId));
     return code;
 };
 

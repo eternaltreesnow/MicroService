@@ -12,7 +12,7 @@ let Verify = {};
 Verify.verify = function(req, res) {
     let result = {
         code: KeyDefine.RESULT_REDIRECT,
-        url: 'http://localhost:10000/login'
+        url: 'http://' + req.headers.host + '/login'
     };
     let sessionId = req.query.sessionId;
     Logger.console('Verify Control: sessionId = ' + sessionId);
@@ -20,6 +20,7 @@ Verify.verify = function(req, res) {
     if(sessionId && sessionId.length > 0) {
         verifyModel.verify(sessionId)
             .then(verifyResult => {
+                Logger.console(verifyResult);
                 if(verifyResult.code === KeyDefine.RESULT_SUCCESS) {
                     result.code = KeyDefine.RESULT_SUCCESS;
                     result.data = {

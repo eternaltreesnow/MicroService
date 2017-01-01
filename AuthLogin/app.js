@@ -4,7 +4,7 @@ const Express = require('express');
 const router = require('./router');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const Logger = require('./log/logger');
+const Logger = require('./util/logger');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const redisStore = require('connect-redis')(session);
@@ -32,7 +32,7 @@ app.use(session({
         prefix: 'session:'
     }),
     cookie: {
-        maxAge: 180 * 1000 // 过期时间(ms)
+        maxAge: 20 * 60 * 1000 // 过期时间(ms)
     }
 }));
 
@@ -40,6 +40,14 @@ app.use(morgan('dev'));
 
 app.use('/', router);
 
-const server = app.listen('10002', () => {
+process.on('uncaughtException', function(e) {
+    if (/\blisten EACCES\b/.test(e.message) && (serverOS.isOSX || serverOS.isLinux)) {
+        logger.error('This is OSX/Linux, you may need to use "sudo" prefix to start server.\n');
+    }
+
+    logger.error(e && e.stack);
+})
+
+const server = app.listen('10001', () => {
     Logger.console('Auth server listening on: ' + server.address().port);
 });

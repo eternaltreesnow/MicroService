@@ -8,6 +8,7 @@ const Define = require('./define');
 
 const service = require('./control/service');
 const session = require('./control/session');
+const Cache = require('./control/cache')();
 
 let KeyDefine = new Define();
 
@@ -19,32 +20,38 @@ function authenticate(req, res, callback) {
     if(req.signedCookies['connect.sid']) {
         sessionId = req.signedCookies['connect.sid'];
         Logger.console('Auth: ' + sessionId);
-    } else {
-        Logger.console('Auth: Null session id');
-    }
 
-    // 将sessionId请求到verify接口进行验证
-    let request = http.get('http://localhost:10000/verify?sessionId=' + sessionId, (response) => {
-        response.setEncoding('utf8');
-        console.log(response.statusCode);
-        response.on('data', (data) => {
-            data = JSON.parse(data);
-            console.log(data);
-            if(data.code === KeyDefine.RESULT_SUCCESS) {
-                Logger.console('Verify successfully');
-                if(session.set(data.data) === KeyDefine.RESULT_SUCCESS) {
-                    callback(req, res);
-                }
-            } else if(data.code === KeyDefine.RESULT_REDIRECT) {
-                Logger.console('Verify failed');
-                res.redirect(data.url + '?src=http://' + req.headers.host);
-            } else {
-                res.end(JSON.stringify(data));
-            }
-        });
-    }).on('error', (e) => {
-        console.log(e);
-    });
+        // 本地cache进行验证
+        if(Cache.get(sessionId)) {
+            Logger.console('Auth: Cache get');
+            callback(req,res);
+        } else {
+            // 将sessionId请求到verify接口进行验证
+            let request = http.get('http://localhost:10001/verify?sessionId=' + sessionId, (response) => {
+                response.setEncoding('utf8');
+                response.on('data', (data) => {
+                    data = JSON.parse(data);
+                    if(data.code === KeyDefine.RESULT_SUCCESS) {
+                        Logger.console('Auth: Verify successfully');
+                        if(session.set(data.data) === KeyDefine.RESULT_SUCCESS) {
+                            callback(req, res);
+                        }
+                    } else if(data.code === KeyDefine.RESULT_REDIRECT) {
+                        Logger.console('Auth: Verify failed');
+                        res.redirect(data.url + '?src=http://' + req.headers.host);
+                    } else {
+                        res.end(JSON.stringify(data));
+                    }
+                });
+            }).on('error', (e) => {
+                console.log(e);
+            });
+        }
+    } else {
+        // 空sessionId直接跳转登录
+        Logger.console('Auth: Null session id');
+        res.redirect('http://localhost:10001/login' + '?src=http://' + req.headers.host);
+    }
 }
 
 router.get('/', (req, res) => {
@@ -55,25 +62,6 @@ router.get('/session', (req, res) => {
     let sessionId = req.query.sessionId;
     res.send(session.check(sessionId));
     res.end();
-});
-
-router.get('/test', (req, res) => {
-    Request('http://localhost:10003/test1', function(err, response, body) {
-        if(err) {
-            console.log(err);
-            res.send(err);
-            res.end();
-        } else {
-            console.log(response.statusCode);
-            res.sendStatus(response.statusCode);
-            res.end();
-        }
-    });
-});
-
-router.get('/test1', (req, res) => {
-    console.log('test1');
-    res.end(JSON.stringify('200'));
 });
 
 module.exports = router;
