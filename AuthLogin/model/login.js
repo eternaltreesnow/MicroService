@@ -1,7 +1,7 @@
 'use strict'
 
 const Q = require('q');
-const Define = require('../define');
+const Define = require('../util/define');
 const DBPool = require('./dbpool');
 const Logger = require('../util/logger');
 const sqlQuery = require('sql-query').Query();

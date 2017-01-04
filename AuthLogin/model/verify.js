@@ -3,7 +3,7 @@
 const Q = require('q');
 const Logger = require('../util/logger');
 const redisClient = require('./redis');
-const Define = require('../define');
+const Define = require('../util/define');
 
 let KeyDefine = new Define();
 

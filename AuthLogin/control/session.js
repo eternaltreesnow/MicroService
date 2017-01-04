@@ -2,7 +2,7 @@
 
 const Q = require('q');
 const Logger = require('../util/logger');
-const Define = require('../define');
+const Define = require('../util/define');
 const sessionModel = require('../model/session');
 
 let KeyDefine = new Define();
