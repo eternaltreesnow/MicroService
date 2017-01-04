@@ -6,11 +6,11 @@ const Define = require('../util/define');
 
 let KeyDefine = new Define();
 
-let Service = {};
+let Status = {};
 
-Service.demo = function(req, res) {
+Status.demo = function(req, res) {
     console.log('This is a demo');
     res.send('This is a demo');
 };
 
-module.exports = Service;
+module.exports = Status;

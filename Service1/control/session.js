@@ -1,9 +1,9 @@
 'use strict'
 
 const Q = require('q');
-const Logger = require('../log/logger');
-const Define = require('../define');
-const Cache = require('./cache')();
+const Logger = require('../util/logger');
+const Define = require('../util/define');
+const Cache = require('../util/cache')();
 
 let KeyDefine = new Define();
 
