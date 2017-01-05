@@ -5,6 +5,7 @@ const Logger = require('../util/logger');
 const Define = require('../util/define');
 
 const actionModel = require('../model/action');
+const clinicControl = require('./clinic');
 
 let KeyDefine = new Define();
 
@@ -15,7 +16,20 @@ Action.transfer = function(req, res) {
     let actionId = req.body.actionId;
     let userId = req.body.userId;
 
+    clinicControl.getClinic(clinicId)
+        .then(clinicResult => {
+            if(clinicResult.code === KeyDefine.RESULT_SUCCESS) {
+                return Action.getAction(actionId);
+            } else if(clinicResult.code === KeyDefine.RESULT_EMPTY) {
 
+            } else {
+
+            }
+        }).catch(error => {
+
+        }).then(actionResult => {
+
+        })
 };
 
 Action.getAction = function(actionId) {
