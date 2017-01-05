@@ -14,18 +14,32 @@ Action.transfer = function(req, res) {
     let clinicId = req.body.clinicId;
     let actionId = req.body.actionId;
     let userId = req.body.userId;
+
+
 };
 
-Action.getAction = function(req, res) {
-    let actionId = req.query.id;
+Action.getAction = function(actionId) {
+    let defer = Q.defer();
+    let result = {
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Action Control: Unknowed error',
+        data: null
+    };
+
     actionModel.get(actionId)
         .then(actionResult => {
+            result.code = actionResult.code;
+            result.desc = actionResult.desc;
             if(actionResult.code === KeyDefine.RESULT_SUCCESS) {
-                res.send(actionResult);
+                result.data = actionResult.data;
             }
+            defer.resolve(result);
         }, error => {
-            res.send(error);
+            Logger.console(error);
+            result.desc = 'Action Model error';
+            defer.reject(result);
         });
+    return defer.promise;
 };
 
 module.exports = Action;
