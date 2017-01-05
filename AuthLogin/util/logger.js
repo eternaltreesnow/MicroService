@@ -1,13 +1,13 @@
 'no use strict'
 
-const fs = require('fs');
-const path = require('path');
+var fs = require('fs');
+var path = require('path');
 
-let Logger = {};
+var Logger = {};
 
 // create log file using timestamp
 Logger.init = function() {
-    let timestamp = Math.floor(+new Date() / 1000);
+    var timestamp = Math.floor(+new Date() / 1000);
     Logger.logfile = './log/log_' + timestamp;
     fs.writeFile(Logger.logfile, '', ['utf8', 'w'], (err, fd) => {
         if(err) {
@@ -19,7 +19,7 @@ Logger.init = function() {
 };
 
 Logger.log = function(content) {
-    let data = new Buffer(new Date().toISOString() + ': ' + content);
+    var data = new Buffer(new Date().toISOString() + ': ' + content);
     fs.writeFile(Logger.logfile, data, 'encoding:utf8, flag:a', (err) => {
         if(err) {
             Logger.console(err);
@@ -30,11 +30,11 @@ Logger.log = function(content) {
 };
 
 Logger.console = function(content) {
-    let info = getCallInfo(1);
+    var info = getCallInfo(1);
     console.log(info.date, info.filename, 'line:' + info.line, content);
 };
 
-let getCallInfo = function(level) {
+var getCallInfo = function(level) {
     var orig, err, stack, line, column, filename;
     var res = {
         date: new Date().toLocaleString('zh-CN')

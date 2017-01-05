@@ -11,6 +11,9 @@ const Define = require('./util/define');
 const Auth = require('./util/auth');
 
 const service = require('./control/service');
+const state = require('./control/state');
+const action = require('./control/action');
+const clinic = require('./control/clinic');
 
 let KeyDefine = new Define();
 
@@ -18,6 +21,18 @@ let router = Express.Router();
 
 router.get('/', (req, res) => {
     Auth.auth(req, res, service.demo);
+});
+
+router.post('/action', (req, res) => {
+    // Auth.auth(req, res, action);
+});
+
+router.get('/action', (req, res) => {
+    Auth.auth(req, res, action.getAction);
+});
+
+router.get('/clinic', (req, res) => {
+    Auth.auth(req, res, clinic.getClinic);
 });
 
 module.exports = router;

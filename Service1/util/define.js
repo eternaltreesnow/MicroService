@@ -1,6 +1,8 @@
 module.exports = function define() {
-    this.ACTION_LOGIN = '101';
-    this.ACTION_VERIFY = '102';
+    this.ACTION_QUERY = '101';
+    this.ACTION_UPDATE = '102';
+    this.ACTION_INSERT = '103';
+    this.ACTION_DELETE = '104';
     this.RESULT_FAILED = '400';
     this.RESULT_SUCCESS = '200';
     this.RESULT_REDIRECT = '302';

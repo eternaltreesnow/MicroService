@@ -6,7 +6,7 @@ const DBPool = require('./dbpool');
 const Logger = require('../util/logger');
 const sqlQuery = require('sql-query').Query();
 
-let KeyDefine = new Define;
+let KeyDefine = new Define();
 KeyDefine.TABLE_NAME = 'user';
 
 let validate = (param) => {
