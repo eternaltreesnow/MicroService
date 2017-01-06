@@ -48,6 +48,49 @@ clinicModel.add = function(clinic) {
                 } else {
                     result.code = KeyDefine.RESULT_SUCCESS;
                     result.desc = 'Success in INSERT ' + KeyDefine.TABLE_NAME;
+                    result.data = rows[0];
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
+clinicModel.set = function(clinic) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_UPDATE,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Clinic Model: Unknowed error',
+    };
+
+    let updateOption = sqlQuery.update()
+                        .into(KeyDefine.TABLE_NAME)
+                        .set(clinic)
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(updateOption, (err, rows) => {
+                Logger.console(updateOption);
+                if(err) {
+                    Logger.console('Error in UPDATE ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else if (rows.affectedRows <= 0) {
+                    Logger.console('Null in UPDATE ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinic.clinicId);
+                    result.code = KeyDefine.RESULT_EMPTY;
+                    result.desc = 'Null in UPDATE' + KeyDefine.TABLE_NAME + ': clinicId=' + clinic.clinicId;
+                    defer.resolve(result);
+                } else {
+                    Logger.console('Success in UPDATE ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinic.clinicId);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Success in UPDATE ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinic.clinicId;
                     defer.resolve(result);
                 }
             });

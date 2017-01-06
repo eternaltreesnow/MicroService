@@ -44,7 +44,6 @@ Clinic.setClinic = function(clinic) {
     let result = {
         code: KeyDefine.RESULT_FAILED,
         desc: 'Clinic Control: Unknowed error',
-        data: null
     };
 
     if(!clinic) {
@@ -53,7 +52,10 @@ Clinic.setClinic = function(clinic) {
     } else {
         clinicModel.set(clinic)
             .then(clinicResult => {
-
+                Logger.console(clinicResult);
+                result.code = clinicResult.code;
+                result.desc = clinicResult.desc;
+                defer.resolve(result);
             }, error => {
                 Logger.console(error);
                 result.desc = 'Clinic Model Error';
@@ -78,9 +80,14 @@ Clinic.addClinic = function(clinic) {
     } else {
         clinicModel.add(clinic)
             .then(clinicResult => {
-
+                Logger.console(clinicResult);
+                result.code = clinicResult.code;
+                result.desc = clinicResult.desc;
+                if(clinicResult.code === KeyDefine.RESULT_SUCCESS) {
+                    result.data = clinicResult.data;
+                }
+                defer.resolve(result);
             }, error => {
-                Logger.console(error);
                 result.desc = 'Clinic Model error';
                 defer.resolve(result);
             });
