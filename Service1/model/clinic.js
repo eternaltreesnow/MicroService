@@ -16,6 +16,48 @@ let validate = (param) => {
 
 let clinicModel = {};
 
+clinicModel.add = function(clinic) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_INSERT,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Clinic Model: Unknowed error',
+        data: null
+    };
+
+    let insertOption = sqlQuery.insert()
+                        .into(KeyDefine.TABLE_NAME)
+                        .set(clinic)
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(insertOption, (err, rows) => {
+                Logger.console(insertOption);
+                if(err) {
+                    Logger.console('Error in INSERT ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err)
+                } else if(rows.affectedRows === 0) {
+                    Logger.console('Failed in INSERT ' + KeyDefine.TABLE_NAME);
+                    result.code = KeyDefine.RESULT_ADD_NONE;
+                    result.desc = 'Failed in INSERT ' + KeyDefine.TABLE_NAME;
+                    defer.resolve(result);
+                } else {
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Success in INSERT ' + KeyDefine.TABLE_NAME;
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+}
+
 clinicModel.get = function(clinicId) {
     let defer = Q.defer();
 

@@ -33,10 +33,60 @@ Clinic.getClinic = function(clinicId) {
             }, error => {
                 Logger.console(error);
                 result.desc = 'Clinic Model Error';
-                defer.reject(result);
+                defer.resolve(result);
             });
     }
     return defer.promise;
 };
+
+Clinic.setClinic = function(clinic) {
+    let defer = Q.defer();
+    let result = {
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Clinic Control: Unknowed error',
+        data: null
+    };
+
+    if(!clinic) {
+        result.desc = 'Clinic Control: Empty Clinic';
+        defer.resolve(result);
+    } else {
+        clinicModel.set(clinic)
+            .then(clinicResult => {
+
+            }, error => {
+                Logger.console(error);
+                result.desc = 'Clinic Model Error';
+                defer.resolve(result);
+            });
+    }
+
+    return defer.promise;
+};
+
+Clinic.addClinic = function(clinic) {
+    let defer = Q.defer();
+    let result = {
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Clinic Control: Unknowed error',
+        data: null
+    };
+
+    if(!clinic) {
+        result.desc = 'Clinic Control: Empty Clinic';
+        defer.resolve(result);
+    } else {
+        clinicModel.add(clinic)
+            .then(clinicResult => {
+
+            }, error => {
+                Logger.console(error);
+                result.desc = 'Clinic Model error';
+                defer.resolve(result);
+            });
+    }
+
+    return defer.promise;
+}
 
 module.exports = Clinic;

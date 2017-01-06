@@ -16,7 +16,7 @@ let validate = (param) => {
 
 let actionModel = {};
 
-actionModel.get = function(actionId) {
+actionModel.get = function(actionName) {
     let defer = Q.defer();
 
     let result = {
@@ -30,7 +30,7 @@ actionModel.get = function(actionId) {
     let queryOption = sqlQuery.select()
                         .from(KeyDefine.TABLE_NAME)
                         .where({
-                            actionId: actionId
+                            name: actionName
                         })
                         .build();
 
@@ -43,16 +43,16 @@ actionModel.get = function(actionId) {
                     Logger.console(err);
                     defer.reject(err);
                 } else if(rows.length <= 0) {
-                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME + ': actionId=' + actionId);
+                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME + ': actionName=' + actionName);
                     result.code = KeyDefine.RESULT_EMPTY;
-                    result.desc = 'Empty in QUERY' + KeyDefine.TABLE_NAME + ': actionId=' + actionId;
+                    result.desc = 'Empty in QUERY' + KeyDefine.TABLE_NAME + ': actionName=' + actionName;
                     defer.resolve(result);
                 } else {
-                    Logger.console('Success in QUERY ' + KeyDefine.TABLE_NAME + ': actionId=' + actionId);
+                    Logger.console('Success in QUERY ' + KeyDefine.TABLE_NAME + ': actionName=' + actionName);
                     Logger.console('Result: ' + JSON.stringify(rows));
 
                     result.code = KeyDefine.RESULT_SUCCESS;
-                    result.desc = 'Success in QUERY ' + KeyDefine.TABLE_NAME + ': actionId=' + actionId;
+                    result.desc = 'Success in QUERY ' + KeyDefine.TABLE_NAME + ': actionName=' + actionName;
                     result.data = rows[0];
                     defer.resolve(result);
                 }

@@ -18,4 +18,10 @@ module.exports = function define() {
     this.VALID_SUCCESS = '600';
     this.VALID_LACK_PARAM = '601';
     this.VALID_PARAM_TYPE_ERROR = '602';
+    this.ROLE_TYPE = {
+        'none': 0,
+        'hospital': 1,
+        'doctor': 2,
+        'technician': 3
+    };
 }
