@@ -9,6 +9,8 @@ const Logger = require('./util/logger');
 const Define = require('./util/define');
 // 验证模块
 const Auth = require('./util/auth');
+// Multer upload模块
+const multer = require('./util/multer-util');
 
 const service = require('./control/service');
 const state = require('./control/state');
@@ -33,6 +35,16 @@ router.get('/action', (req, res) => {
 
 router.get('/clinic', (req, res) => {
     Auth.auth(req, res, clinic.getClinic);
+});
+
+router.post('/clinic', (req, res) => {
+    Auth.auth(req, res, clinic.addClinic);
+});
+
+router.get('/profile', (req, res) => {
+    Auth.auth(req, res, function() {
+        res.render('profile');
+    });
 });
 
 module.exports = router;

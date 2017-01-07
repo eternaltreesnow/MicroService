@@ -72,7 +72,7 @@ Action.transfer = function(req, res) {
             Logger.console(authResult);
             // 验证通过则执行action
             if(authResult.code === KeyDefine.RESULT_SUCCESS) {
-                return actionExecute(clinicData, actionData, userData);
+                return actionExecute(clinicData, actionData, userData, req);
             }
             // 验证不通过则返回failed
             else {
@@ -81,8 +81,11 @@ Action.transfer = function(req, res) {
                 res.send(result);
             }
         }).then(executeResult => {
-
-        })
+            Logger.console(executeResult);
+            result.code = executeResult.code;
+            result.desc = executeResult.desc;
+            res.send(result);
+        });
 };
 
 Action.getAction = function(actionName) {

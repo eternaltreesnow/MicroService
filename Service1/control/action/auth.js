@@ -1,3 +1,7 @@
+/**
+ * action验证模块
+ * @author dickzheng
+ */
 'use strict'
 
 const Q = require('q');

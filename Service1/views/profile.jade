@@ -1,0 +1,7 @@
+block content
+    h1 profile
+    form(action='/clinic', method='post', enctype='multipart/form-data')
+        input(type="text", name="patientId")
+        input(type="text", name="hospitalId")
+        input(type='file', name='ecg-file')
+        input(type='submit')

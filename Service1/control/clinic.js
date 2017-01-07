@@ -3,6 +3,7 @@
 const Q = require('q');
 const Logger = require('../util/logger');
 const Define = require('../util/define');
+const multer = require('../util/multer-util');
 
 const clinicModel = require('../model/clinic');
 
@@ -66,18 +67,26 @@ Clinic.setClinic = function(clinic) {
     return defer.promise;
 };
 
-Clinic.addClinic = function(clinic) {
-    let defer = Q.defer();
+Clinic.addClinic = function(req, res) {
     let result = {
         code: KeyDefine.RESULT_FAILED,
         desc: 'Clinic Control: Unknowed error',
         data: null
     };
 
-    if(!clinic) {
-        result.desc = 'Clinic Control: Empty Clinic';
-        defer.resolve(result);
-    } else {
+    let upload = multer('ecg-file').single('ecg-file');
+    upload(req, res, (err) => {
+        if(err) {
+            Logger.console(err);
+            res.send(err);
+        }
+        let clinic = {
+            patientId: req.body.patientId,
+            addTime: Date.now(),
+            file: req.file.filename,
+            hospitalId: req.body.hospitalId,
+            state: 2
+        };
         clinicModel.add(clinic)
             .then(clinicResult => {
                 Logger.console(clinicResult);
@@ -86,14 +95,13 @@ Clinic.addClinic = function(clinic) {
                 if(clinicResult.code === KeyDefine.RESULT_SUCCESS) {
                     result.data = clinicResult.data;
                 }
-                defer.resolve(result);
+                res.send(result);
             }, error => {
+                Logger.console(error);
                 result.desc = 'Clinic Model error';
-                defer.resolve(result);
+                res.send(result);
             });
-    }
-
-    return defer.promise;
-}
+    });
+};
 
 module.exports = Clinic;

@@ -47,7 +47,10 @@ Temporary Items
 .apdisk
 
 # node_modules
-/**/node_modules/*
+/**/node_modules/
 
 # log file
 /**/logs/*
+
+# upload file
+/**/ecg_file/*

@@ -17,7 +17,18 @@ app.use(bodyParser.urlencoded({
 // use cookie parser
 app.use(cookieParser('ecg-cloud'));
 
+// use jade as view template engine
+app.set('view engine', 'jade');
+
 app.use(morgan('dev'));
+
+process.on('uncaughtException', function(e) {
+    if (/\blisten EACCES\b/.test(e.message) && (serverOS.isOSX || serverOS.isLinux)) {
+        Logger.console('This is OSX/Linux, you may need to use "sudo" prefix to start server.\n');
+    }
+
+    Logger.console(e && e.stack);
+});
 
 app.use('/', router);
 
