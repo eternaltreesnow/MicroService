@@ -11,13 +11,13 @@ let ActionFunc = {
     "allocateClinic": () => {
 
     },
-    "analyzeClinicDoc": () => {
+    "analyzeClinicDoc": (clinicData, actionData, userData) => {
 
     },
-    "analyzeClinicTech": () => {
+    "analyzeClinicTech": (clinicData, actionData, userData) => {
 
     },
-    "revokeClinicTech": () => {
+    "revokeClinicTech": (clinicData, actionData, userData) => {
 
     },
     "publishReportDoc": () => {
@@ -26,13 +26,13 @@ let ActionFunc = {
     "submitReportTech": () => {
 
     },
-    "auditFailedDoc": () => {
+    "auditFailedDoc": (clinicData, actionData, userData) => {
 
     },
-    "reanalyzeTech": () => {
+    "reanalyzeTech": (clinicData, actionData, userData) => {
 
     },
-    "auditSuccessDoc": () => {
+    "auditSuccessDoc": (clinicData, actionData, userData) => {
 
     },
     "initConsulAudit": () => {
