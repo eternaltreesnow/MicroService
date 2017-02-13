@@ -30,11 +30,17 @@ Login.login = function(req, res) {
             Logger.console(loginResult.desc);
             if(loginResult.code === KeyDefine.LOGIN_SUCCESS) {
                 let userData = loginResult.data;
-                // 注册session
-                return session.register(userData);
+                // 获取操作
+                return loginModel.getOperation(userData);
             } else {
                 res.send(loginResult);
             }
+        })
+        .then(operationResult => {
+            let userData = operationResult.data;
+            Logger.console(operationResult.desc);
+            // 注册session
+            return session.register(userData);
         })
         .then(sessionResult => {
             if(sessionResult.code === KeyDefine.RESULT_SUCCESS) {

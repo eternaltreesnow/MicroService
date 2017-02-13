@@ -21,6 +21,7 @@ sessionModel.register = (userData) => {
 
     sessionData['userId'] = userData.userId;
     sessionData['username'] = userData.username;
+    sessionData['operation'] = userData.operation;
 
     result.code = KeyDefine.RESULT_SUCCESS;
     result.desc = 'Session Model: Session generator successfully';

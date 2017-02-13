@@ -81,8 +81,9 @@ loginModel.login = (username, password) => {
                         result.code = KeyDefine.LOGIN_SUCCESS;
                         result.desc = 'Login Model: Password matched, login successfully';
                         result.data = {
-                            userId: rows[0].id,
-                            username: rows[0].username
+                            userId: rows[0].userId,
+                            username: rows[0].username,
+                            operation: new Array()
                         };
                         defer.resolve(result);
                     } else {
@@ -99,5 +100,49 @@ loginModel.login = (username, password) => {
 
     return defer.promise;
 };
+
+// 获取用户被允许执行的operation数组
+loginModel.getOperation = function(userData) {
+    let userId = userData.userId;
+
+    let defer = Q.defer();
+
+    let result = {
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'QUERY operations: Unknowed error',
+        data: userData
+    };
+
+    let queryOption = 'SELECT name FROM operation WHERE operationId IN ( SELECT operationId from rolemapoperation WHERE roleId IN ( SELECT roleId from usermaprole WHERE userId = ' + userId + ' ) )';
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                if(err) {
+                    Logger.console('Error in QUERY operations: ' + err);
+                    defer.reject(err);
+                } else if(rows.length <= 0) {
+                    Logger.console('Empty in QUERY operations: userId=' + userId);
+                    result.code = KeyDefine.RESULT_EMPTY;
+                    result.desc = 'Empty in QUERY operations: userId=' + userId;
+                    defer.resolve(result);
+                } else {
+                    Logger.console('Success in QUERY operations: userId=' + userId);
+                    Logger.console('Result: ' + JSON.stringify(rows));
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Success in QUERY operations: userId=' + userId;
+                    for(let item of rows) {
+                        userData.operation.push(item.name);
+                    }
+                    result.data = userData;
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+}
 
 module.exports = loginModel;

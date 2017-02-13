@@ -4,14 +4,6 @@ const Q = require('q');
 const mysql = require('mysql');
 const Logger = require('../util/logger');
 
-// const DBConfig = {
-//     database: 'auth',
-//     host: 'authinstance.cvz2dqoouwkc.us-west-2.rds.amazonaws.com',
-//     user: 'root',
-//     password: 'rootroot',
-//     port: 3306
-// };
-
 const DBConfig = {
     database: 'ecg_auth',
     host: 'localhost',
@@ -29,11 +21,9 @@ DBPool.getConnection = function() {
     mysqlPool.getConnection(function(err, connection) {
         if(err) {
             Logger.console(err);
-            Logger.log(err);
             defer.reject(err);
         } else {
             Logger.console('Mysql get connection successfully.');
-            // Logger.log('Mysql get connection successfully.');
             defer.resolve(connection);
         }
     });

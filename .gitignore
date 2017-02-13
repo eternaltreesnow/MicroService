@@ -54,3 +54,6 @@ Temporary Items
 
 # upload file
 /**/ecg_file/*
+!/**/ecg_file/tmp
+/**/report/*
+!/**/report/tmp

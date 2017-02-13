@@ -3,6 +3,7 @@
 const Q = require('q');
 const Logger = require('../../util/logger');
 const Define = require('../../util/define');
+const Cache = require('../../util/cache')();
 
 const actionModel = require('../../model/action');
 const clinicControl = require('../clinic');
