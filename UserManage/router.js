@@ -19,8 +19,8 @@ let KeyDefine = new Define();
 let router = Express.Router();
 
 router.get('/test', (req, res) => {
-    Auth.auth(req, res, 'addTeam', function(req, res) {
-        res.send('test');
+    Auth.auth(req, res, '', function() {
+        res.send('test1');
     });
 });
 
