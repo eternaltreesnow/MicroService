@@ -13,6 +13,8 @@ const Logger = require('./util/logger');
 const Define = require('./util/define');
 // 验证模块
 const Auth = require('./util/auth');
+// 代理模块
+const Agent = require('./util/agent');
 
 let KeyDefine = new Define();
 
@@ -20,7 +22,24 @@ let router = Express.Router();
 
 router.get('/test', (req, res) => {
     Auth.auth(req, res, '', function() {
-        res.send('test1');
+        res.send('test');
+    });
+});
+
+router.get('/testservice', (req, res) => {
+    Auth.authService(req, res, function(req, res) {
+        res.send('testservice');
+    });
+});
+
+router.get('/testservice_client', (req, res) => {
+    Agent.request('GET', {
+        host: 'localhost',
+        port: 10003,
+        path: '/testservice'
+    }, {}, function(data) {
+        Logger.console(data);
+        res.send('testservice1');
     });
 });
 

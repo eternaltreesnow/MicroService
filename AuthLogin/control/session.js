@@ -26,7 +26,7 @@ Session.register = function(userData) {
                 defer.resolve(result);
             } else {
                 result.desc = 'Session Control: Session created failed';
-                defer.reject(registerResult);
+                defer.resolve(registerResult);
             }
         }, registerError => {
             Logger.console(registerError);

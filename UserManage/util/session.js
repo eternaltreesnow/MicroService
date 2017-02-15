@@ -9,7 +9,7 @@ let KeyDefine = new Define();
 
 let Session = {};
 
-// 验证session的有效性和操作的合法性
+// 验证用户session的有效性和操作的合法性
 Session.validate = function(sessionId, operation) {
     let result = KeyDefine.VALID_EMPTY_CACHE;
     let userData = JSON.parse(Cache.get(sessionId));
@@ -24,10 +24,27 @@ Session.validate = function(sessionId, operation) {
     return result;
 };
 
-Session.set = function(session) {
+// 验证服务session的有效性
+Session.validateService = function(serviceName, accessToken) {
+    let result = KeyDefine.VALID_EMPTY_CACHE;
+    let sessionData = JSON.parse(Cache.get(serviceName));
+    let timestamp = +new Date();
+
+    Logger.console('Session Validate: sessionData: ' + sessionData);
+
+    if(sessionData) {
+        if(sessionData.accessToken === accessToken && sessionData.ttl >= timestamp) {
+            result = KeyDefine.VALID_SUCCESS;
+        } else {
+            result = KeyDefine.VALID_INVALID_SERVICE;
+        }
+    }
+    return result;
+};
+
+// 设置session
+Session.set = function(sessionId, sessionData) {
     let code = KeyDefine.RESULT_FAILED;
-    let sessionId = session.sessionId;
-    let sessionData = session.sessionData;
     if(Cache.set(sessionId, sessionData)) {
         code = KeyDefine.RESULT_SUCCESS;
     }

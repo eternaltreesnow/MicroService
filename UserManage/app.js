@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const router = require('./router');
 const morgan = require('morgan');
 const Logger = require('./util/logger');
+const session = require('./util/session');
 
 const app = Express();
 
@@ -31,6 +32,10 @@ process.on('uncaughtException', function(e) {
 });
 
 app.use('/', router);
+
+// 初始化serviceName
+session.set('serviceName', 'UserManage');
+session.set('password', 'root');
 
 const server = app.listen('10003', () => {
     Logger.console('User Management listening on: ' + server.address().port);

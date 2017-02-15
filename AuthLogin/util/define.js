@@ -1,6 +1,8 @@
 module.exports = function define() {
     this.ACTION_LOGIN = '101';
     this.ACTION_VERIFY = '102';
+    this.ACTION_INSERT = '103';
+    this.ACTION_QUERY = '104';
     this.RESULT_FAILED = '400';
     this.RESULT_SUCCESS = '200';
     this.RESULT_REDIRECT = '302';
@@ -18,6 +20,7 @@ module.exports = function define() {
     this.VALID_PARAM_TYPE_ERROR = '602';
     this.LOGIN_LACK_PARAM_USERNAME = '1001';
     this.LOGIN_LACK_PARAM_PWD = '1002';
+    this.LACK_PARAM_SERVICEID = '1003';
     this.LOGIN_WORNG_PWD = '1003';
     this.LOGIN_SUCCESS = '1004';
 }

@@ -15,11 +15,13 @@ module.exports = function define() {
     this.RESULT_DELETE_FAILED = '407';
     this.RESULT_UPDATE_FAILED = '408';
     this.SERVER_FAILED = '500';
+    this.SERVER_AGENT_FAILED = '501';
     this.VALID_SUCCESS = '600';
     this.VALID_LACK_PARAM = '601';
     this.VALID_PARAM_TYPE_ERROR = '602';
     this.VALID_EMPTY_CACHE = '603';
     this.VALID_INVALID_OPERATION = '604';
+    this.VALID_INVALID_SERVICE = '605';
     this.ROLE_TYPE = {
         'none': 0,
         'hospital': 1,

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2017-02-13 13:20:42
+-- Generation Time: 2017-02-15 14:19:44
 -- 服务器版本： 5.6.24
 -- PHP Version: 5.6.29
 
@@ -86,6 +86,56 @@ CREATE TABLE IF NOT EXISTS `rolemapoperation` (
 INSERT INTO `rolemapoperation` (`rmpId`, `roleId`, `operationId`) VALUES
 (1, 1, 1),
 (2, 1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `service`
+--
+
+CREATE TABLE IF NOT EXISTS `service` (
+  `serviceId` int(11) NOT NULL AUTO_INCREMENT COMMENT '服务id',
+  `name` varchar(40) NOT NULL COMMENT '服务名称',
+  `password` varchar(40) NOT NULL COMMENT '服务密钥',
+  `remark` varchar(40) NOT NULL COMMENT '注释',
+  PRIMARY KEY (`serviceId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='服务密钥表';
+
+--
+-- 转存表中的数据 `service`
+--
+
+INSERT INTO `service` (`serviceId`, `name`, `password`, `remark`) VALUES
+(1, 'UserManage', 'root', '用户管理服务');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `service_token`
+--
+
+CREATE TABLE IF NOT EXISTS `service_token` (
+  `tokenId` int(11) NOT NULL AUTO_INCREMENT COMMENT '令牌id',
+  `serviceName` varchar(40) NOT NULL COMMENT '服务名称',
+  `accessToken` varchar(40) NOT NULL COMMENT '令牌',
+  `ttl` varchar(15) NOT NULL COMMENT '过期时间',
+  PRIMARY KEY (`tokenId`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='服务令牌表' ROW_FORMAT=COMPACT;
+
+--
+-- 转存表中的数据 `service_token`
+--
+
+INSERT INTO `service_token` (`tokenId`, `serviceName`, `accessToken`, `ttl`) VALUES
+(2, 'UserManage', '7a564363823118ac3947c8c7af525245', '1487146067436'),
+(3, 'UserManage', '68bd7be105094359136029a9cd111594', '1487147163336'),
+(4, 'UserManage', '81252114d0f3575430b7b2caaba0a62e', '1487167201644'),
+(5, 'UserManage', '7935d823257ff87e00c86a0eaa6adb56', '1487167493556'),
+(6, 'UserManage', '7fe8e41fdd1394246ec5fd2e341fed63', '1487167676895'),
+(7, 'UserManage', '927da6634a1606e30722de944d720fae', '1487167805477'),
+(8, 'UserManage', '3145f8a8a3e64da42453dc2e46b73499', '1487167883193'),
+(9, 'UserManage', '37b2c05734414b1fe10ac552f18e5d08', '1487168013147'),
+(10, 'UserManage', '9717e63ccc42be290e824ed4c1e09654', '1487168126539');
 
 -- --------------------------------------------------------
 
