@@ -12,6 +12,7 @@ let KeyDefine = new Define();
 let Auth = {};
 
 Auth.auth = function(req, res) {
+    Logger.console(req.body);
     let name = req.body.name;
     let password = req.body.password;
 

@@ -22,10 +22,13 @@ module.exports = function define() {
     this.VALID_EMPTY_CACHE = '603';
     this.VALID_INVALID_OPERATION = '604';
     this.VALID_INVALID_SERVICE = '605';
+    this.VALID_INVALID_TOKEN = '606';
+    this.VALID_INVALID_EXPIRED = '607';
     this.ROLE_TYPE = {
         'none': 0,
         'hospital': 1,
         'doctor': 2,
         'technician': 3
     };
+    this.AuthLoginUri = 'http://localhost:10001'; // AuthLogin服务Uri
 }

@@ -1,6 +1,9 @@
 'use strict'
-// 简单链表
-// Author: dickzheng
+/**
+ * 简单链表
+ * @Author: dickzheng
+ * @Date: 2017/01/16
+ */
 
 // 链表节点
 function Node(key) {
@@ -155,15 +158,19 @@ function Link() {
     };
 }
 
+/**
+ * 外部方法：创建链表
+ * @return {Link} 简单链表结构
+ */
 exports.createLink = function() {
     return new Link();
 };
 
+/**
+ * 外部方法：创建节点
+ * @param  {String} key 键
+ * @return {Node}       数据节点
+ */
 exports.createNode = function(key) {
     return new Node(key);
 };
-
-// var link = new Link();
-// var node1 = new Node('value1');
-// var node2 = new Node('value2');
-// var node3 = new Node('value3');

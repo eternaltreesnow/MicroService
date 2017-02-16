@@ -27,17 +27,14 @@ router.get('/test', (req, res) => {
 });
 
 router.get('/testservice', (req, res) => {
+    Logger.console('Get Req testservice');
     Auth.authService(req, res, function(req, res) {
-        res.send('testservice');
+        res.send('{ "code": "200", "test": "testservice" }');
     });
 });
 
 router.get('/testservice_client', (req, res) => {
-    Agent.request('GET', {
-        host: 'localhost',
-        port: 10003,
-        path: '/testservice'
-    }, {}, function(data) {
+    Agent.request('GET', 'http://localhost:10003/testservice', {}, function(data) {
         Logger.console(data);
         res.send('testservice1');
     });

@@ -34,8 +34,8 @@ process.on('uncaughtException', function(e) {
 app.use('/', router);
 
 // 初始化serviceName
-session.set('serviceName', 'UserManage');
-session.set('password', 'root');
+session.set('serviceName', 'UserManage', 30 * 24 * 60 * 60 * 1000);
+session.set('password', 'root', 30 * 24 * 60 * 60 * 1000);
 
 const server = app.listen('10003', () => {
     Logger.console('User Management listening on: ' + server.address().port);

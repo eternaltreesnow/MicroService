@@ -1,17 +1,31 @@
 'use strict'
-// local cache
-// Author: dickzheng
+/**
+ * Local Cache本地缓存
+ * @Author: dickzheng
+ * @Date: 2017/01/16
+ */
+
 const LRU = require('./LRU');
 
 let lastSize = null;
+// 存储已生成的Cache队列，实现单例模式
 let localCache;
 
-// 初始化缓存链表
+/**
+ * 初始化缓存链表
+ * @param  {Number} size Cache大小
+ * @return {Queue}       Cache队列
+ */
 let initQueue = function(size) {
     return LRU.createQueue(size);
 };
 
-// Set方法
+/**
+ * Cache缓存Set方法
+ * @param {String} key    键
+ * @param {String} value  值(序列化的JSON值或String)
+ * @param {Number} maxAge 有效时间
+ */
 let set = function(key, value, maxAge) {
     let result = false;
     let _cache = this.cache;
@@ -45,7 +59,11 @@ let set = function(key, value, maxAge) {
     return result;
 };
 
-// Get方法
+/**
+ * Cache缓存GET方法
+ * @param  {String} key 键
+ * @return {String}     值
+ */
 let get = function(key) {
     let _cache = this.cache;
     let _queue = this.queue;
@@ -59,6 +77,7 @@ let get = function(key) {
         if(!expire || expire && curTime < expire) {
             _queue.update(node);
             return _cache[key].value;
+        // 存在过期时间且已过期，则删除该缓存记录
         } else if(expire && curTime > expire) {
             _queue.del(node);
             return null;
@@ -81,6 +100,7 @@ let print = function() {
 
 // 初始化localCache
 let createCache = function(size) {
+    // 默认大小为10000
     if(!size) {
         lastSize = size = 10000;
     }
@@ -94,6 +114,7 @@ let createCache = function(size) {
         print: print
     };
 
+    // 1s定时器扫描Cache记录的有效性
     setInterval(function() {
         let cache = obj.cache;
         let queue = obj.queue;
@@ -114,7 +135,13 @@ let createCache = function(size) {
     return obj;
 };
 
+/**
+ * 外部方法：根据缓存大小创建Cache队列
+ * @param  {Number} size Cache大小
+ * @return {Queue}       Cache队列
+ */
 module.exports = function(size) {
+    // 单例模式
     if(!localCache) {
         localCache = createCache(size);
     }

@@ -1,6 +1,13 @@
 'use strict'
+/**
+ * 请求代理Frame
+ * @Target: 用于Service之间请求的授权与验证
+ * @Author: dickzheng
+ * @Date: 2017/02/16
+ */
 
 const http = require('http');
+const Request = require('request');
 const querystring = require('querystring');
 const Logger = require('./logger');
 const Define = require('./define');
@@ -14,7 +21,7 @@ let Agent = {};
 /**
  * 代理发送请求
  * @param  {String}   method   请求类型: 'GET', 'POST', 'DELETE'
- * @param  {JSON}     uri      请求资源uri: host, port, path
+ * @param  {String}   uri      请求资源uri
  * @param  {JSON}     params   参数
  * @param  {Function} callback 回调函数
  */
@@ -23,99 +30,107 @@ Agent.request = function(method, uri, params, callback) {
         code: KeyDefine.SERVER_AGENT_FAILED
     };
 
+    // 获取验证参数
     let serviceName = Cache.get('serviceName');
     let accessToken = Cache.get('accessToken');
 
+    // 合并参数
     params['service_name'] = serviceName;
     params['access_token'] = accessToken;
 
-    let req_params = querystring.stringify(params);
+    // 处理GET请求
+    if(method === 'GET') {
+        // 参数序列化
+        let query_params = querystring.stringify(params);
 
-    let options = {
-        host: uri.host,
-        port: uri.port,
-        path: uri.path,
-        method: method,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(params)
-        }
-    };
-
-    Logger.console('Params: ' + JSON.stringify(params));
-
-    let agentReq = http.request(options, function(res) {
-        res.setEncoding('utf8');
-        res.on('data', function(data) {
-            data = JSON.parse(data);
-            if(data.code === KeyDefine.VALID_INVALID_SERVICE) {
-                Agent.auth(function(tag) {
-                    Logger.console(tag);
-                    if(tag) {
-                        Agent.request(method, uri, params, callback);
-                    } else {
-                        result.code = KeyDefine.VALID_INVALID_SERVICE;
-                        callback(result);
-                    }
-                });
+        Request(uri + '?' + query_params, function(error, res, body) {
+            if(!error && res.statusCode == 200) {
+                let info = JSON.parse(body);
+                // 验证失败，则执行授权方法
+                if(info.code === KeyDefine.VALID_INVALID_SERVICE) {
+                    Agent.auth(function(tag) {
+                        // 授权成功，则重新发送该请求
+                        if(tag) {
+                            Agent.request(method, uri, params, callback);
+                        // 授权失败，则返回失败状态码
+                        } else {
+                            result.code = KeyDefine.VALID_INVALID_SERVICE;
+                            callback(result);
+                        }
+                    });
+                // 验证成功，则返回数据
+                } else {
+                    callback(info);
+                }
             } else {
-                callback(data);
+                Logger.console('Agent Req: Http Request error');
+                Logger.console(error);
+                callback(result);
             }
         });
-    })
-    .on('error', function(err) {
-        Logger.console('Agent Req: Http Request error');
-        Logger.console(err);
-        callback(result);
-    });
-
-    agentReq.write(req_params);
-    agentReq.end();
+    } else {
+        let options = {
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded'
+            },
+            uri: uri,
+            method: method,
+            body: params
+        };
+        Request(options, function(error, res, body) {
+            if(!error && res.statusCode == 200) {
+                let info = JSON.parse(body);
+                Logger.console(info);
+            }
+        });
+    }
 };
 
+/**
+ * 服务授权
+ * @Target: 通过获取服务请求方的serviceName和password到AuthLogin服务进行授权
+ * @param  {Function} callback 回调函数
+ */
 Agent.auth = function(callback) {
     let serviceName = Cache.get('serviceName');
     let password = Cache.get('password');
 
+    // 获取授权参数
     let param = querystring.stringify({
         name: serviceName,
         password: password
     });
 
+    // POST请求option
     let options = {
-        host: 'localhost',
-        port: 10001,
-        path: '/service/auth',
-        method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(param)
-        }
+            'content-type': 'application/x-www-form-urlencoded'
+        },
+        method: 'POST',
+        uri: KeyDefine.AuthLoginUri + '/service/auth',
+        body: param
     };
 
-    let authReq = http.request(options, function(res) {
-        res.setEncoding('utf8');
-        res.on('data', function(data) {
-            data = JSON.parse(data);
-            if(data.code === KeyDefine.RESULT_SUCCESS) {
-                let accessToken = JSON.stringify(data.data);
-                session.set(serviceName, accessToken);
+    Request(options, function(error, res, body) {
+        if(!error && res.statusCode == 200) {
+            let info = JSON.parse(body);
+            // 授权成功，将token写入Cache
+            if(info.code === KeyDefine.RESULT_SUCCESS) {
+                let accessToken = info.data.accessToken;
+                session.set('accessToken', accessToken);
                 Logger.console('Agent Auth: Service auth success');
                 callback(true);
+            // 授权失败，执行失败方法
             } else {
                 Logger.console('Agent Auth: Service auth failed');
                 callback(false);
             }
-        });
-    })
-    .on('error', function(err) {
-        Logger.console('Agent Auth: Http Request error');
-        Logger.console(err);
-        callback(false);
+        } else {
+            Logger.console('Agent Auth: Http Request error');
+            Logger.console(error);
+            callback(false);
+        }
     });
-
-    authReq.write(param);
-    authReq.end();
 };
 
 module.exports = Agent;

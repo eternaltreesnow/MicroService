@@ -1,4 +1,10 @@
 'use strict'
+/**
+ * 验证模块
+ * @Target: 用于Service的用户身份验证和服务授权验证
+ * @Author: dickzheng
+ * @Date: 2017/02/16
+ */
 
 const http = require('http');
 const Logger = require('./logger');
@@ -6,19 +12,25 @@ const Define = require('./define');
 const Cache = require('./cache')();
 const session = require('./session');
 
-const authLoginAddr = 'http://localhost:10001/';
-
-const authUrl = {
-    login: authLoginAddr + 'login',
-    verify: authLoginAddr + 'verify',
-    serviceAuth: authLoginAddr + 'service/auth',
-    serviceVerify: authLoginAddr + 'service/verify'
-};
-
 let KeyDefine = new Define();
+
+// 登录, 授权, 验证相关Uri
+const authUrl = {
+    login: KeyDefine.AuthLoginUri + 'login',
+    verify: KeyDefine.AuthLoginUri + 'verify',
+    serviceAuth: KeyDefine.AuthLoginUri + 'service/auth',
+    serviceVerify: KeyDefine.AuthLoginUri + 'service/verify'
+};
 
 let Auth = {};
 
+/**
+ * 验证用户身份合法性
+ * @param  {Object}   req       请求
+ * @param  {Object}   res       响应
+ * @param  {String}   operation 请求操作
+ * @param  {Function} callback  回调函数
+ */
 Auth.auth = function(req, res, operation, callback) {
     // 初始化并获取cookie中的sessionId
     let sessionId = '';
@@ -26,7 +38,7 @@ Auth.auth = function(req, res, operation, callback) {
         sessionId = req.signedCookies['connect.sid'];
         Logger.console('SessionId: ' + sessionId);
 
-        // 本地cache进行验证与操作的合法性
+        // 本地Cache进行验证与操作的合法性
         let validation = session.validate(sessionId, operation);
         if(validation === KeyDefine.VALID_SUCCESS) {
             callback(req, res);
@@ -41,7 +53,7 @@ Auth.auth = function(req, res, operation, callback) {
                     if(data.code === KeyDefine.RESULT_SUCCESS) {
                         Logger.console('Verify successfully');
                         if(session.set(data.data.sessionId, data.data.sessionData) === KeyDefine.RESULT_SUCCESS) {
-                            // 本地cache进行验证与操作的合法性
+                            // 本地Cache进行验证与操作的合法性
                             validation = session.validate(data.data.sessionId, operation);
                             if(validation === KeyDefine.VALID_SUCCESS) {
                                 callback(req, res);
@@ -87,15 +99,19 @@ Auth.authService = function(req, res, callback) {
         serviceName = req.query.service_name;
         accessToken = req.query.access_token;
     } else if(req.method === 'POST' || req.method === 'DELETE') {
+        Logger.console('Auth Service: Method POST || DELETE');
+        Logger.console(req.body);
         serviceName = req.body.service_name;
         accessToken = req.body.access_token;
     } else {
+        Logger.console('Auth Service: Unknowed Method');
         serviceName = req.param('service_name') || '';
         accessToken = req.param('access_token') || '';
     }
 
     Logger.console('Service Auth Params: serviceName = ' + serviceName + ', accessToken = ' + accessToken);
 
+    // 本地Cache进行验证
     let validation = session.validateService(serviceName, accessToken);
     if(validation === KeyDefine.VALID_SUCCESS) {
         callback(req, res);
@@ -105,11 +121,14 @@ Auth.authService = function(req, res, callback) {
             response.setEncoding('utf8');
             response.on('data', (data) => {
                 data = JSON.parse(data);
+                // 验证成功，将Service对应的Token写入Cache
                 if(data.code === KeyDefine.RESULT_SUCCESS) {
                     Logger.console('Service verify successfully');
-                    session.set(data.data.serviceName, data.data);
+                    session.set(data.data.serviceName, JSON.stringify(data.data));
                     callback(req, res);
+                // 验证失败，返回失败码
                 } else {
+                    Logger.console('Service verify failed');
                     failedResult.url = data.url;
                     res.send(failedResult);
                 }
