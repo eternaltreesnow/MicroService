@@ -13,9 +13,9 @@ let validate = (param) => {
     return KeyDefine.VALID_SUCCESS;
 };
 
-let loginModel = {};
+let Login = {};
 
-loginModel.checkParam = (username, password) => {
+Login.checkParam = (username, password) => {
     let defer = Q.defer();
 
     let result = {
@@ -42,7 +42,7 @@ loginModel.checkParam = (username, password) => {
     return defer.promise;
 };
 
-loginModel.login = (username, password) => {
+Login.login = (username, password) => {
     let defer = Q.defer();
 
     let result = {
@@ -63,33 +63,33 @@ loginModel.login = (username, password) => {
     DBPool.getConnection()
         .then(connection => {
             connection.query(queryOption, (err, rows) => {
-                Logger.console(queryOption);
                 if(err) {
                     Logger.console('Login Model: Error in QUERY ' + KeyDefine.TABLE_NAME + ': ' + err);
                     defer.reject(err);
                 } else if(rows.length <= 0) {
-                    Logger.console('Login Model: Empty in QUERY ' + KeyDefine.TABLE_NAME + ': username=' + username);
+                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME + ': username=' + username);
                     result.code = KeyDefine.RESULT_EMPTY;
-                    result.desc = 'Login Model: Empty in QUERY ' + KeyDefine.TABLE_NAME + ': username=' + username;
+                    result.desc = 'Username or Password error';
                     defer.resolve(result);
                 } else {
                     Logger.console('Login Model: Success in QUERY ' + KeyDefine.TABLE_NAME + ': username=' + username);
                     Logger.console('Login Model: Result: ' + JSON.stringify(rows));
 
                     if(password === rows[0].password) {
-                        Logger.console('Login Model: Password matched: username=' + username);
+                        Logger.console('Password matched: username=' + username);
                         result.code = KeyDefine.LOGIN_SUCCESS;
-                        result.desc = 'Login Model: Password matched, login successfully';
+                        result.desc = 'Login successfully';
                         result.data = {
                             userId: rows[0].userId,
                             username: rows[0].username,
+                            roleId: rows[0].roleId,
                             operation: new Array()
                         };
                         defer.resolve(result);
                     } else {
                         Logger.console('Login Model: Password don\'t match: username=' + username);
                         result.code = KeyDefine.LOGIN_WORNG_PWD;
-                        result.desc = 'Login Model: Password don\'t match';
+                        result.desc = 'Username or Password error';
                         defer.resolve(result);
                     }
                 }
@@ -102,7 +102,7 @@ loginModel.login = (username, password) => {
 };
 
 // 获取用户被允许执行的operation数组
-loginModel.getOperation = function(userData) {
+Login.getOperation = function(userData) {
     let userId = userData.userId;
 
     let defer = Q.defer();
@@ -113,7 +113,7 @@ loginModel.getOperation = function(userData) {
         data: userData
     };
 
-    let queryOption = 'SELECT name FROM operation WHERE operationId IN ( SELECT operationId from rolemapoperation WHERE roleId IN ( SELECT roleId from usermaprole WHERE userId = ' + userId + ' ) )';
+    let queryOption = 'SELECT name FROM operation WHERE operationId IN ( SELECT operationId from rolemapoperation WHERE roleId IN ( SELECT roleId from user WHERE userId = ' + userId + ' ) )';
 
     DBPool.getConnection()
         .then(connection => {
@@ -145,4 +145,4 @@ loginModel.getOperation = function(userData) {
     return defer.promise;
 }
 
-module.exports = loginModel;
+module.exports = Login;

@@ -1,0 +1,36 @@
+// - extends 继承 layout.jade
+extends layout.jade
+block title
+    title 用户登录 | 心电分析云平台
+block css
+    link(rel="stylesheet", href="static/css/login.css")
+block content
+    div.login-container
+        div.container.login-form
+            form.form-horizontal
+                fieldset
+                    legend 用户登录
+                    div.alert.alert-dismissible.fade.login-alert#infoAlert(role="alert")
+                        p#infoAlertText &nbsp;
+                    input(type="hidden", id="inputSrc")
+                    div.form-group
+                        label.control-label.col-lg-3(for="inputUserName") 用户名
+                        div.col-lg-9
+                            label.sr-only(for="inputUserName") 请输入用户名...
+                            input(type="text", class="form-control", id="inputUserName", placeholder="请输入用户名...")
+                    div.form-group
+                        label.control-label.col-lg-3(for="inputPassword") 密码
+                        div.col-lg-9
+                            label.sr-only(for="inputPassword") 请输入密码...
+                            input(type="text", class="form-control", id="inputPassword", placeholder="请输入密码...")
+                    div.form-group
+                        div.col-lg-12
+                            a.btn.btn-primary.btn-block#loginBtn(href="javascript:void(0);") 登录
+block script
+    script(src="static/js/login.js")
+    //- h1 login
+    //- form(action='/login', method='post')
+    //-     input(type='hidden', name='src', value!=src)
+    //-     input(type='text', name='username')
+    //-     input(type='password', name='password')
+    //-     input(type='submit')

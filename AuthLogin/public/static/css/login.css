@@ -1,0 +1,10 @@
+.login-form {
+    margin-top: 200px;
+    max-width: 550px;
+    border: 2px solid #DCE4EC;
+    border-radius: 10px;
+    padding: 20px 40px;
+}
+.login-form legend {
+    text-align: center;
+}

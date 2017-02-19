@@ -4,16 +4,34 @@ const Q = require('q');
 const Logger = require('../util/logger');
 const Define = require('../util/define');
 const loginModel = require('../model/login');
+const roleModel = require('../model/role');
 const session = require('./session');
 
 let KeyDefine = new Define();
 
 let Login = {};
 
+/**
+ * 用户登录
+ * @param  {Object} req 请求
+ * @param  {Object} res 响应
+ * @return {Object}     登录结果
+ * @workflow:
+ *  - 检查用户名密码
+ *  - 登录
+ *  - 获取授权操作
+ *  - 注册session
+ *  - 获取跳转uri
+ */
 Login.login = function(req, res) {
     let username = req.body.username;
     let password = req.body.password;
-    let src = req.body.src;
+    let src = req.body.src || '';
+
+    let result = {
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Login Control: Login failed, unknowed error'
+    };
 
     // 检查用户名&密码
     loginModel.checkParam(username, password)
@@ -23,47 +41,54 @@ Login.login = function(req, res) {
                 // 登录请求
                 return loginModel.login(username, password);
             } else {
-                res.send(checkResult);
+                result.code = checkResult.code;
+                result.desc = checkResult.desc;
+                result.uri = null;
+                res.send(result);
             }
         })
         .then(loginResult => {
             Logger.console(loginResult.desc);
+            result.code = loginResult.code;
+            result.desc = loginResult.desc;
             if(loginResult.code === KeyDefine.LOGIN_SUCCESS) {
                 let userData = loginResult.data;
                 // 获取操作
                 return loginModel.getOperation(userData);
             } else {
-                res.send(loginResult);
+                res.send(result);
             }
         })
         .then(operationResult => {
             let userData = operationResult.data;
             Logger.console(operationResult.desc);
             // 注册session
-            return session.register(userData);
-        })
-        .then(sessionResult => {
-            if(sessionResult.code === KeyDefine.RESULT_SUCCESS) {
-                let sessionId = req.session.id;
-                let sessionData = JSON.stringify(sessionResult.data);
-                // 将session信息存储到redis和cookie中
-                req.session.data = sessionData;
-                if(src && src.length > 0) {
-                    res.redirect(src);
-                } else {
-                    res.send(req.session);
-                }
+            req.session.data = JSON.stringify(userData);
+            if(src && src !== '' && src.length > 0) {
+                result.uri = src;
+                res.send(result);
             } else {
-                res.send(sessionResult);
+                // 无跳转uri时，根据角色获取跳转uri
+                return roleModel.getUri(userData.roleId);
             }
         })
+        .then(roleResult => {
+            if(roleResult.code === KeyDefine.RESULT_SUCCESS) {
+                result.uri = roleResult.data;
+            } else {
+                result.uri = null;
+            }
+            res.send(result);
+        })
         .catch(error => {
-            res.send(error);
+            result.desc = 'Login error';
+            Logger.console(error);
+            res.send(result);
         });
 };
 
 Login.loginView = function(req, res) {
-    res.render('../view/login', {
+    res.render('login', {
         src: req.query.src
     });
 };

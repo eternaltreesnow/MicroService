@@ -59,7 +59,7 @@ Auth.auth = function(req, res) {
 };
 
 Auth.authView = function(req, res) {
-    res.render('../view/service/auth');
+    res.render('service/auth');
 };
 
 module.exports = Auth;

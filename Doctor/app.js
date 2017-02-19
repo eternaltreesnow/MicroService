@@ -1,14 +1,13 @@
 'use strict'
 
 const Express = require('express');
-const router = require('./router');
+const path = require('path');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const router = require('./router');
 const morgan = require('morgan');
 const Logger = require('./util/logger');
-const serverOS = require('./util/isWindows');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const redisStore = require('connect-redis')(session);
+const session = require('./util/session');
 
 const app = Express();
 
@@ -25,23 +24,7 @@ app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 app.use(Express.static('public'));
 
-// initial session store config
-app.use(session({
-    secret: 'ecg-cloud',
-    store: new redisStore({
-        host: '54.187.245.212',
-        port: 6379,
-        pass: 'ecg-cloud',
-        prefix: 'session:'
-    }),
-    cookie: {
-        maxAge: 20 * 60 * 1000 // 过期时间(ms)
-    }
-}));
-
 app.use(morgan('dev'));
-
-app.use('/', router);
 
 process.on('uncaughtException', function(e) {
     if (/\blisten EACCES\b/.test(e.message) && (serverOS.isOSX || serverOS.isLinux)) {
@@ -51,6 +34,12 @@ process.on('uncaughtException', function(e) {
     Logger.console(e && e.stack);
 });
 
-const server = app.listen('10001', () => {
-    Logger.console('Auth server listening on: ' + server.address().port);
+app.use('/', router);
+
+// 初始化serviceName
+session.set('serviceName', 'DoctorCli', 30 * 24 * 60 * 60 * 1000);
+session.set('password', 'root', 30 * 24 * 60 * 60 * 1000);
+
+const server = app.listen('10005', () => {
+    Logger.console('Doctor Client listening on: ' + server.address().port);
 });
