@@ -1,11 +1,6 @@
 'use strict'
 
 const Express = require('express');
-const http = require('http');
-const sqlQuery = require('sql-query').Query();
-
-const user = require('./control/user');
-const info = require('./control/info');
 
 // 日志模块
 const Logger = require('./util/logger');

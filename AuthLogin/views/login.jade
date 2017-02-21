@@ -12,7 +12,7 @@ block content
                     legend 用户登录
                     div.alert.alert-dismissible.fade.login-alert#infoAlert(role="alert")
                         p#infoAlertText &nbsp;
-                    input(type="hidden", id="inputSrc")
+                    input(type="hidden", id="inputSrc", value!=src)
                     div.form-group
                         label.control-label.col-lg-3(for="inputUserName") 用户名
                         div.col-lg-9
@@ -22,7 +22,7 @@ block content
                         label.control-label.col-lg-3(for="inputPassword") 密码
                         div.col-lg-9
                             label.sr-only(for="inputPassword") 请输入密码...
-                            input(type="text", class="form-control", id="inputPassword", placeholder="请输入密码...")
+                            input(type="password", class="form-control", id="inputPassword", placeholder="请输入密码...")
                     div.form-group
                         div.col-lg-12
                             a.btn.btn-primary.btn-block#loginBtn(href="javascript:void(0);") 登录

@@ -23,6 +23,8 @@ Role.getUri = function(roleId) {
         data: null
     };
 
+    Logger.console('Role Model: getUri function');
+
     let queryOption = sqlQuery.select()
                         .from(KeyDefine.TABLE_NAME)
                         .where({
@@ -33,6 +35,7 @@ Role.getUri = function(roleId) {
     DBPool.getConnection()
         .then(connection => {
             connection.query(queryOption, (err, rows) => {
+                connection.release();
                 if(err) {
                     Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME + ': ' + err);
                     defer.reject(err);

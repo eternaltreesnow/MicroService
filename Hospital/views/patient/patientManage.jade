@@ -1,0 +1,48 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'patient'
+block title
+    title 病人管理 | 基层医院
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li.active 病人管理
+    div.container-fluid
+        b.table-title.pull-left 病人列表
+        a.btn.btn-primary.btn-sm.pull-right(href="#")
+            span.glyphicon.glyphicon-plus
+            &nbsp;添加病人
+    div.container-fluid.table-container
+        table.table.table-striped.table-hover.table-bordered#patientTable(cellspacing="0", width="100%")
+            thead
+                tr
+                    th #
+                    th 病人号
+                    th 身份证号
+                    th 姓名
+                    th 性别
+                    th 操作
+            tbody
+
+block modal
+    div.modal.fade#deleteModal
+        div.modal-dialog
+            input#deleteId(type="hidden")
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                    h4.modal-title 删除提示
+                div.modal-body
+                    p 删除该病人将会影响其相关的检查单数据，请确认删除?
+                div.modal-footer
+                    a.btn.btn-default(data-dismiss="modal") 返回
+                    a.btn.btn-primary#deleteModalBtn(href="javascript:void(0);") 确认删除
+
+block script
+    script(src="/lib/DataTables-1.10.8/js/jquery.dataTables.min.js")
+    script(src="/lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js")
+    script(src="/lib/bootstrap-datetimepicker/moment/moment.js")
+    script.
+        seajs.use('js/patientManage');

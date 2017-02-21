@@ -34,7 +34,7 @@ Token.generate = function(serviceName, accessToken, ttl) {
     DBPool.getConnection()
         .then(connection => {
             connection.query(queryOption, (err, rows) => {
-                Logger.console(queryOption);
+                connection.release();
                 if(err) {
                     Logger.console('Token Model: Error in INSERT ' + KeyDefine.TABLE_NAME + ': ' + err);
                     defer.reject(err);

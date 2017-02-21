@@ -37,7 +37,7 @@ actionModel.get = function(actionName) {
     DBPool.getConnection()
         .then(connection => {
             connection.query(queryOption, (err, rows) => {
-                Logger.console(queryOption);
+                connection.release();
                 if(err) {
                     Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
                     Logger.console(err);

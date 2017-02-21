@@ -1,0 +1,60 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'add'
+block title
+    title 新建检查单 | 基层医院
+block css
+    link(rel="stylesheet", href="/lib/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css")
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li 检查单管理
+            li.active 新建检查单
+    div.container-fluid.upload-form
+        form.form-horizontal#checklistForm
+            legend 新建检查单
+            div.panel.panel-default
+                div.panel-heading
+                    div.panel-title 病人信息
+                div.panel-body
+                    div.form-group
+                        label.col-lg-3.control-label 病人id :
+                        div.col-lg-8
+                            input(type="text", id="patientId", name="patientId", class="form-control", placeholder="病人id...")
+                div.panel-body
+                    div.form-group
+                        label.col-lg-3.control-label 心电数据文件 :
+                        div.col-lg-8
+                            input(type="file", id="inputFile", name="ecg-file")
+        div.form-group
+            div.col-lg-8.col-lg-offset-3
+                a.btn.btn-primary#submitBtn(href="javascript:void(0);") 提交
+                a.btn.btn-default#cancerBtn(href="javascript:void(0);") 取消
+block modal
+    div.modal.fade#submitModal
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                    h4.modal-title 提交成功提示
+                div.modal-body
+                    p 提交成功...
+                div.modal-footer
+                    a.btn.btn-default(data-dismiss="modal") 返回继续添加
+                    a.btn.btn-primary(href="javascript:void(0);") 查看检查单列表
+
+block script
+    script(src="/lib/bootstrap-datetimepicker/moment/moment.js")
+    script(src="/lib/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js")
+    script.
+        seajs.use('js/addClinic');
+
+
+
+
+
+
+
+

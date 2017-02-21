@@ -30,6 +30,7 @@ Verify.verify = function(req, res) {
                 } else {
                     Logger.console('Verify Control: Session invalid');
                 }
+                Logger.console(JSON.stringify(verifyResult.data));
                 res.end(JSON.stringify(result));
             }, error => {
                 Logger.console('Verify Control: Session verify error');

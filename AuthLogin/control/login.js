@@ -41,10 +41,13 @@ Login.login = function(req, res) {
                 // 登录请求
                 return loginModel.login(username, password);
             } else {
+                // 验证失败则跳出promise链
                 result.code = checkResult.code;
                 result.desc = checkResult.desc;
                 result.uri = null;
                 res.send(result);
+                throw new Error('Abort promise chain');
+                return null;
             }
         })
         .then(loginResult => {
@@ -56,7 +59,10 @@ Login.login = function(req, res) {
                 // 获取操作
                 return loginModel.getOperation(userData);
             } else {
+                // 登录失败则跳出promise链
                 res.send(result);
+                throw new Error('Abort promise chain');
+                return null;
             }
         })
         .then(operationResult => {
@@ -64,9 +70,12 @@ Login.login = function(req, res) {
             Logger.console(operationResult.desc);
             // 注册session
             req.session.data = JSON.stringify(userData);
+            Logger.console(JSON.stringify(userData));
             if(src && src !== '' && src.length > 0) {
                 result.uri = src;
                 res.send(result);
+                throw new Error('Abort promise chain');
+                return null;
             } else {
                 // 无跳转uri时，根据角色获取跳转uri
                 return roleModel.getUri(userData.roleId);
@@ -81,9 +90,13 @@ Login.login = function(req, res) {
             res.send(result);
         })
         .catch(error => {
-            result.desc = 'Login error';
-            Logger.console(error);
-            res.send(result);
+            if(error.message === 'Abort promise chain') {
+                // 手动跳出promise链
+            } else {
+                result.desc = 'Login error';
+                Logger.console(error);
+                res.send(result);
+            }
         });
 };
 

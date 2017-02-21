@@ -22,12 +22,13 @@ $(function() {
                 src: $inputSrc.val()
             },
             success: function(data) {
+                console.log(data);
                 if(data.code == 1004) {
                     if(data.uri && data.uri !== '' && data.uri.length > 0) {
                         setAlert("登录成功, 即将自动跳转", "success", 3000);
                         setTimeout(function() {
                             document.location = data.uri;
-                        }, 3000);
+                        }, 1500);
                     } else {
                         setAlert("登录成功", "success", 3000);
                     }

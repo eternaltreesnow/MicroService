@@ -24,11 +24,16 @@ Session.validate = function(sessionId, operation) {
     let userData = JSON.parse(Cache.get(sessionId));
 
     if(userData) {
-        // 验证成功条件：session存在 & 操作合法
-        if(userData.operation instanceof Array && userData.operation.length > 0 && userData.operation.indexOf(operation) >= 0) {
+        // 操作为空则默认合法
+        if(operation === '') {
             result = KeyDefine.VALID_SUCCESS;
         } else {
-            result = KeyDefine.VALID_INVALID_OPERATION;
+            // 验证成功条件：session存在 & 操作合法
+            if(userData.operation instanceof Array && userData.operation.length > 0 && userData.operation.indexOf(operation) >= 0) {
+                result = KeyDefine.VALID_SUCCESS;
+            } else {
+                result = KeyDefine.VALID_INVALID_OPERATION;
+            }
         }
     }
     return result;
@@ -72,5 +77,18 @@ Session.set = function(sessionId, sessionData) {
     Logger.console('Session: ' + sessionId + ': ' + JSON.stringify(Cache.get(sessionId)));
     return code;
 };
+
+// 获取Cache中的用户数据
+Session.getUserData = function(req) {
+    let sessionId = req.signedCookies['connect.sid'];
+    let userData = null;
+    if(sessionId && sessionId.length > 0) {
+        userData = Cache.get(sessionId);
+        if(userData !== null) {
+            return JSON.parse(userData);
+        }
+    }
+    return userData;
+}
 
 module.exports = Session;

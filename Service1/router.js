@@ -16,13 +16,14 @@ const service = require('./control/service');
 const state = require('./control/state');
 const action = require('./control/action');
 const clinic = require('./control/clinic');
+const patient = require('./control/patient');
 
 let KeyDefine = new Define();
 
 let router = Express.Router();
 
 router.get('/', (req, res) => {
-    Auth.auth(req, res, service.demo);
+    Auth.auth(req, res, '', service.demo);
 });
 
 router.post('/action', (req, res) => {
@@ -30,21 +31,33 @@ router.post('/action', (req, res) => {
 });
 
 router.get('/action', (req, res) => {
-    Auth.auth(req, res, action.getAction);
+    Auth.auth(req, res, '', action.getAction);
 });
 
 router.get('/clinic', (req, res) => {
-    Auth.auth(req, res, clinic.getClinic);
+    Auth.auth(req, res, '', clinic.getClinic);
 });
 
 router.post('/clinic', (req, res) => {
-    Auth.auth(req, res, clinic.addClinic);
+    Auth.auth(req, res, '', clinic.addClinic);
+});
+
+router.get('/getClinicList', (req, res) => {
+    Auth.auth(req, res, '', clinic.getClinicList);
 });
 
 router.get('/profile', (req, res) => {
-    Auth.auth(req, res, function() {
+    Auth.auth(req, res, '', function() {
         res.render('profile');
     });
+});
+
+router.get('/getPatientList', (req, res) => {
+    Auth.auth(req, res, '', patient.getPatientList);
+});
+
+router.get('/deletePatient', (req, res) => {
+    Auth.auth(req, res, '', patient.deletePatient)
 });
 
 module.exports = router;

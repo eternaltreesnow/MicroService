@@ -5,11 +5,13 @@ const mysql = require('mysql');
 const Logger = require('../util/logger');
 
 const DBConfig = {
-    database: 'clinic',
+    database: 'ecg_auth',
     host: 'localhost',
     user: 'root',
     password: 'root',
-    port: 3306
+    port: 3306,
+    connectionLimit: 30,
+    waitForConnections: false
 };
 
 let mysqlPool = mysql.createPool(DBConfig);

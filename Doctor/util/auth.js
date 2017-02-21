@@ -16,10 +16,10 @@ let KeyDefine = new Define();
 
 // 登录, 授权, 验证相关Uri
 const authUrl = {
-    login: KeyDefine.AuthLoginUri + 'login',
-    verify: KeyDefine.AuthLoginUri + 'verify',
-    serviceAuth: KeyDefine.AuthLoginUri + 'service/auth',
-    serviceVerify: KeyDefine.AuthLoginUri + 'service/verify'
+    login: KeyDefine.AuthLoginUri + '/login',
+    verify: KeyDefine.AuthLoginUri + '/verify',
+    serviceAuth: KeyDefine.AuthLoginUri + '/service/auth',
+    serviceVerify: KeyDefine.AuthLoginUri + '/service/verify'
 };
 
 let Auth = {};
@@ -50,6 +50,7 @@ Auth.auth = function(req, res, operation, callback) {
                 response.setEncoding('utf8');
                 response.on('data', (data) => {
                     data = JSON.parse(data);
+                    Logger.console(JSON.parse(data.data.sessionData));
                     if(data.code === KeyDefine.RESULT_SUCCESS) {
                         Logger.console('Verify successfully');
                         if(session.set(data.data.sessionId, data.data.sessionData) === KeyDefine.RESULT_SUCCESS) {
@@ -75,6 +76,7 @@ Auth.auth = function(req, res, operation, callback) {
     } else {
         // 空sessionId直接跳转登录
         Logger.console('Null session id');
+        Logger.console(authUrl.login + '?src=http://' + req.headers.host + req.url);
         res.redirect(authUrl.login + '?src=http://' + req.headers.host + req.url);
     }
 };

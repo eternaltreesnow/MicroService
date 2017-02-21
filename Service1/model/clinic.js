@@ -35,7 +35,7 @@ clinicModel.add = function(clinic) {
     DBPool.getConnection()
         .then(connection => {
             connection.query(insertOption, (err, rows) => {
-                Logger.console(insertOption);
+                connection.release();
                 if(err) {
                     Logger.console('Error in INSERT ' + KeyDefine.TABLE_NAME);
                     Logger.console(err);
@@ -77,7 +77,7 @@ clinicModel.set = function(clinic) {
     DBPool.getConnection()
         .then(connection => {
             connection.query(updateOption, (err, rows) => {
-                Logger.console(updateOption);
+                connection.release();
                 if(err) {
                     Logger.console('Error in UPDATE ' + KeyDefine.TABLE_NAME);
                     Logger.console(err);
@@ -122,7 +122,7 @@ clinicModel.get = function(clinicId) {
     DBPool.getConnection()
         .then(connection => {
             connection.query(queryOption, (err, rows) => {
-                Logger.console(queryOption);
+                connection.release();
                 if(err) {
                     Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
                     Logger.console(err);
@@ -139,6 +139,116 @@ clinicModel.get = function(clinicId) {
                     result.code = KeyDefine.RESULT_SUCCESS;
                     result.desc = 'Success in QUERY ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinicId;
                     result.data = rows[0];
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
+/**
+ * 获取检查单列表长度
+ * @param  {Number} hospitalId 基层医院id
+ * @param  {Number} state      状态
+ * @return {Array}             列表长度
+ */
+clinicModel.count = function(hospitalId, state) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_QUERY,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Clinic Model: Unknowed error',
+        data: 0
+    };
+
+    let queryOption = sqlQuery.select()
+                        .from(KeyDefine.TABLE_NAME)
+                        .count()
+                        .where({
+                            hospitalId: hospitalId,
+                            state: state
+                        })
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else {
+                    Logger.console(rows);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.data = rows[0]['COUNT(*)'];
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
+/**
+ * 获取检查单列表
+ * @param  {Number} hospitalId 基层医院id
+ * @param  {Number} state      检查单状态
+ * @param  {Number} start      起始位置
+ * @param  {Number} length     筛选长度
+ * @return {Array}             检查单列表
+ */
+clinicModel.getList = function(hospitalId, state, start, length) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_QUERY,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Clinic Model: Unknowed error',
+        data: []
+    };
+
+    let queryOption = sqlQuery.select()
+                        .from(KeyDefine.TABLE_NAME)
+                        .select('*')
+                        .from('patient', 'patientId', 'patientId', { joinType: 'left' })
+                        .select('*')
+                        .where('clinic', { hospitalId: hospitalId }, { state: state })
+                        .limit(start + ', ' + length)
+                        .build();
+
+    Logger.console(queryOption);
+
+    // let queryOption = 'SELECT clinic.*, patient.* FROM clinic LEFT JOIN patient ON clinic.patientId = patient.patientId WHERE clinic.hospitalId = ' + hospitalId + 'AND clinic.state = ' + state;
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else if(rows.length <= 0) {
+                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME + ': state=' + state);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Empty in QUERY' + KeyDefine.TABLE_NAME;
+                    defer.resolve(result);
+                } else {
+                    Logger.console('Success in QUERY ' + KeyDefine.TABLE_NAME);
+                    // Logger.console('Result: ' + JSON.stringify(rows));
+
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Success in QUERY ' + KeyDefine.TABLE_NAME;
+                    result.data = rows;
                     defer.resolve(result);
                 }
             });

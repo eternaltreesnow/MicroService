@@ -1,0 +1,40 @@
+// Navigation
+div.navbar.navbar-default.navbar-fixed-top.header(role="navigation")
+    - // Brand and toggle get grouped for better mobile display
+    div.container
+        div.navbar-header
+            button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#navbar", aria-expanded="false", aria-controls="navbar")
+                span.sr-only Toggle Navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            a.navbar-brand.navbar-logo(href="#")
+                span.navbar-logo-txt ECG Cloud Platform
+        div.navbar-collapse.collapse#navbar
+            ul.nav.navbar-nav.navbar-right
+                li.dropdown(role="presentation")
+                    a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
+                        span.glyphicon.glyphicon-user
+                        span.userName
+                        span.caret
+                        ul.dropdown-menu
+                            li
+                                a.menu-link(href="#")
+                                    span.glyphicon.glyphicon-off
+                                    &nbsp;退出登录
+        - // Sidebar Menu Items
+        div.collapse.navbar-collapse.navbar-ex1-collapse
+            ul.nav.side-nav
+                - // 定义导航栏状态
+                - var child_team = '';
+                - var child_contract = '';
+                if nav_parent == 'team'
+                    - child_team = 'active';
+                else if nav_parent == 'contract'
+                    - child_contract = 'active';
+
+                li(class=child_team)
+                    a(href="#") 团队管理
+                li(class=child_contract)
+                    a(href="#") 医院与契约管理
+

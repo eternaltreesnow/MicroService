@@ -63,6 +63,7 @@ Login.login = (username, password) => {
     DBPool.getConnection()
         .then(connection => {
             connection.query(queryOption, (err, rows) => {
+                connection.release();
                 if(err) {
                     Logger.console('Login Model: Error in QUERY ' + KeyDefine.TABLE_NAME + ': ' + err);
                     defer.reject(err);
@@ -82,6 +83,7 @@ Login.login = (username, password) => {
                         result.data = {
                             userId: rows[0].userId,
                             username: rows[0].username,
+                            realName: rows[0].realName,
                             roleId: rows[0].roleId,
                             operation: new Array()
                         };
@@ -118,6 +120,7 @@ Login.getOperation = function(userData) {
     DBPool.getConnection()
         .then(connection => {
             connection.query(queryOption, (err, rows) => {
+                connection.release();
                 if(err) {
                     Logger.console('Error in QUERY operations: ' + err);
                     defer.reject(err);

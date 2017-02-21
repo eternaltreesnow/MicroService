@@ -1,0 +1,71 @@
+// Navigation
+div.navbar.navbar-default.navbar-fixed-top.header(role="navigation")
+    - // Brand and toggle get grouped for better mobile display
+    div.container
+        div.navbar-header
+            button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#navbar", aria-expanded="false", aria-controls="navbar")
+                span.sr-only Toggle Navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            a.navbar-brand.navbar-logo(href="#")
+                span.navbar-logo-txt ECG Cloud Platform
+        div.navbar-collapse.collapse#navbar
+            ul.nav.navbar-nav.navbar-right
+                li.dropdown(role="presentation")
+                    a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
+                        span.glyphicon.glyphicon-user
+                        span.userName
+                        span.caret
+                        ul.dropdown-menu
+                            li
+                                a.menu-link(href="#") 医院信息
+                            li.divider(role="separator")
+                            li
+                                a.menu-link(href="#")
+                                    span.glyphicon.glyphicon-off
+                                    &nbsp;退出登录
+        - // Sidebar Menu Items
+        div.collapse.navbar-collapse.navbar-ex1-collapse
+            ul.nav.side-nav
+                - // 定义导航栏状态
+                - var parent_task = 'collapse';
+                - var child_addClinic = '';
+                - var child_clinicManage = '';
+                - var child_unfinishedClinic = '';
+                - var child_finishedClinic = '';
+                - var child_patient = '';
+                - var child_person = '';
+                if nav_parent == 'task'
+                    - parent_task = 'collapse in';
+                    if nav_child == 'clinicManage'
+                        - child_clinicManage = 'active';
+                    else if nav_child == 'unfinishedClinic'
+                        - child_unfinishedClinic = 'active';
+                    else if nav_child == 'finishedClinic'
+                        - child_finishedClinic = 'active';
+                else if nav_parent == 'add'
+                    - child_addClinic = 'active';
+                else if nav_parent == 'patient'
+                    - child_patient = 'active';
+                else
+                    - child_person = 'active';
+
+                li(class=child_addClinic)
+                    a(href="/clinic/addClinic") 新建检查单
+                li
+                    a(href="javascript:void(0);", data-toggle="collapse", data-target="#task-drop", aria-expanded="true")
+                        span 检查单管理
+                        span.caret
+                    ul#task-drop(class=parent_task)
+                        li(class=child_clinicManage)
+                            a(href="/") 所有检查单
+                        li(class=child_unfinishedClinic)
+                            a(href="/clinic/unfinishedClinic") 未完成检查单
+                        li(class=child_finishedClinic)
+                            a(href="/clinic/finishedClinic") 已完成检查单
+                li(class=child_patient)
+                    a(href="/patient/patientManage") 病人管理
+                li(class=child_person)
+                    a(href="#") 医院信息
+

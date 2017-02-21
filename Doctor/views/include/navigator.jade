@@ -15,7 +15,7 @@ div.navbar.navbar-default.navbar-fixed-top.header(role="navigation")
                 li.dropdown(role="presentation")
                     a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                         span.glyphicon.glyphicon-user
-                        span.userName
+                        span.userName #{username}
                         span.caret
                         ul.dropdown-menu
                             li
@@ -30,17 +30,17 @@ div.navbar.navbar-default.navbar-fixed-top.header(role="navigation")
             ul.nav.side-nav
                 - // 定义导航栏状态
                 - var parent_task = 'collapse';
-                - var child_clinic = '';
-                - var child_uncheckTask = '';
+                - var child_analysis = '';
+                - var child_censorTask = '';
                 - var child_allTask = '';
                 - var child_team = '';
                 - var child_person = '';
                 if nav_parent == 'task'
                     - parent_task = 'collapse in';
-                    if nav_child == 'clinic'
-                        - child_clinic = 'active';
-                    else if nav_child == 'uncheck'
-                        - child_uncheckTask = 'active';
+                    if nav_child == 'analysis'
+                        - child_analysis = 'active';
+                    else if nav_child == 'censor'
+                        - child_censorTask = 'active';
                     else if nav_child == 'alltask'
                         - child_allTask = 'active';
                 else if nav_parent == 'team'
@@ -53,14 +53,17 @@ div.navbar.navbar-default.navbar-fixed-top.header(role="navigation")
                         span 任务管理
                         span.caret
                     ul#task-drop(class=parent_task)
-                        li(class=child_clinic)
-                            a(href="#") 检查单任务
-                        li(class=child_uncheckTask)
-                            a(href="#") 待审核任务
+                        li(class=child_analysis)
+                            a(href="#") 分析任务
+                        li(class=child_censorTask)
+                            a(href="#") 审核任务
                         li(class=child_allTask)
                             a(href="#") 所有任务
                 li(class=child_team)
                     a(href="#") 团队管理
                 li(class=child_person)
                     a(href="#") 个人信息
+        - // Alert Framework
+        div.alert.alert-dismissible.fade.common-alert#infoAlert(role="alert")
+            p#infoAlertText &nbsp;
 

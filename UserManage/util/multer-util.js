@@ -20,9 +20,9 @@ module.exports = function(type) {
         destination: (req, file, callback) => {
             callback(null, './uploads/' + folder);
         },
-        fieldname: (req, file, callback) => {
+        filename: (req, file, callback) => {
             let fileFormat = file.originalname.split('.');
-            callback(null, filename + '-' + Date.now() + '.' + fileFormat[fileFormat.length - 1]);
+            callback(null, file.fieldname + '-' + Date.now() + '.' + fileFormat[fileFormat.length - 1]);
         }
     });
 

@@ -31,7 +31,7 @@ UserModel.add = function(user) {
     DBPool.getConnection()
         .then(connection => {
             connection.query(insertOption, (err, rows) => {
-                Logger.console(insertOption);
+                connection.release();
                 if(err) {
                     Logger.console('Error in INSERT ' + KeyDefine.TABLE_NAME);
                     Logger.console(err);
@@ -73,7 +73,7 @@ UserModel.set = function(user) {
     DBPool.getConnection()
         .then(connection => {
             connection.query(updateOption, (err, rows) => {
-                Logger.console(updateOption);
+                connection.release();
                 if(err) {
                     Logger.console('Error in UPDATE ' + KeyDefine.TABLE_NAME);
                     Logger.console(err);
@@ -117,7 +117,7 @@ UserModel.modifyStatus = function(userId, status) {
     DBPool.getConnection()
         .then(connection => {
             connection.query(updateOption, (err, rows) => {
-                Logger.console(updateOption);
+                connection.release();
                 if(err) {
                     Logger.console('Error in UPDATE ' + KeyDefine.TABLE_NAME);
                     Logger.console(err);

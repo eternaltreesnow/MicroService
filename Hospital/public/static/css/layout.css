@@ -1,0 +1,206 @@
+html {
+    height: 101%;
+}
+/* Top Navigation */
+.top-nav>li {
+    display: inline-block;
+    float: left;
+}
+.top-nav>.open>.dropdown-menu {
+    float: left;
+    position: absolute;
+    margin-top: 0;
+    border: 1px solid rgba(0,0,0,.15);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background-color: #fff;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+.top-nav>.open>.dropdown-menu>li>a {
+    white-space: normal;
+}
+ul.message-dropdown {
+    padding: 0;
+    max-height: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.message-preview {
+    width: 275px;
+    border-bottom: 1px solid rgba(0,0,0,.15);
+}
+ul.dropdown-menu li>a {
+    padding: 0;
+}
+ul.dropdown-menu li a.menu-link {
+    padding: 10px 20px;
+}
+li.message-footer {
+    margin: 5px 0;
+}
+.form-control {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Side Navigation */
+@media(min-width: 768px) {
+    .side-nav {
+        position: fixed;
+        top: 60px;
+        left: 225px;
+        bottom: 0;
+        width: 225px;
+        margin-left: -225px;
+        border-right: 1px solid #ecf0f1;
+        border-radius: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: #FFF;
+        padding-bottom: 40px;
+    }
+    .side-nav>li>a {
+        width: 225px;
+        color: #555555;
+        padding-top: 19.5px;
+        padding-bottom: 19.5px;
+    }
+    .side-nav li a:hover,
+    .side-nav li a:focus {
+        outline: none;
+        background-color: #ecf0f1;
+    }
+    .side-nav li.active>a,
+    .side-nav li.active>a:visited,
+    .side-nav li.active>a:hover,
+    .side-nav li.active>a:focus {
+        background-color: #1A242F;
+        color: #FFF;
+    }
+}
+.side-nav>li>ul {
+    padding: 0;
+}
+.side-nav>li>ul>li>a {
+    display: block;
+    padding: 10px 15px 10px 38px;
+    text-decoration: none;
+    color: #555555;
+}
+
+/* Main page */
+.main-page {
+    margin: 60px 0 100px 225px;
+}
+.main-page .upload-form {
+    max-width: 1170px;
+}
+.user-management-tree {
+    min-height: 440px;
+    max-height: 650px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 15px 0 0 15px;
+    border: 2px solid #ecf0f1;
+    border-radius: 5px;
+}
+.user-management-detail {
+    min-height: 440px;
+    max-height: 650px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 15px 0 0 15px;
+    border: 2px solid #ecf0f1;
+    border-radius: 5px;
+    font-size: 14pt;
+    color: #333;
+}
+
+/* Bread Crumb */
+.path-navigation .breadcrumb {
+    border-radius: 0px;
+}
+.path-navigation .breadcrumb li a {
+    color: #2C3E50;
+}
+
+/* Filter Container */
+.filter-container {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #E8E8E8;
+    border-radius: 2px;
+}
+.filter-container .form-inline {
+    padding: 5px 0 5px 5px;
+}
+.filter-container .form-inline:not(:first-child) {
+    border-top: 1px dashed #dedede;
+}
+.filter-container .control-label {
+    min-width: 150px;
+}
+.filter-addional .form-group {
+    padding: 5px 0 5px 0;
+}
+.filter-addional .form-control {
+    margin-right: 5px;
+}
+
+/* Cutting Line */
+.cut-line {
+    width: 100%;
+    height: 1px;
+    margin: 9px 1px;
+    overflow: hidden;
+    background-color: #2C3E50;
+    border-bottom: 1px solid #95A5A6;
+}
+
+/* Form Hint */
+.form-hint {
+    display: inline-block;
+    height: 43px;
+    line-height: 43px;
+}
+.form-hint-nec {
+    color: red;
+}
+.form-hint-opt {
+    color: #8A6D3B;
+}
+.form-hint-suc {
+    color: #3C763D;
+}
+
+/* Common Alert */
+.common-alert {
+    position: absolute;
+    width: 600px;
+    margin-left: 25%;
+    margin-top: 1px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+@media(max-width: 1100px) {
+    .common-alert {
+        width: 450px;
+        margin-left: 35%;
+    }
+}
+.modal-alert {
+    position: absolute;
+    width: 400px;
+    margin-left: 79px;
+    margin-top: -15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.login-alert {
+    max-width: 870px;
+    margin: -15px auto 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
