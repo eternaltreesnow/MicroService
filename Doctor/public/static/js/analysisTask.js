@@ -9,8 +9,6 @@ define(function(require) {
         }, {
             "data": "gender"
         }, {
-            "data": "age"
-        }, {
             "data": "addTime"
         }, {
             "data": "description"
@@ -39,10 +37,14 @@ define(function(require) {
             dom: 'rtl<"ecg-table-paginate"p>',
             serverSide: true,
             ajax: {
-                url: occupiedTask + '/showAcceptedTask',
+                url: 'http://localhost:10002/getDocList',
                 type: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 data: function(d) {
-                    d.status = 3;
+                    d.state = 3;
                     delete d.columns;
                     delete d.order;
                 },
@@ -78,10 +80,14 @@ define(function(require) {
             dom: 'rtl<"ecg-table-paginate"p>',
             serverSide: true,
             ajax: {
-                url: '/showAcceptedTask',
+                url: 'http://localhost:10002/getDocList',
                 type: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 data: function(d) {
-                    d.status = 3;
+                    d.state = 4;
                     delete d.columns;
                     delete d.order;
                 },
@@ -99,7 +105,7 @@ define(function(require) {
         function resetData(data) {
             for(var i = 0; i < data.length; i++) {
                 data[i]['clickId'] = i + 1 + '<input type="hidden" value="' + data[i]['clickId'] + '">';
-                if(data[i]['status'] == '') {
+                if(data[i]['state'] == '4') {
                     data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="analysis">开始分析</a>'
                                     + '<a href="javascript:void(0);" class="btn btn-warning btn-xs" data-link="cancel">取消任务</a>';
                 } else {

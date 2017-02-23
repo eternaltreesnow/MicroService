@@ -41,7 +41,7 @@ const origin = 'http://localhost:10001,'
              + 'http://localhost:10008';
 // 设置跨域访问
 app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:10007");
+    res.header("Access-Control-Allow-Origin", "http://localhost:10005");
     res.header("Access-Control-Allow-Headers", "*, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
     res.header("Access-Control-Allow-Credentials", "true");
