@@ -42,8 +42,12 @@ router.post('/clinic', (req, res) => {
     Auth.auth(req, res, '', clinic.addClinic);
 });
 
-router.get('/getClinicList', (req, res) => {
+router.get('/getHospList', (req, res) => {
     Auth.auth(req, res, '', clinic.getHospList);
+});
+
+router.get('/getDocList', (req, res) => {
+    Auth.auth(req, res, '', clinic.getDocList);
 });
 
 router.get('/profile', (req, res) => {

@@ -168,13 +168,6 @@ Clinic.getHospList = function(req, res) {
 
 // 获取医生相关的检查单数据列表
 Clinic.getDocList = function(req, res) {
-    let result = {
-        status: KeyDefine.RESULT_SUCCESS,
-        draw: draw,
-        data: [],
-        recordsFiltered: 0
-    };
-
     // 获取session中的用户数据
     let userData = Session.getUserData(req);
     let doctorId;

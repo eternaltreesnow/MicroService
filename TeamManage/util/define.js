@@ -30,5 +30,5 @@ module.exports = function define() {
         'doctor': 2,
         'technician': 3
     };
-    this.AuthLoginUri = 'http://localhost:10001'; // AuthLogin服务Uri
+    this.AuthLoginUri = 'http://localhost:10001/'; // AuthLogin服务Uri
 }

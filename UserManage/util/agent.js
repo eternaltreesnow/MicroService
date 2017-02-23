@@ -46,6 +46,7 @@ Agent.request = function(method, uri, params, callback) {
         Request(uri + '?' + query_params, function(error, res, body) {
             if(!error && res.statusCode == 200) {
                 let info = JSON.parse(body);
+                Logger.console(info);
                 // 验证失败，则执行授权方法
                 if(info.code === KeyDefine.VALID_INVALID_SERVICE) {
                     Agent.auth(function(tag) {

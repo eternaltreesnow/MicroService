@@ -39,7 +39,7 @@ define(function(require) {
             dom: 'rtl<"ecg-table-paginate"p>',
             serverSide: true,
             ajax: {
-                url: '//localhost:10002/getClinicList',
+                url: '//localhost:10002/getHospList',
                 type: 'GET',
                 xhrFields: {
                     withCredentials: true

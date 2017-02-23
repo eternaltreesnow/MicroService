@@ -196,8 +196,7 @@ clinicModel.count = function(condition) {
 
 /**
  * 获取检查单列表
- * @param  {Number} hospitalId 基层医院id
- * @param  {Number} state      检查单状态
+ * @param  {JSON}   condition  搜索条件
  * @param  {Number} start      起始位置
  * @param  {Number} length     筛选长度
  * @return {Array}             检查单列表
@@ -235,7 +234,7 @@ clinicModel.getList = function(condition, start, length) {
                     Logger.console(err);
                     defer.reject(err);
                 } else if(rows.length <= 0) {
-                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME + ': state=' + state);
+                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME);
                     result.code = KeyDefine.RESULT_SUCCESS;
                     result.desc = 'Empty in QUERY' + KeyDefine.TABLE_NAME;
                     defer.resolve(result);
