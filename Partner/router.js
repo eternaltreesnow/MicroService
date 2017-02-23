@@ -21,6 +21,12 @@ router.get('/test', (req, res) => {
     });
 });
 
+// 退出登录
+router.get('/logout', (req, res) => {
+    res.cookie('connect.sid', '', {expires: new Date(1), path: '/' });
+    res.redirect('/');
+});
+
 // 团队管理列表页
 router.get('/', (req, res) => {
     Auth.auth(req, res, '', teamControl.teamManage);

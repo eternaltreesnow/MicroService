@@ -21,6 +21,12 @@ router.get('/test', (req, res) => {
     });
 });
 
+// 退出登录
+router.get('/logout', (req, res) => {
+    res.cookie('connect.sid', '', {expires: new Date(1), path: '/' });
+    res.redirect('/');
+});
+
 // 检查单列表页
 router.get('/', (req, res) => {
     Auth.auth(req, res, '', clinicControl.clinicManage);

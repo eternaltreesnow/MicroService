@@ -3,6 +3,7 @@
 const Express = require('express');
 const clinicControl = require('./control/clinic');
 const teamControl = require('./control/team');
+const logoutControl = require('./control/logout');
 
 // 日志模块
 const Logger = require('./util/logger');
@@ -19,6 +20,12 @@ router.get('/test', (req, res) => {
     Auth.auth(req, res, '', function() {
         res.render('test');
     });
+});
+
+// 退出登录
+router.get('/logout', (req, res) => {
+    res.cookie('connect.sid', '', {expires: new Date(1), path: '/' });
+    res.redirect('/');
 });
 
 // 检查单列表页

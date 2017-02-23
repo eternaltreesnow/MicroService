@@ -155,7 +155,7 @@ clinicModel.get = function(clinicId) {
  * @param  {Number} state      状态
  * @return {Array}             列表长度
  */
-clinicModel.count = function(hospitalId, state) {
+clinicModel.count = function(condition) {
     let defer = Q.defer();
 
     let result = {
@@ -169,10 +169,7 @@ clinicModel.count = function(hospitalId, state) {
     let queryOption = sqlQuery.select()
                         .from(KeyDefine.TABLE_NAME)
                         .count()
-                        .where({
-                            hospitalId: hospitalId,
-                            state: state
-                        })
+                        .where(condition)
                         .build();
 
     DBPool.getConnection()
@@ -205,7 +202,7 @@ clinicModel.count = function(hospitalId, state) {
  * @param  {Number} length     筛选长度
  * @return {Array}             检查单列表
  */
-clinicModel.getList = function(hospitalId, state, start, length) {
+clinicModel.getList = function(condition, start, length) {
     let defer = Q.defer();
 
     let result = {
@@ -221,7 +218,7 @@ clinicModel.getList = function(hospitalId, state, start, length) {
                         .select('*')
                         .from('patient', 'patientId', 'patientId', { joinType: 'left' })
                         .select('*')
-                        .where('clinic', { hospitalId: hospitalId }, { state: state })
+                        .where('clinic', condition)
                         .limit(start + ', ' + length)
                         .build();
 

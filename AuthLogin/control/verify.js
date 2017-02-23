@@ -12,6 +12,7 @@ let Verify = {};
 Verify.verify = function(req, res) {
     let result = {
         code: KeyDefine.RESULT_REDIRECT,
+        data: {},
         url: 'http://' + req.headers.host + '/login'
     };
     let sessionId = req.query.sessionId;

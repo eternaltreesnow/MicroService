@@ -5,6 +5,7 @@ const Logger = require('../util/logger');
 const Define = require('../util/define');
 const multer = require('../util/multer-util');
 const Session = require('../util/session');
+const Agent = require('../util/agent');
 
 const clinicModel = require('../model/clinic');
 const contractModel = require('../model/contract');
@@ -139,7 +140,8 @@ Clinic.addClinic = function(req, res) {
     });
 };
 
-Clinic.getClinicList = function(req, res) {
+// 获取基层医院相关的检查单数据列表
+Clinic.getHospList = function(req, res) {
     // 获取session中的用户数据
     let userData = Session.getUserData(req);
     let hospitalId;
@@ -156,6 +158,16 @@ Clinic.getClinicList = function(req, res) {
         state = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     }
 
+    let condition = {
+        hospitalId: hospitalId,
+        state: state
+    };
+
+    Clinic.getClinicList(condition, draw, start, length, res);
+};
+
+// 获取医生相关的检查单数据列表
+Clinic.getDocList = function(req, res) {
     let result = {
         status: KeyDefine.RESULT_SUCCESS,
         draw: draw,
@@ -163,10 +175,81 @@ Clinic.getClinicList = function(req, res) {
         recordsFiltered: 0
     };
 
-    clinicModel.count(hospitalId, state)
+    // 获取session中的用户数据
+    let userData = Session.getUserData(req);
+    let doctorId;
+    if(userData) {
+        doctorId = userData.userId;
+    }
+
+    let draw = req.query.draw;
+    let start = req.query.start;
+    let length = req.query.length;
+    let state = req.query.state;
+
+    let condition;
+    // state = 3: 待拉取检查单
+    if(state == 3) {
+        let method = 'GET';
+        let uri = 'http://localhost:10004/doc/getPartnerId';
+        let param = {
+            "userId": doctorId
+        };
+        Agent.request(method, uri, param, function(data) {
+            if(data.code === KeyDefine.RESULT_SUCCESS) {
+                let condition = {
+                    'partnerId': data.data,
+                    'state': [2,3]
+                };
+                Clinic.getClinicList(condition, draw, start, length, res);
+            }
+        });
+    // state = 4: 医生分析中的检查单
+    } else if(state == 4) {
+        let condition = {
+            'doctorId': doctorId,
+            'state': 4
+        };
+        Clinic.getClinicList(condition, draw, start, length, res);
+    // state = 6(1): 初审检查单
+    } else if(state == 61) {
+        let method = 'GET';
+        let uri = 'http://localhost:10004/doc/getTeamId';
+        let param = {
+            "userId": doctorId
+        };
+        Agent.request(method, uri, param, function(data) {
+            if(data.code === KeyDefine.RESULT_SUCCESS) {
+                let condition = {
+                    teamId: data.data,
+                    doctorId: 0,
+                    state: 6
+                };
+                Clinic.getClinicList(condition, draw, start, length, res);
+            }
+        });
+    // state = 6(2): 重审检查单
+    } else if(state == 62) {
+        let condition = {
+            doctorId: doctorId,
+            state: 6
+        };
+        Clinic.getClinicList(condition, draw, start, length, res);
+    }
+};
+
+Clinic.getClinicList = function(condition, draw, start, length, res) {
+    let result = {
+        status: KeyDefine.RESULT_SUCCESS,
+        draw: draw,
+        data: [],
+        recordsFiltered: 0
+    };
+
+    clinicModel.count(condition)
         .then(countResult => {
             result.recordsFiltered = countResult.data;
-            return clinicModel.getList(hospitalId, state, start, length);
+            return clinicModel.getList(condition, start, length);
         })
         .then(clinicResult => {
             result.data = clinicResult.data;
@@ -176,6 +259,6 @@ Clinic.getClinicList = function(req, res) {
             Logger.console(error);
             res.send(result);
         });
-};
+}
 
 module.exports = Clinic;
