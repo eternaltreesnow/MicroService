@@ -33,23 +33,5 @@ define(function(require) {
                 }
             });
         });
-
-        var $cancerBtn = $("#cancerBtn");
-        $cancerBtn.on('click', function() {
-            $.ajax({
-                type: 'GET',
-                url: 'http://localhost:10002/',
-                xhrFields: {
-                    withCredentials: true
-                },
-                crossDomain: true,
-                success: function(data) {
-                    console.log(data);
-                },
-                error: function(error) {
-                    console.error(error);
-                }
-            });
-        });
     });
 });

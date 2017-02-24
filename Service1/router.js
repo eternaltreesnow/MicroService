@@ -42,6 +42,11 @@ router.post('/clinic', (req, res) => {
     Auth.auth(req, res, '', clinic.addClinic);
 });
 
+// 接单请求
+router.post('/occupyClinic', (req, res) => {
+    Auth.auth(req, res, '', clinic.occupyClinic);
+});
+
 router.get('/getHospList', (req, res) => {
     Auth.auth(req, res, '', clinic.getHospList);
 });
@@ -62,6 +67,11 @@ router.get('/getPatientList', (req, res) => {
 
 router.get('/deletePatient', (req, res) => {
     Auth.auth(req, res, '', patient.deletePatient)
+});
+
+// 上传心电报告
+router.post('/report', (req, res) => {
+    Auth.auth(req, res, '', clinic.uploadReport);
 });
 
 module.exports = router;

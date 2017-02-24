@@ -59,7 +59,7 @@ clinicModel.add = function(clinic) {
     return defer.promise;
 };
 
-clinicModel.set = function(clinic) {
+clinicModel.set = function(clinicId, clinic) {
     let defer = Q.defer();
 
     let result = {
@@ -72,6 +72,9 @@ clinicModel.set = function(clinic) {
     let updateOption = sqlQuery.update()
                         .into(KeyDefine.TABLE_NAME)
                         .set(clinic)
+                        .where({
+                            clinicId: clinicId
+                        })
                         .build();
 
     DBPool.getConnection()
@@ -80,12 +83,11 @@ clinicModel.set = function(clinic) {
                 connection.release();
                 if(err) {
                     Logger.console('Error in UPDATE ' + KeyDefine.TABLE_NAME);
-                    Logger.console(err);
                     defer.reject(err);
                 } else if (rows.affectedRows <= 0) {
-                    Logger.console('Null in UPDATE ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinic.clinicId);
+                    Logger.console('Null in UPDATE ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinicId);
                     result.code = KeyDefine.RESULT_EMPTY;
-                    result.desc = 'Null in UPDATE' + KeyDefine.TABLE_NAME + ': clinicId=' + clinic.clinicId;
+                    result.desc = 'Null in UPDATE' + KeyDefine.TABLE_NAME + ': clinicId=' + clinicId;
                     defer.resolve(result);
                 } else {
                     Logger.console('Success in UPDATE ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinic.clinicId);

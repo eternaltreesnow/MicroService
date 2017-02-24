@@ -173,6 +173,13 @@ Clinic.getDocList = function(req, res) {
     let length = req.query.length;
     let state = req.query.state;
 
+    let result = {
+        status: KeyDefine.RESULT_SUCCESS,
+        draw: draw,
+        data: [],
+        recordsFiltered: 0
+    };
+
     let condition;
     // state = 3: 待拉取检查单
     if(state == 3) {
@@ -188,6 +195,8 @@ Clinic.getDocList = function(req, res) {
                     'state': [2,3]
                 };
                 Clinic.getClinicList(condition, draw, start, length, res);
+            } else {
+                res.send(result);
             }
         });
     // state = 4: 医生分析中的检查单
@@ -212,6 +221,8 @@ Clinic.getDocList = function(req, res) {
                     state: 6
                 };
                 Clinic.getClinicList(condition, draw, start, length, res);
+            } else {
+                res.send(result);
             }
         });
     // state = 6(2): 重审检查单
@@ -245,6 +256,111 @@ Clinic.getClinicList = function(condition, draw, start, length, res) {
             Logger.console(error);
             res.send(result);
         });
-}
+};
+
+Clinic.uploadReport = function(req, res) {
+    // 获取session中的用户数据
+    let userData = Session.getUserData(req);
+    Logger.console(userData);
+
+    let result = {
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Clinic Report: Unknowed error'
+    };
+
+    // 上传心电报告文件并重命名
+    let upload = multer('report').single('ecg-report');
+    upload(req, res, (err) => {
+        if(err) {
+            Logger.console(err);
+            result.desc = 'Clinic Report: File upload failed';
+            res.send(result);
+        } else {
+            let clinic;
+            let clinicId = req.body.id;
+            if(userData.roleId == 1) {
+                clinic = {
+                    state: 9,
+                    reportTime: Date.now(),
+                    report: req.file.filename
+                };
+            } else if(userData.roleId == 2) {
+                clinic = {
+                    state: 6,
+                    reportTime: Date.now(),
+                    report: req.file.filename
+                };
+            }
+            Logger.console(clinic);
+            clinicModel.set(clinicId, clinic)
+                .then(clinicResult => {
+                    Logger.console(clinicResult);
+                    result.code = clinicResult.code;
+                    result.desc = clinicResult.desc;
+                    res.send(result);
+                }, error => {
+                    Logger.console(error);
+                    result.desc = 'Clinic Report: update data failed';
+                    res.send(result);
+                });
+        }
+    });
+};
+
+Clinic.occupyClinic = function(req, res) {
+    // 获取session中的用户数据
+    let userData = Session.getUserData(req);
+    Logger.console(userData);
+
+    let result = {
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Occupy Clinic: Unknowed error'
+    };
+
+    // 获取参数
+    let clinicId = req.body.id;
+    let userId = userData.userId;
+    let clinic;
+
+    // 获取teamId
+    let method = 'GET';
+    let uri = KeyDefine.TeamManageUri + '/doc/getTeamId';
+    let param = {
+        "userId": userId
+    };
+    Agent.request(method, uri, param, function(data) {
+        if(data.code === KeyDefine.RESULT_SUCCESS) {
+            // 构造model调用参数
+            let teamId = data.data;
+            if(userData.roleId == 1) {
+                clinic = {
+                    doctorId: userId,
+                    teamId: teamId,
+                    state: 4
+                };
+            } else if(userData.roleId == 2) {
+                clinic = {
+                    techId: userId,
+                    teamId: teamId,
+                    state: 5
+                };
+            }
+            clinicModel.set(clinicId, clinic)
+                .then(clinicResult => {
+                    Logger.console(clinicResult);
+                    result.code = clinicResult.code;
+                    result.desc = clinicResult.desc;
+                    res.send(result);
+                }, error => {
+                    Logger.console(error);
+                    result.desc = 'Occupy Clinic: Update data failed';
+                    res.send(result);
+                });
+        } else {
+            result.desc = 'Occupy Clinic: Get TeamId failed';
+            res.send(result);
+        }
+    });
+};
 
 module.exports = Clinic;

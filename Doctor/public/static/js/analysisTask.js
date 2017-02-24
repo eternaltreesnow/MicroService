@@ -140,16 +140,16 @@ define(function(require) {
             $linkAccept.unbind();
             $linkAccept.on('click', function() {
                 var $this = $(this);
-                var id = $this.parent('tr').children(':first').children(':first').val();
+                var id = $this.parents('tr').children(':first').children('input').val();
 
                 $.ajax({
                     type: 'POST',
-                    url: '/occupyChecklist',
+                    url: 'http://localhost:10002/occupyClinic',
                     data: {
                         id: id
                     },
                     success: function(data) {
-                        if (data.status == 200) {
+                        if (data.code == 200) {
                             $submitModalTaskId.val(id);
                             $submitModal.modal({
                                 'show': true,
