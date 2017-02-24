@@ -104,14 +104,14 @@ define(function(require) {
 
         function resetData(data) {
             for(var i = 0; i < data.length; i++) {
-                data[i]['clickId'] = i + 1 + '<input type="hidden" value="' + data[i]['clickId'] + '">';
+                data[i]['clinicId'] = i + 1 + '<input type="hidden" value="' + data[i]['clinicId'] + '">';
                 if(data[i]['state'] == '4') {
                     data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="analysis">开始分析</a>'
                                     + '<a href="javascript:void(0);" class="btn btn-warning btn-xs" data-link="cancel">取消任务</a>';
                 } else {
                     data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="accept">接单</a>';
                 }
-                data[i]['addTime'] = moment(data[i]['addTime']).format('YYYY-MM-DD HH:mm');
+                data[i]['addTime'] = moment(parseFloat(data[i]['addTime'])).format('YYYY-MM-DD HH:mm');
             }
         }
 
@@ -121,8 +121,8 @@ define(function(require) {
             $linkAnalysis.unbind();
             $linkAnalysis.on('click', function() {
                 var $this = $(this);
-                var id = $this.parent('tr').children(':first').children(':first').val();
-                document.location = '' + id;
+                var id = $this.parents('tr').children(':first').children('input').val();
+                document.location = '/clinic/analysisDetail?id=' + id + '&state=4';
             });
 
             // 处理"取消任务"按钮事件
@@ -130,7 +130,7 @@ define(function(require) {
             $linkCancel.unbind();
             $linkCancel.on('click', function() {
                 var $this = $(this);
-                var id = $this.parent('tr').children(':first').children(':first').val();
+                var id = $this.parents('tr').children(':first').children('input').val();
                 $cancelModalTaskId.val(id);
                 $cancelModal.modal('show');
             });

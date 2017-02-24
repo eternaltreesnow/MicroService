@@ -31,4 +31,5 @@ module.exports = function define() {
         'technician': 3
     };
     this.AuthLoginUri = 'http://localhost:10001'; // AuthLogin服务Uri
+    this.TeamManageUri = 'http://localhost:10004'; // TeamManage服务Uri
 }

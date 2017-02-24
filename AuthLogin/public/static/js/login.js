@@ -27,8 +27,8 @@ $(function() {
                     if(data.uri && data.uri !== '' && data.uri.length > 0) {
                         setAlert("登录成功, 即将自动跳转", "success", 3000);
                         setTimeout(function() {
-                            document.location = data.uri;
-                        }, 1500);
+                            document.location = unescape(data.uri);
+                        }, 1000);
                     } else {
                         setAlert("登录成功", "success", 3000);
                     }

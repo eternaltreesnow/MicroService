@@ -101,7 +101,7 @@ clinicModel.set = function(clinic) {
     return defer.promise;
 }
 
-clinicModel.get = function(clinicId) {
+clinicModel.get = function(clinicId, state) {
     let defer = Q.defer();
 
     let result = {
@@ -112,12 +112,34 @@ clinicModel.get = function(clinicId) {
         data: null
     };
 
-    let queryOption = sqlQuery.select()
+    let queryOption;
+    // 获取分析状态检查单数据
+    if(state == 4 || state == 5) {
+        queryOption = sqlQuery.select()
                         .from(KeyDefine.TABLE_NAME)
-                        .where({
-                            clinicId: clinicId
+                        .select('addTime', 'file', 'description')
+                        .from('patient', 'patientId', 'patientId', { joinType: 'left' })
+                        .select('name', 'gender', 'birth', 'height', 'weight')
+                        .where(KeyDefine.TABLE_NAME, {
+                            clinicId: clinicId,
+                            state: state
                         })
                         .build();
+    // 获取审核状态检查单数据
+    } else if(state == 6) {
+        queryOption = sqlQuery.select()
+                        .from(KeyDefine.TABLE_NAME)
+                        .select('addTime', 'file', 'description', 'report')
+                        .from('patient', 'patientId', 'patientId', { joinType: 'left' })
+                        .select('name', 'gender', 'birth', 'height', 'weight')
+                        .where(KeyDefine.TABLE_NAME, {
+                            clinicId: clinicId,
+                            state: state
+                        })
+                        .build();
+    // 获取重分析状态检查单数据
+    } else if(state == 7) {
+    }
 
     DBPool.getConnection()
         .then(connection => {
@@ -134,7 +156,7 @@ clinicModel.get = function(clinicId) {
                     defer.resolve(result);
                 } else {
                     Logger.console('Success in QUERY ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinicId);
-                    Logger.console('Result: ' + JSON.stringify(rows));
+                    Logger.console('Result: ' + JSON.stringify(rows[0]));
 
                     result.code = KeyDefine.RESULT_SUCCESS;
                     result.desc = 'Success in QUERY ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinicId;
@@ -214,9 +236,9 @@ clinicModel.getList = function(condition, start, length) {
 
     let queryOption = sqlQuery.select()
                         .from(KeyDefine.TABLE_NAME)
-                        .select('*')
+                        .select('clinicId', 'addTime', 'description', 'state')
                         .from('patient', 'patientId', 'patientId', { joinType: 'left' })
-                        .select('*')
+                        .select('name', 'gender')
                         .where('clinic', condition)
                         .limit(start + ', ' + length)
                         .build();

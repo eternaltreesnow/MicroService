@@ -1,0 +1,86 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'task'
+    - var nav_child = 'analysis'
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li 任务管理
+            li.active 分析任务
+
+    div.container.task-form
+        form.form-horizontal#taskForm
+            input#id(type="hidden", name="id", value!=clinicId)
+            input#state(type="hidden", name="state", value!=state)
+            div.panel.panel-default
+                div.panel-heading
+                    h4.panel-title 病人基本信息
+                div.panel-body
+                    div.form-group
+                        label.col-lg-3.control-label(for="") 姓名 :
+                        div.col-lg-8
+                            div.form-control#name
+                    div.form-group
+                        label.col-lg-3.control-label(for="") 性别 :
+                        div.col-lg-2
+                            div.form-control#gender
+                        label.col-lg-2.control-label(for="") 出生年月 :
+                        div.col-lg-3
+                            div.form-control#birth
+                    div.form-group
+                        label.col-lg-3.control-label(for="") 身高 :
+                        div.col-lg-2
+                            div.input-group
+                                div.form-control#height
+                                div.input-group-addon CM
+                        label.col-lg-2.control-label(for="") 体重 :
+                        div.col-lg-3
+                            div.input-group
+                                div.form-control#weight
+                                div.input-group-addon Kg
+                    div.form-group
+                        label.col-lg-3.control-label(for="") 检查时间 :
+                        div.col-lg-8
+                            div.form-control#addTime
+
+            div.panel.panel-default
+                div.panel-heading
+                    h4.panel-title 分析数据&报告
+                div.panel-body
+                    div.form-group
+                        label.col-lg-3.control-label(for="") 心电数据 :
+                        div.col-lg-6
+                            div.form-control.data-control#file
+                        div.col-lg-2
+                            a.btn.btn-primary#downloadBtn(href="javascript:void(0);") 下载数据
+                    div.form-group
+                        label.col-lg-3.control-label(for="") 简要描述 :
+                        div.col-lg-8
+                            div.form-control#description
+                    div.form-group
+                        label.col-lg-3.control-label(for="") 分析报告 :
+                        div.col-lg-6
+                            input.form-control#uploadFile(type="file", name="ecg-report")
+            div.form-group
+                div.col-lg-9.col-lg-offset-3
+                    a.btn.btn-primary#submitBtn(href="javascript:void(0);") 提交结果
+                    a.btn.btn-default#cancerBtn(href="/") 取消
+
+block modal
+    div.modal.fade#submitModal
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                    h4.modal-title 提交成功提示
+                div.modal-body
+                    p 提交成功 !
+                div.modal-footer
+                    a.btn.btn-primary#cancelModalBtn(href="/") 查看所有任务
+
+block script
+    script.
+        seajs.use('js/analysisDetail');
+

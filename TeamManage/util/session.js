@@ -51,7 +51,7 @@ Session.validateService = function(serviceName, accessToken) {
     let sessionData = JSON.parse(Cache.get(serviceName));
     let timestamp = +new Date();
 
-    Logger.console('Session Validate: sessionData: ' + sessionData);
+    Logger.console('Session Validate: sessionData: ' + JSON.stringify(sessionData));
 
     if(sessionData) {
         if(sessionData.accessToken !== accessToken) {
@@ -62,6 +62,7 @@ Session.validateService = function(serviceName, accessToken) {
             result = KeyDefine.VALID_INVALID_SERVICE;
         } else {
             // 验证成功条件：令牌存在，令牌有效
+            Logger.console('Session Validate: Validate Successfully');
             result = KeyDefine.VALID_SUCCESS;
         }
     }

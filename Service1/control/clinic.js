@@ -14,35 +14,6 @@ let KeyDefine = new Define();
 
 let Clinic = {};
 
-Clinic.getClinic = function(clinicId) {
-    let defer = Q.defer();
-    let result = {
-        code: KeyDefine.RESULT_FAILED,
-        desc: 'Clinic Control: Unknowed error',
-        data: null
-    };
-
-    if(!clinicId) {
-        result.desc = 'Clinic Control: Null clinicId';
-        defer.resolve(result);
-    } else {
-        clinicModel.get(clinicId)
-            .then(clinicResult => {
-                result.code = clinicResult.code;
-                result.desc = clinicResult.desc;
-                if(clinicResult.code === KeyDefine.RESULT_SUCCESS) {
-                    result.data = clinicResult.data;
-                }
-                defer.resolve(result);
-            }, error => {
-                Logger.console(error);
-                result.desc = 'Clinic Model Error';
-                defer.resolve(result);
-            });
-    }
-    return defer.promise;
-};
-
 Clinic.setClinic = function(clinic) {
     let defer = Q.defer();
     let result = {
@@ -69,6 +40,28 @@ Clinic.setClinic = function(clinic) {
 
     return defer.promise;
 };
+
+Clinic.getClinic = function(req, res) {
+    let result = {
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Clinic Service: Get Clinic data failed',
+        data: null
+    };
+
+    let clinicId = req.query.clinicId;
+    let state = req.query.state;
+
+    clinicModel.get(clinicId, state)
+        .then(clinicResult => {
+            result.code = clinicResult.code;
+            result.desc = clinicResult.desc;
+            result.data = clinicResult.data;
+            res.send(result);
+        }, error => {
+            Logger.console(error);
+            res.send(result);
+        });
+}
 
 /**
  * 新建检查单
@@ -184,7 +177,7 @@ Clinic.getDocList = function(req, res) {
     // state = 3: 待拉取检查单
     if(state == 3) {
         let method = 'GET';
-        let uri = 'http://localhost:10004/doc/getPartnerId';
+        let uri = KeyDefine.TeamManageUri + '/doc/getPartnerId';
         let param = {
             "userId": doctorId
         };
@@ -207,7 +200,7 @@ Clinic.getDocList = function(req, res) {
     // state = 6(1): 初审检查单
     } else if(state == 61) {
         let method = 'GET';
-        let uri = 'http://localhost:10004/doc/getTeamId';
+        let uri = KeyDefine.TeamManageUri + '/doc/getTeamId';
         let param = {
             "userId": doctorId
         };

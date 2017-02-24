@@ -65,7 +65,7 @@ Auth.auth = function(req, res, operation, callback) {
                         }
                     } else if(data.code === KeyDefine.RESULT_REDIRECT) {
                         Logger.console('Verify failed');
-                        res.redirect(data.url + '?src=http://' + req.headers.host + req.url);
+                        res.redirect(data.url + '?src=' + escape('http://' + req.headers.host + req.url));
                     } else {
                         res.end(JSON.stringify(data));
                     }
@@ -77,7 +77,7 @@ Auth.auth = function(req, res, operation, callback) {
     } else {
         // 空sessionId直接跳转登录
         Logger.console('Null session id');
-        res.redirect(authUrl.login + '?src=http://' + req.headers.host + req.url);
+        res.redirect(authUrl.login + '?src=' + escape('http://' + req.headers.host + req.url));
     }
 };
 

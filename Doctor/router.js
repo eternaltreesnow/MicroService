@@ -3,7 +3,6 @@
 const Express = require('express');
 const clinicControl = require('./control/clinic');
 const teamControl = require('./control/team');
-const logoutControl = require('./control/logout');
 
 // 日志模块
 const Logger = require('./util/logger');
@@ -28,9 +27,14 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-// 检查单列表页
+// 分析任务列表页
 router.get('/', (req, res) => {
     Auth.auth(req, res, '', clinicControl.analysisTask);
+});
+
+// 分析任务详情页
+router.get('/clinic/analysisDetail', (req, res) => {
+    Auth.auth(req, res, '', clinicControl.analysisDetail);
 });
 
 // 所有任务页
