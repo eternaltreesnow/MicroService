@@ -42,6 +42,7 @@ const origins = ['http://localhost:10001',
 
 // 设置跨域访问
 app.all('*', function(req, res, next) {
+    // res.header("Access-Control-Allow-Origin", "http://localhost:10006");
     let origin = req.headers.origin;
     if(origins.indexOf(origin) > -1) {
         res.setHeader("Access-Control-Allow-Origin", origin);
@@ -55,8 +56,8 @@ app.all('*', function(req, res, next) {
 app.use('/', router);
 
 // 初始化serviceName
-session.set('serviceName', 'ClinicManage', 30 * 24 * 60 * 60 * 1000);
-session.set('password', 'root', 30 * 24 * 60 * 60 * 1000);
+session.set('serviceName', 'ClinicManage', -1);
+session.set('password', 'root', -1);
 
 const server = app.listen('10002', () => {
     Logger.console('Clinic Manage listening on: ' + server.address().port);

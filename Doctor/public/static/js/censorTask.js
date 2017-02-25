@@ -49,7 +49,7 @@ define(function(require) {
                     delete d.order;
                 },
                 dataSrc: function(json) {
-                    resetData(json.data);
+                    resetData(json.data, '61');
                     return json.data;
                 }
             },
@@ -92,7 +92,7 @@ define(function(require) {
                     delete d.order;
                 },
                 dataSrc: function(json) {
-                    resetData(json.data);
+                    resetData(json.data, '62');
                     return json.data;
                 }
             },
@@ -102,10 +102,10 @@ define(function(require) {
             }
         });
 
-        function resetData(data) {
+        function resetData(data, state) {
             for(var i = 0; i < data.length; i++) {
-                data[i]['clickId'] = i + 1 + '<input type="hidden" value="' + data[i]['clickId'] + '">';
-                if(data[i]['state'] == '61') {
+                data[i]['clinicId'] = i + 1 + '<input type="hidden" value="' + data[i]['clinicId'] + '">';
+                if(state == '61') {
                     data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>';
                 } else {
                     data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="recheck">审核</a>';
@@ -120,8 +120,8 @@ define(function(require) {
             $linkCheck.unbind();
             $linkCheck.on('click', function() {
                 var $this = $(this);
-                var id = $this.parent('tr').children(':first').children(':first').val();
-                document.location = '' + id;
+                var id = $this.parents('tr').children(':first').children('input').val();
+                document.location = '/clinic/censorDetail?id=' + id + '&state=6';
             });
 
             // 处理"重审审核"按钮事件
@@ -129,8 +129,8 @@ define(function(require) {
             $linkRecheck.unbind();
             $linkRecheck.on('click', function() {
                 var $this = $(this);
-                var id = $this.parent('tr').children(':first').children(':first').val();
-                document.location = '' + id;
+                var id = $this.parents('tr').children(':first').children('input').val();
+                document.location = '/clinic/censorDetail?id=' + id + '&state=6';
             });
         }
     });

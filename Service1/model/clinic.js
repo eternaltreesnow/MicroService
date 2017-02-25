@@ -90,9 +90,9 @@ clinicModel.set = function(clinicId, clinic) {
                     result.desc = 'Null in UPDATE' + KeyDefine.TABLE_NAME + ': clinicId=' + clinicId;
                     defer.resolve(result);
                 } else {
-                    Logger.console('Success in UPDATE ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinic.clinicId);
+                    Logger.console('Success in UPDATE ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinicId);
                     result.code = KeyDefine.RESULT_SUCCESS;
-                    result.desc = 'Success in UPDATE ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinic.clinicId;
+                    result.desc = 'Success in UPDATE ' + KeyDefine.TABLE_NAME + ': clinicId=' + clinicId;
                     defer.resolve(result);
                 }
             });

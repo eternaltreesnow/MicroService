@@ -51,17 +51,21 @@ process.on('uncaughtException', function(e) {
     Logger.console(e && e.stack);
 });
 
-const origin = 'http://localhost:10001,'
-             + 'http://localhost:10002,'
-             + 'http://localhost:10003,'
-             + 'http://localhost:10004,'
-             + 'http://localhost:10005,'
-             + 'http://localhost:10006,'
-             + 'http://localhost:10007,'
-             + 'http://localhost:10008';
+const origins = ['http://localhost:10001',
+                 'http://localhost:10002',
+                 'http://localhost:10003',
+                 'http://localhost:10004',
+                 'http://localhost:10005',
+                 'http://localhost:10006',
+                 'http://localhost:10007',
+                 'http://localhost:10008'];
 // 设置跨域访问
 app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", 'http://localhost:10003');
+    // res.header("Access-Control-Allow-Origin", 'http://localhost:10003');
+    let origin = req.headers.origin;
+    if(origins.indexOf(origin) > -1) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+    }
     res.header("Access-Control-Allow-Headers", "*, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
     res.header("Access-Control-Allow-Credentials", "true");

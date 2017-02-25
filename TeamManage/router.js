@@ -18,14 +18,14 @@ let KeyDefine = new Define();
 let router = Express.Router();
 
 // 获取团队id
-router.get('/doc/getTeamId', (req, res) => {
-    Logger.console('Get Req /doc/getTeamId');
+router.get('/getTeamId', (req, res) => {
+    Logger.console('Get Req /getTeamId');
     Auth.authService(req, res, team.getTeamIdByUserId);
 });
 
 // 获取合伙人id
-router.get('/doc/getPartnerId', (req, res) => {
-    Logger.console('Get Req /doc/getPartnerId');
+router.get('/getPartnerId', (req, res) => {
+    Logger.console('Get Req /getPartnerId');
     Auth.authService(req, res, team.getPartnerIdByUserId);
 });
 

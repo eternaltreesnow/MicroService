@@ -41,5 +41,5 @@ session.set('serviceName', 'TechnicianCli', 30 * 24 * 60 * 60 * 1000);
 session.set('password', 'root', 30 * 24 * 60 * 60 * 1000);
 
 const server = app.listen('10006', () => {
-    Logger.console('Hospital Client listening on: ' + server.address().port);
+    Logger.console('Technician Client listening on: ' + server.address().port);
 });

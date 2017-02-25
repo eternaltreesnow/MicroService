@@ -184,7 +184,7 @@ Clinic.getDocList = function(req, res) {
     // state = 3: 待拉取检查单
     if(state == 3) {
         let method = 'GET';
-        let uri = KeyDefine.TeamManageUri + '/doc/getPartnerId';
+        let uri = KeyDefine.TeamManageUri + '/getPartnerId';
         let param = {
             "userId": doctorId
         };
@@ -209,7 +209,7 @@ Clinic.getDocList = function(req, res) {
     // state = 6(1): 初审检查单
     } else if(state == 61) {
         let method = 'GET';
-        let uri = KeyDefine.TeamManageUri + '/doc/getTeamId';
+        let uri = KeyDefine.TeamManageUri + '/getTeamId';
         let param = {
             "userId": doctorId
         };
@@ -230,6 +230,70 @@ Clinic.getDocList = function(req, res) {
         let condition = {
             doctorId: doctorId,
             state: 6
+        };
+        Clinic.getClinicList(condition, draw, start, length, res);
+    }
+};
+
+// 获取技师相关的检查单数据列表
+Clinic.getTechList = function(req, res) {
+    // 获取session中的用户数据
+    let userData = Session.getUserData(req);
+    let techId;
+    if(userData) {
+        techId = userData.userId;
+    }
+
+    let draw = req.query.draw;
+    let start = req.query.start;
+    let length = req.query.length;
+    let state = req.query.state;
+
+    let result = {
+        status: KeyDefine.RESULT_SUCCESS,
+        draw: draw,
+        data: [],
+        recordsFiltered: 0
+    };
+
+    let condition;
+    // state = 3: 待拉取检查单
+    if(state == 3) {
+        let method = 'GET';
+        let uri = KeyDefine.TeamManageUri + '/getPartnerId';
+        let param = {
+            "userId": techId
+        };
+        Agent.request(method, uri, param, function(data) {
+            if(data.code === KeyDefine.RESULT_SUCCESS) {
+                let condition = {
+                    'partnerId': data.data,
+                    'state': [2,3]
+                };
+                Clinic.getClinicList(condition, draw, start, length, res);
+            } else {
+                res.send(result);
+            }
+        });
+    // state = 5: 技师分析中的检查单
+    } else if(state == 5) {
+        let condition = {
+            'techId': techId,
+            'state': 5
+        };
+        Clinic.getClinicList(condition, draw, start, length, res);
+    // state = 7: 重分析检查单
+    } else if(state == 7) {
+        let condition = {
+            'techId': techId,
+            'state': 7
+        };
+        Clinic.getClinicList(condition, draw, start, length, res);
+    // state = 6: 已完成检查单
+    } else if(state == 62) {
+        let condition = {
+            'techId': techId,
+            'state': [6, 9]
         };
         Clinic.getClinicList(condition, draw, start, length, res);
     }
@@ -324,7 +388,7 @@ Clinic.occupyClinic = function(req, res) {
 
     // 获取teamId
     let method = 'GET';
-    let uri = KeyDefine.TeamManageUri + '/doc/getTeamId';
+    let uri = KeyDefine.TeamManageUri + '/getTeamId';
     let param = {
         "userId": userId
     };
@@ -361,6 +425,51 @@ Clinic.occupyClinic = function(req, res) {
             res.send(result);
         }
     });
+};
+
+// 审核检查单
+Clinic.censorClinic = (req, res) => {
+    // 获取session中的用户数据
+    let userData = Session.getUserData(req);
+    Logger.console(userData);
+
+    let result = {
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Censor Clinic: Unknowed error'
+    };
+
+    let userId = userData.userId;
+    let clinicId = req.body.id;
+    let censorOption = req.body.censorOption;
+    let feedback = req.body.feedback;
+
+    let clinic;
+    if(censorOption == 1) {
+        clinic = {
+            doctorId: userId,
+            state: 9,
+            description: feedback,
+            reportTime: Date.now()
+        };
+    } else {
+        clinic = {
+            doctorId: userId,
+            state: 7,
+            description: feedback,
+            reportTime: Date.now()
+        };
+    }
+    clinicModel.set(clinicId, clinic)
+        .then(clinicResult => {
+            Logger.console(clinicResult);
+            result.code = clinicResult.code;
+            result.desc = clinicResult.desc;
+            res.send(result);
+        }, error => {
+            Logger.console(error);
+            result.desc = 'Censor Clinic: Update data failed';
+            res.send(result);
+        });
 };
 
 module.exports = Clinic;

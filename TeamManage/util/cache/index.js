@@ -31,23 +31,33 @@ let set = function(key, value, maxAge) {
     let _cache = this.cache;
     let _queue = this.queue;
 
-    // 默认缓存时间为20min
+    // 默认缓存时间为20min, -1为永不失效
     maxAge = maxAge || 20 * 60 * 1000;
 
     // 如果存在，则重新赋值
     if(_cache[key]) {
         _cache[key].value = value;
-        _cache[key].expire = +new Date() + maxAge;
+        if(maxAge == -1) {
+            _cache[key].expire = -1;
+        } else {
+            _cache[key].expire = +new Date() + maxAge;
+        }
 
         _queue.update(_cache[key].node);
         result = true;
     // 如果不存在，则为新插入数据
     } else {
         let newNode = _queue.insert(key);
+        let expire;
+        if(maxAge == -1) {
+            expire = -1;
+        } else {
+            expire = +new Date() + maxAge;
+        }
 
         _cache[key] = {
             value: value,
-            expire: +new Date() + maxAge,
+            expire: expire,
             node: newNode.node
         };
 
@@ -74,7 +84,7 @@ let get = function(key) {
         let curTime = +new Date();
 
         // 如果不存在过期时间 || 存在过期时间但尚未过期
-        if(!expire || expire && curTime < expire) {
+        if(!expire || expire == -1 || expire && curTime < expire) {
             _queue.update(node);
             return _cache[key].value;
         // 存在过期时间且已过期，则删除该缓存记录
@@ -125,7 +135,7 @@ let createCache = function(size) {
             let curTime = +new Date();
             let node = cache[key]['node'];
 
-            if(expire && curTime > expire) {
+            if(expire && expire != -1 && curTime > expire) {
                 queue.del(node);
                 cache[key] = null;
             }

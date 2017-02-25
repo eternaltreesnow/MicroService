@@ -70,9 +70,9 @@ Session.validateService = function(serviceName, accessToken) {
 };
 
 // 设置session
-Session.set = function(sessionId, sessionData) {
+Session.set = function(sessionId, sessionData, maxAge) {
     let code = KeyDefine.RESULT_FAILED;
-    if(Cache.set(sessionId, sessionData)) {
+    if(Cache.set(sessionId, sessionData, maxAge)) {
         code = KeyDefine.RESULT_SUCCESS;
     }
     Logger.console('Session: ' + sessionId + ': ' + JSON.stringify(Cache.get(sessionId)));

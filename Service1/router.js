@@ -11,6 +11,8 @@ const Define = require('./util/define');
 const Auth = require('./util/auth');
 // Multer upload模块
 const multer = require('./util/multer-util');
+// 缓存
+const Cache = require('./util/cache')();
 
 const service = require('./control/service');
 const state = require('./control/state');
@@ -55,6 +57,10 @@ router.get('/getDocList', (req, res) => {
     Auth.auth(req, res, '', clinic.getDocList);
 });
 
+router.get('/getTechList', (req, res) => {
+    Auth.auth(req, res, '', clinic.getTechList);
+});
+
 router.get('/profile', (req, res) => {
     Auth.auth(req, res, '', function() {
         res.render('profile');
@@ -68,6 +74,10 @@ router.get('/getPatientList', (req, res) => {
 router.get('/deletePatient', (req, res) => {
     Auth.auth(req, res, '', patient.deletePatient)
 });
+
+router.post('/censor', (req, res) => {
+    Auth.auth(req, res, '', clinic.censorClinic);
+})
 
 // 上传心电报告
 router.post('/report', (req, res) => {

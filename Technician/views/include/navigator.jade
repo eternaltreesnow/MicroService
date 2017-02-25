@@ -15,14 +15,14 @@ div.navbar.navbar-default.navbar-fixed-top.header(role="navigation")
                 li.dropdown(role="presentation")
                     a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                         span.glyphicon.glyphicon-user
-                        span.userName
+                        span.userName #{username}
                         span.caret
                         ul.dropdown-menu
                             li
                                 a.menu-link(href="#") 个人信息
                             li.divider(role="separator")
                             li
-                                a.menu-link(href="#")
+                                a.menu-link(href="/logout")
                                     span.glyphicon.glyphicon-off
                                     &nbsp;退出登录
         - // Sidebar Menu Items
@@ -54,13 +54,16 @@ div.navbar.navbar-default.navbar-fixed-top.header(role="navigation")
                         span.caret
                     ul#task-drop(class=parent_task)
                         li(class=child_taskManage)
-                            a(href="#") 可接任务
+                            a(href="/") 可接任务
                         li(class=child_occupiedTask)
-                            a(href="#") 已接任务
+                            a(href="/clinic/occupiedTask") 已接任务
                         li(class=child_reanalysisTask)
-                            a(href="#") 重分析任务
+                            a(href="/clinic/reanalysisTask") 重分析任务
                         li(class=child_finishedTask)
-                            a(href="#") 已完成任务
+                            a(href="/clinic/finishedTask") 已完成任务
                 li(class=child_person)
                     a(href="#") 个人信息
+        - // Alert Framework
+        div.alert.alert-dismissible.fade.common-alert#infoAlert(role="alert")
+            p#infoAlertText &nbsp;
 

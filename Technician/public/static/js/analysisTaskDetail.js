@@ -65,8 +65,7 @@ define(function(require) {
                             document.location = '/';
                         }, 1000);
                     } else {
-                        console.log(data);
-                        setAlert.alert('分析结果上传失败, 请稍后重试', 'danger', 3000);
+                        setAlert.alert(data, 'danger', 3000);
                     }
                 },
                 error: function(error) {

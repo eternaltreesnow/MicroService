@@ -1,0 +1,47 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'task'
+    - var nav_child = 'taskManage'
+
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li 任务管理
+            li.active 可接任务
+
+    div.container-fluid
+        b.table-title.pull-left 可接受任务列表
+    div.container-fluid.table-container
+        table.table.table-striped.table-hover.table-bordered#unoccupiedTaskTable(cellspacing="0", width="100%")
+            thead
+                tr
+                    th #
+                    th 姓名
+                    th 性别
+                    th 检查时间
+                    th 描述
+                    th 操作
+            tbody
+
+block modal
+    div.modal.fade#submitModal
+        div.modal-dialog
+            input#submitModalTaskId(type="hidden")
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                    h4.modal-title 接受任务提示
+                div.modal-body
+                    p 成功接受任务，请问直接跳转进行分析或是返回列表 ?
+                div.modal-footer
+                    a.btn.btn-default(data-dismiss="modal") 返回列表
+                    a.btn.btn-primary#submitModalBtn(href="javascript:void(0);") 分析任务
+
+block script
+    script(src="/lib/DataTables-1.10.8/js/jquery.dataTables.min.js")
+    script(src="/lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js")
+    script(src="/lib/bootstrap-datetimepicker/moment/moment.js")
+    script.
+        seajs.use('js/taskManage');
