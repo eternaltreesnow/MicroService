@@ -15,6 +15,7 @@ define(function(require) {
         var $description = $("#description");
         var $file = $("#file");
         var $report = $("#report");
+        var $errorType = $("#errorType");
         var $feedback = $("#feedback");
 
         $.ajax({
@@ -51,6 +52,16 @@ define(function(require) {
             }
         });
 
+        var $errorContainer = $("#errorContainer");
+        $errorContainer.hide();
+        $("input:radio[name='censorOption']").on('change', function() {
+            if ($("input:radio[name='censorOption']:checked").attr('id') === "censorOption1") {
+                $errorContainer.hide();
+            } else if ($("input:radio[name='censorOption']:checked").attr('id') === "censorOption2") {
+                $errorContainer.show();
+            }
+        });
+
         var $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function() {
             $.ajax({
@@ -60,6 +71,7 @@ define(function(require) {
                     id: $clinicId.val(),
                     state: $state.val(),
                     censorOption: $('input[name="censorOption"]:checked').val(),
+                    errorType: $errorType.val(),
                     feedback: $feedback.val()
                 },
                 xhrFields: {
@@ -69,9 +81,9 @@ define(function(require) {
                 success: function(data) {
                     if (data.code == 200) {
                         setAlert.alert('审核成功', 'success', 3000);
-                        setTimeout(function() {
-                            document.location = '/clinic/censorTask';
-                        }, 1000);
+                        // setTimeout(function() {
+                        //     document.location = '/clinic/censorTask';
+                        // }, 1000);
                     } else {
                         console.log(data);
                         setAlert.alert('审核失败, 请稍后重试', 'danger', 3000);

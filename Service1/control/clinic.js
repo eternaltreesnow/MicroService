@@ -9,6 +9,7 @@ const Agent = require('../util/agent');
 
 const clinicModel = require('../model/clinic');
 const contractModel = require('../model/contract');
+const censorModel = require('../model/censor');
 
 let KeyDefine = new Define();
 
@@ -441,34 +442,56 @@ Clinic.censorClinic = (req, res) => {
     let userId = userData.userId;
     let clinicId = req.body.id;
     let censorOption = req.body.censorOption;
+    let errorType = req.body.errorType;
     let feedback = req.body.feedback;
 
     let clinic;
+    let censor;
     if(censorOption == 1) {
         clinic = {
             doctorId: userId,
             state: 9,
-            description: feedback,
             reportTime: Date.now()
         };
     } else {
         clinic = {
             doctorId: userId,
-            state: 7,
-            description: feedback,
-            reportTime: Date.now()
+            state: 7
+        };
+        censor = {
+            clinicId: clinicId,
+            doctorId: userId,
+            errorType: errorType,
+            feedback: feedback,
+            censorTime: Date.now()
         };
     }
     clinicModel.set(clinicId, clinic)
         .then(clinicResult => {
             Logger.console(clinicResult);
-            result.code = clinicResult.code;
-            result.desc = clinicResult.desc;
+            if(clinicResult.code === KeyDefine.RESULT_SUCCESS && censorOption != 1) {
+                result.code = clinicResult.code;
+                return censorModel.add(censor);
+            } else {
+                result.code = clinicResult.code;
+                result.desc = clinicResult.desc;
+                res.send(result);
+                throw new Error('Abort promise chain');
+                return null;
+            }
+        })
+        .then(censorResult => {
+            result.desc = censorResult.desc;
             res.send(result);
-        }, error => {
-            Logger.console(error);
-            result.desc = 'Censor Clinic: Update data failed';
-            res.send(result);
+        })
+        .catch(error => {
+            if(error.message === 'Abort promise chain') {
+                // 手动跳出promise链
+            } else {
+                Logger.console(error);
+                result.desc = 'Censor Clinic: Update data failed';
+                res.send(result);
+            }
         });
 };
 

@@ -114,7 +114,7 @@ define(function(require) {
             $submitModalBtn.unbind();
             $submitModalBtn.on('click', function() {
                 var id = $submitModalTaskId.val();
-                location.href = '/clinic/analysisTaskDetail?id=' + id;
+                location.href = '/clinic/analysisTaskDetail?id=' + id + '&state=5';
             });
         }
     });

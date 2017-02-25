@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2017-02-23 17:23:23
+-- Generation Time: 2017-02-25 16:00:50
 -- 服务器版本： 5.7.17
 -- PHP Version: 5.6.29
 
@@ -19,6 +19,31 @@ SET time_zone = "+00:00";
 --
 -- Database: `ecg_auth`
 --
+CREATE DATABASE IF NOT EXISTS `ecg_auth` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `ecg_auth`;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `censor`
+--
+
+CREATE TABLE IF NOT EXISTS `censor` (
+  `censorId` int(11) NOT NULL AUTO_INCREMENT COMMENT '审核信息id',
+  `clinicId` int(11) NOT NULL COMMENT '检查单id',
+  `doctorId` int(11) NOT NULL COMMENT '医生id',
+  `errorType` varchar(40) DEFAULT NULL COMMENT '错误类型',
+  `feedback` varchar(40) DEFAULT NULL COMMENT '审核反馈信息',
+  `censorTime` varchar(15) NOT NULL COMMENT '审核时间',
+  PRIMARY KEY (`censorId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='审核信息表';
+
+--
+-- 转存表中的数据 `censor`
+--
+
+INSERT INTO `censor` (`censorId`, `clinicId`, `doctorId`, `errorType`, `feedback`, `censorTime`) VALUES
+(1, 6, 2, '病症判断有误', 'feedback', '1488037093071');
 
 -- --------------------------------------------------------
 
@@ -41,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `clinic` (
   `teamId` int(11) DEFAULT '0' COMMENT '所属团队id',
   `reportTime` varchar(15) DEFAULT NULL COMMENT '报告时间',
   PRIMARY KEY (`clinicId`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='检查单表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='检查单表';
 
 --
 -- 转存表中的数据 `clinic`
@@ -50,13 +75,14 @@ CREATE TABLE IF NOT EXISTS `clinic` (
 INSERT INTO `clinic` (`clinicId`, `patientId`, `addTime`, `description`, `file`, `report`, `hospitalId`, `partnerId`, `doctorId`, `techId`, `state`, `teamId`, `reportTime`) VALUES
 (1, 1, '1483613755736', 'desc', 'temp_file', 'temp_report', 1, 0, 1, 1, 1, 1, '1483613755736'),
 (2, 2, '1483767218924', 'desc2', 'ecg-file-1483767218918.zip', NULL, 2, 1, 2, 3, 6, 1, NULL),
-(3, 1, '1487629412425', NULL, '326444b53f540bceba72cbd6a1b6aa9e', NULL, 1, 1, 2, 0, 4, 0, NULL),
-(4, 1, '1487629647842', NULL, '4bcd8685fa777d300bf8f580c91552cb', NULL, 1, 1, 0, 0, 2, 0, NULL),
-(5, 1, '1487629795592', NULL, 'd624a8e1ac4187e171a17a6964a7cfef', NULL, 1, 1, 0, 0, 2, 0, NULL),
-(6, 1, '1487630093317', NULL, 'ecg-file-1487630093292.png', NULL, 1, 1, 0, 0, 2, 0, NULL),
-(7, 1, '1487630976572', NULL, 'ecg-file-1487630976556.png', NULL, 1, 1, 0, 0, 2, 0, NULL),
+(3, 1, '1487629412425', NULL, '326444b53f540bceba72cbd6a1b6aa9e', 'ecg-report-1487954474100.csv', 1, 1, 2, 0, 9, 0, '1487954474111'),
+(4, 1, '1487629647842', NULL, '4bcd8685fa777d300bf8f580c91552cb', 'ecg-report-1488036807786.csv', 1, 1, 2, 3, 7, 1, '1488036807796'),
+(5, 1, '1487629795592', NULL, 'd624a8e1ac4187e171a17a6964a7cfef', 'ecg-report-1488036825412.csv', 1, 1, 2, 3, 7, 1, '1488036825415'),
+(6, 1, '1487630093317', NULL, 'ecg-file-1487630093292.png', 'ecg-report-1488037021884.csv', 1, 1, 2, 3, 7, 1, '1488037021896'),
+(7, 1, '1487630976572', NULL, 'ecg-file-1487630976556.png', 'ecg-report-1488037029604.csv', 1, 1, 2, 3, 9, 1, '1488038019422'),
 (8, 1, '1487632726539', NULL, 'ecg-file-1487632726497.png', NULL, 1, 1, 0, 0, 2, 0, NULL),
-(9, 1, '1487632831542', NULL, 'ecg-file-1487632831495.png', NULL, 1, 1, 0, 0, 2, 0, NULL);
+(9, 1, '1487632831542', NULL, 'ecg-file-1487632831495.png', 'ecg-report-1488037037389.png', 1, 1, 0, 3, 6, 1, '1488037037393'),
+(10, 1, '1487952435664', NULL, 'ecg-file-1487952435642.png', NULL, 1, 1, 0, 0, 2, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -284,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `service_token` (
   `accessToken` varchar(40) NOT NULL COMMENT '令牌',
   `ttl` varchar(15) NOT NULL COMMENT '过期时间',
   PRIMARY KEY (`tokenId`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COMMENT='服务令牌表' ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COMMENT='服务令牌表' ROW_FORMAT=COMPACT;
 
 --
 -- 转存表中的数据 `service_token`
@@ -312,7 +338,17 @@ INSERT INTO `service_token` (`tokenId`, `serviceName`, `accessToken`, `ttl`) VAL
 (44, 'ClinicManage', 'ee7c235b6a6d48b260fb6afbcb889399', '1487868958076'),
 (45, 'ClinicManage', 'bd28f69fe7c3e7f11e4d2e5fa1a5df24', '1487869216124'),
 (46, 'ClinicManage', '381d33f852cbb6c5c8f0f67d791c3380', '1487870185541'),
-(47, 'ClinicManage', '6c8c46b8d5c394c6afaa8bb8df7623f7', '1487870648735');
+(47, 'ClinicManage', '6c8c46b8d5c394c6afaa8bb8df7623f7', '1487870648735'),
+(48, 'ClinicManage', 'ddffaa7247327bec8932cd60ac3ee760', '1487951613742'),
+(49, 'ClinicManage', '4bc0516155e6be4db759a936b1512d65', '1487952291243'),
+(50, 'ClinicManage', 'ba084393d88769dbb8ee7288d069a715', '1487952918421'),
+(51, 'ClinicManage', '256cef9026037a48043afc665357241b', '1487954214424'),
+(52, 'ClinicManage', '572b415926d97aeeaae4d9d131c311b1', '1487954813662'),
+(53, 'ClinicManage', '17ab2cba30d120c32022a004efafa42e', '1488036485262'),
+(54, 'ClinicManage', 'fe08a8a8d3e29b2b6c82736e7b67b71b', '1488036757991'),
+(55, 'ClinicManage', 'f71ff317cc61ce0bafeec33d2f6f24d3', '1488036976373'),
+(56, 'ClinicManage', 'b60d3ad84c1ead433da1ff2192cb6093', '1488037194180'),
+(57, 'ClinicManage', '71a0f48051e59de475769f38107a5c3c', '1488038186440');
 
 -- --------------------------------------------------------
 
@@ -371,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`userId`, `username`, `password`, `workId`, `realName`, `chargeName`, `grade`, `level`, `idCode`, `telephone`, `address`, `email`, `major`, `createTime`, `status`, `roleId`, `teamId`) VALUES
 (1, 'root', 'root', '0', '武警医院', NULL, NULL, NULL, '444444444444444444', '18888888888', '广东省广州市大学城中山大学', '562276119@qq.com', '', '1486963385949', '1', 3, 0),
 (2, 'doctor', 'root', NULL, '杨医生', NULL, NULL, NULL, '444444444444444444', '18888888888', '广东省某医院', '99999999@qq.com', '心脏内科', '1487682988069', '1', 1, 1),
-(3, 'technician', 'root', NULL, '李技师', NULL, NULL, NULL, '444444444444444444', '13333333333', '广东省基层卫生服务', '1333333@qq.com', '心脏内科', '1487682988069', '1', 2, 0),
+(3, 'tech', 'root', NULL, '李技师', NULL, NULL, NULL, '444444444444444444', '13333333333', '广东省基层卫生服务', '1333333@qq.com', '心脏内科', '1487682988069', '1', 2, 1),
 (4, 'partner', 'root', NULL, '王合伙人', NULL, NULL, NULL, '444444444444444444', '13333333333', '广东省某投资合伙社区', '1882929@qq.com', '投资银行学', '1487682988069', '1', 4, 0);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
