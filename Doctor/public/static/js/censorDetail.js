@@ -81,9 +81,9 @@ define(function(require) {
                 success: function(data) {
                     if (data.code == 200) {
                         setAlert.alert('审核成功', 'success', 3000);
-                        // setTimeout(function() {
-                        //     document.location = '/clinic/censorTask';
-                        // }, 1000);
+                        setTimeout(function() {
+                            document.location = '/clinic/censorTask';
+                        }, 1000);
                     } else {
                         console.log(data);
                         setAlert.alert('审核失败, 请稍后重试', 'danger', 3000);

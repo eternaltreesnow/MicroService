@@ -19,6 +19,7 @@ const state = require('./control/state');
 const action = require('./control/action');
 const clinic = require('./control/clinic');
 const patient = require('./control/patient');
+const file = require('./control/file');
 
 let KeyDefine = new Define();
 
@@ -77,11 +78,19 @@ router.get('/deletePatient', (req, res) => {
 
 router.post('/censor', (req, res) => {
     Auth.auth(req, res, '', clinic.censorClinic);
-})
+});
 
 // 上传心电报告
 router.post('/report', (req, res) => {
     Auth.auth(req, res, '', clinic.uploadReport);
+});
+
+router.get('/ecg_file', (req, res) => {
+    Auth.auth(req, res, '', file.downloadFile);
+});
+
+router.get('/report', (req, res) => {
+    Auth.auth(req, res, '', file.downloadReport);
 });
 
 module.exports = router;

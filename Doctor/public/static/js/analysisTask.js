@@ -178,7 +178,7 @@ define(function(require) {
             $submitModalBtn.unbind();
             $submitModalBtn.on('click', function() {
                 var id = $submitModalTaskId.val();
-                location.href = '' + id;
+                location.href = '/clinic/analysisDetail?id=' + id + '&state=4';
             });
 
             // "取消任务"模态框事件

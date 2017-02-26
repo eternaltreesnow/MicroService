@@ -41,6 +41,11 @@ router.get('/clinic/reanalysisTask', (req, res) => {
     Auth.auth(req, res, '', clinicControl.reanalysisTask);
 });
 
+// 重分析任务详情页
+router.get('/clinic/reanalysisDetail', (req, res) => {
+    Auth.auth(req, res, '', clinicControl.reanalysisTaskDetail);
+});
+
 // 已完成任务列表页
 router.get('/clinic/finishedTask', (req, res) => {
     Auth.auth(req, res, '', clinicControl.finishedTask);

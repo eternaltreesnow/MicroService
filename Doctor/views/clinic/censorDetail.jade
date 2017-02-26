@@ -1,8 +1,9 @@
 // - extends 继承 layout.jade
 extends ../layout.jade
 block vars
-    - var nav_parent = 'task'
-    - var nav_child = 'censor'
+    - var nav_parent = 'task';
+    - var nav_child = 'censor';
+    - var clinicServiceUri = 'http://localhost:10002';
 block content
     div.path-navigation
         ol.breadcrumb
@@ -64,13 +65,13 @@ block content
                         div.col-lg-6
                             div.form-control.data-control#file
                         div.col-lg-2
-                            a.btn.btn-primary#downloadFileBtn(href="javascript:void(0);") 下载心电数据
+                            a.btn.btn-primary#downloadFileBtn(href="#{clinicServiceUri}/ecg_file?id=#{clinicId}", target="blank") 下载心电数据
                     div.form-group
                         label.col-lg-3.control-label(for="") 分析报告 :
                         div.col-lg-6
                             div.form-control.data-control#report
                         div.col-lg-2
-                            a.btn.btn-primary#downloadReportBtn(href="javascript:void(0);") 下载报告
+                            a.btn.btn-primary#downloadReportBtn(href="#{clinicServiceUri}/report?id=#{clinicId}", target="blank") 下载报告
             div.panel.panel-default
                 div.panel-heading
                     h4.panel-title 报告审核
