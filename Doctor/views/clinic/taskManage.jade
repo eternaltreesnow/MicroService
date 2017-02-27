@@ -1,0 +1,32 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'task'
+    - var nav_child = 'alltask'
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li 任务管理
+            li.active 所有任务
+
+    div.container-fluid
+        b.table-title.pull-left 所有任务列表
+    div.container-fluid.table-container
+        table.table.table-striped.table-hover.table-bordered#allTaskTable(cellspacing="0", width="100%")
+            thead
+                tr
+                    th #
+                    th 病人姓名
+                    th 性别
+                    th 检查时间
+                    th 描述
+                    th 状态
+                    th 操作
+            tbody
+
+block script
+    script(src="/lib/DataTables-1.10.8/js/jquery.dataTables.min.js")
+    script(src="/lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js")
+    script(src="/lib/bootstrap-datetimepicker/moment/moment.js")
+    script.
+        seajs.use('js/allTask');

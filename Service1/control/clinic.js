@@ -233,6 +233,12 @@ Clinic.getDocList = function(req, res) {
             state: 6
         };
         Clinic.getClinicList(condition, draw, start, length, res);
+    } else if(state == 0) {
+        let condition = {
+            doctorId: doctorId,
+            state: [2, 3, 4, 5, 6, 7, 8, 9]
+        };
+        Clinic.getClinicList(condition, draw, start, length, res);
     }
 };
 
@@ -356,7 +362,6 @@ Clinic.uploadReport = function(req, res) {
                     report: req.file.filename
                 };
             }
-            Logger.console(clinic);
             clinicModel.set(clinicId, clinic)
                 .then(clinicResult => {
                     Logger.console(clinicResult);

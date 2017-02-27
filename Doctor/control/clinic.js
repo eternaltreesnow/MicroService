@@ -15,7 +15,7 @@ let Clinic = {};
 Clinic.analysisTask = function(req, res) {
     let userData = Session.getUserData(req);
     res.render('clinic/analysisTask', {
-        username: userData.username,
+        realName: userData.realName,
         userId: userData.userId
     });
 };
@@ -26,7 +26,7 @@ Clinic.analysisDetail = function(req, res) {
     let clinicId = req.query.id;
     let state = req.query.state;
     res.render('clinic/analysisDetail', {
-        username: userData.username,
+        realName: userData.realName,
         userId: userData.userId,
         clinicId: clinicId,
         state: state
@@ -35,14 +35,18 @@ Clinic.analysisDetail = function(req, res) {
 
 // 所有任务页
 Clinic.taskManage = function(req, res) {
-    res.render('clinic/taskManage');
+    let userData = Session.getUserData(req);
+    res.render('clinic/taskManage', {
+        realName: userData.realName,
+        userId: userData.userId
+    });
 };
 
 // 待审核任务列表页
 Clinic.censorTask = function(req, res) {
     let userData = Session.getUserData(req);
     res.render('clinic/censorTask', {
-        username: userData.username,
+        realName: userData.realName,
         userId: userData.userId
     });
 };
@@ -53,7 +57,7 @@ Clinic.censorDetail = function(req, res) {
     let clinicId = req.query.id;
     let state = req.query.state;
     res.render('clinic/censorDetail', {
-        username: userData.username,
+        realName: userData.realName,
         userId: userData.userId,
         clinicId: clinicId,
         state: state

@@ -62,14 +62,19 @@ define(function(require) {
         });
 
         function resetData(data) {
+            var clinicId;
             for(var i = 0; i < data.length; i++) {
-                data[i]['clinicId'] = i + 1 + '<input type="hidden" value="' + data[i]['clinicId'] + '">';
-                if(data[i]['state'] == '') {
-                    data[i]['status'] = '';
+                clinicId = data[i]['clinicId'];
+                data[i]['clinicId'] = i + 1 + '<input type="hidden" value="' + clinicId + '">';
+                data[i]['edit'] = '';
+                if(data[i]['state'] == 2) {
+                    data[i]['status'] = '未处理';
+                } else if(data[i]['state'] == 9) {
+                    data[i]['status'] = '已完成';
+                    data[i]['edit'] = '<a href="http://localhost:10002/report?id=' + clinicId + '" target="blank" class="btn btn-primary btn-xs" data-link="download">下载报告</a>';
                 } else {
                     data[i]['status'] = '处理中';
                 }
-                data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="download">下载报告</a>';
             }
         }
 

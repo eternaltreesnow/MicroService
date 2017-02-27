@@ -3,7 +3,7 @@ extends ../layout.jade
 block vars
     - var nav_parent = 'task'
     - var nav_child = 'analysis'
-    - var clinicServiceUri = 'http://localhost:10002';
+    //- - var clinicServiceUri = 'http://localhost:10002';
 block content
     div.path-navigation
         ol.breadcrumb
@@ -54,7 +54,7 @@ block content
                         div.col-lg-6
                             div.form-control.data-control#file
                         div.col-lg-2
-                            a.btn.btn-primary#downloadBtn(href="#{clinicServiceUri}/ecg_file?id=#{clinicId}", target="blank") 下载数据
+                            a.btn.btn-primary#downloadBtn(href="#{ClinicService}/ecg_file?id=#{clinicId}", target="blank") 下载数据
                     div.form-group
                         label.col-lg-3.control-label(for="") 简要描述 :
                         div.col-lg-8

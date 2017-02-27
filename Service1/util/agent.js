@@ -107,7 +107,7 @@ Agent.auth = function(callback) {
             'content-type': 'application/x-www-form-urlencoded'
         },
         method: 'POST',
-        uri: KeyDefine.AuthLoginUri + '/service/auth',
+        uri: KeyDefine.AuthLogin + '/service/auth',
         body: param
     };
 

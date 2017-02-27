@@ -62,9 +62,13 @@ Clinic.analysisTaskDetail = function(req, res) {
 // 重分析任务详情页
 Clinic.reanalysisTaskDetail = function(req, res) {
     let userData = Session.getUserData(req);
+    let clinicId = req.query.id;
+    let state = req.query.state;
     res.render('clinic/reanalysisTaskDetail', {
         username: userData.username,
-        userId: userData.userId
+        userId: userData.userId,
+        clinicId: clinicId,
+        state: state
     });
 };
 

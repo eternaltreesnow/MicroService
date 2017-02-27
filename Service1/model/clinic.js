@@ -141,19 +141,7 @@ clinicModel.get = function(clinicId, state) {
                         .build();
     // 获取重分析状态检查单数据
     } else if(state == 7) {
-        queryOption = sqlQuery.select()
-                        .from(KeyDefine.TABLE_NAME)
-                        .select('addTime', 'file', 'description', 'report', 'reportTime')
-                        .from('patient', 'patientId', 'patientId', { joinType: 'left' })
-                        .select('name', 'gender', 'birth', 'height', 'weight')
-                        .from('censor', 'clinicId', 'clinicId', { joinType: 'left' })
-                        .select('doctorId', 'errorType', 'feedback', 'censorTime')
-                        .where(KeyDefine.TABLE_NAME, {
-                            clinicId: clinicId,
-                            state: state
-                        })
-                        .build();
-        queryOption = 'SELECT clinic.addTime, clinic.file, patient.name, censor.feedback FROM clinic LEFT JOIN patient ON patient.patientId = clinic.patientId LEFT JOIN censor ON censor.clinicId = clinic.clinicId WHERE clinic.clinicId = 6 ORDER BY censorTime DESC LIMIT 1';
+        queryOption = 'SELECT clinic.addTime, clinic.description, clinic.report, clinic.reportTime, clinic.file, patient.name, patient.gender, patient.birth, patient.height, patient.weight, censor.feedback, censor.censorTime, censor.errorType, user.realName FROM clinic LEFT JOIN patient ON patient.patientId = clinic.patientId LEFT JOIN censor ON censor.clinicId = clinic.clinicId LEFT JOIN user ON user.userId = censor.doctorId WHERE clinic.clinicId = ' + clinicId + ' ORDER BY censorTime DESC LIMIT 1';
     } else {
         queryOption = sqlQuery.select()
                         .from(KeyDefine.TABLE_NAME)
@@ -263,14 +251,12 @@ clinicModel.getList = function(condition, start, length) {
                         .from(KeyDefine.TABLE_NAME)
                         .select('clinicId', 'addTime', 'description', 'state')
                         .from('patient', 'patientId', 'patientId', { joinType: 'left' })
-                        .select('name', 'gender')
+                        .select('name', 'gender', 'idCode', 'medicareNum')
                         .where('clinic', condition)
                         .limit(start + ', ' + length)
                         .build();
 
     Logger.console(queryOption);
-
-    // let queryOption = 'SELECT clinic.*, patient.* FROM clinic LEFT JOIN patient ON clinic.patientId = patient.patientId WHERE clinic.hospitalId = ' + hospitalId + 'AND clinic.state = ' + state;
 
     DBPool.getConnection()
         .then(connection => {

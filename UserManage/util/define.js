@@ -30,5 +30,12 @@ module.exports = function define() {
         'doctor': 2,
         'technician': 3
     };
-    this.AuthLoginUri = 'http://localhost:10001/'; // AuthLogin服务Uri
+    this.AuthLogin = 'http://localhost:10001'; // AuthLogin服务Uri
+    this.ClinicService = 'http://localhost:10002'; // ClinicService服务Uri
+    this.UserManage = 'http://localhost:10003'; // UserManage服务Uri
+    this.TeamManage = 'http://localhost:10004'; // TeamManage服务Uri
+    this.DoctorCli = 'http://localhost:10005'; // DoctorCli服务Uri
+    this.TechnicianCli = 'http://localhost:10006'; // TechnicianCli服务Uri
+    this.HospitalCli = 'http://localhost:10007'; // HospitalCli服务Uri
+    this.PartnerCli = 'http://localhost:10008'; // PartnerCli服务Uri
 }
