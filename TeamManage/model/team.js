@@ -113,4 +113,102 @@ Team.getPartnerIdByUserId = function(userId) {
     return defer.promise;
 };
 
+Team.count = function(partnerId) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_QUERY,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Team Model: Unknowed error',
+        data: 0
+    };
+
+    let queryOption = sqlQuery.select()
+                        .from(KeyDefine.TABLE_NAME)
+                        .count()
+                        .where({
+                            partnerId: partnerId
+                        })
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else {
+                    Logger.console(rows);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.data = rows[0]['COUNT(*)'];
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
+/**
+ * 获取团队列表
+ * @param  {Number} partnerId  合伙人id
+ * @param  {Number} start      起始位置
+ * @param  {Number} length     筛选长度
+ * @return {Array}             团队列表
+ */
+Team.getList = function(partnerId, start, length) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_QUERY,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Team Model: Unknowed error',
+        data: []
+    };
+
+    let queryOption = sqlQuery.select()
+                        .from(KeyDefine.TABLE_NAME)
+                        .select('teamId', 'name', 'state')
+                        .from('user', 'userId', 'leaderId', { joinType: 'left' })
+                        .select('realName')
+                        .where({
+                            partnerId: partnerId
+                        })
+                        .limit(start + ', ' + length)
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else if(rows.length <= 0) {
+                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Empty in QUERY' + KeyDefine.TABLE_NAME;
+                    defer.resolve(result);
+                } else {
+                    Logger.console('Success in QUERY ' + KeyDefine.TABLE_NAME);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Success in QUERY ' + KeyDefine.TABLE_NAME;
+                    result.data = rows;
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
 module.exports = Team;

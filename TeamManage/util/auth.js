@@ -16,10 +16,10 @@ let KeyDefine = new Define();
 
 // 登录, 授权, 验证相关Uri
 const authUrl = {
-    login: KeyDefine.AuthLoginUri + 'login',
-    verify: KeyDefine.AuthLoginUri + 'verify',
-    serviceAuth: KeyDefine.AuthLoginUri + 'service/auth',
-    serviceVerify: KeyDefine.AuthLoginUri + 'service/verify'
+    login: KeyDefine.AuthLogin + '/login',
+    verify: KeyDefine.AuthLogin + '/verify',
+    serviceAuth: KeyDefine.AuthLogin + '/service/auth',
+    serviceVerify: KeyDefine.AuthLogin + '/service/verify'
 };
 
 let Auth = {};

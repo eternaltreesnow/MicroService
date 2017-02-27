@@ -1,0 +1,32 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'team'
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li 团队管理
+
+    div.container-fluid
+        b.table-title.pull-left 团队列表
+        a.btn.btn-primary.btn-sm.pull-right(href="/team/addTeam")
+            span.glyphicon.glyphicon-plus
+            &nbsp;添加团队
+    div.container-fluid.table-container
+        table.table.table-striped.table-hover.table-bordered#teamTable(cellspacing="0", width="100%")
+            thead
+                tr
+                    th #
+                    th 团队名称
+                    th 负责医生
+                    th 状态
+                    th 操作
+            tbody
+
+block script
+    script(src="/lib/DataTables-1.10.8/js/jquery.dataTables.min.js")
+    script(src="/lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js")
+    script(src="/lib/bootstrap-datetimepicker/moment/moment.js")
+    script.
+        var teamManage = "#{TeamManage}";
+        seajs.use('js/teamManage');

@@ -2,22 +2,20 @@ define(function(require) {
     var setAlert = require('alert');
 
     $(document).ready(function() {
-        var taskColumn = [{
+        var teamColumn = [{
             "data": "clinicId"
         }, {
             "data": "name"
         }, {
-            "data": "gender"
+            "data": "realName"
         }, {
-            "data": "addTime"
-        }, {
-            "data": "description"
+            "data": "state"
         }, {
             "data": "edit"
         }];
 
-        var $uncheckTaskTable = $("#uncheckTaskTable");
-        var uncheckDatatable = $uncheckTaskTable.DataTable({
+        var $teamTable = $("#teamTable");
+        var teamDatatable = $teamTable.DataTable({
             searching: false,
             processing: true,
             language: {
@@ -32,67 +30,23 @@ define(function(require) {
                 },
                 "lengthMenu": '每页显示 _MENU_ 条记录'
             },
-            columns: taskColumn,
+            columns: teamColumn,
             pagingType: "full_numbers",
             dom: 'rtl<"ecg-table-paginate"p>',
             serverSide: true,
             ajax: {
-                url: 'http://localhost:10002/getDocList',
+                url: teamManage + '/getTeamList',
                 type: 'GET',
                 xhrFields: {
                     withCredentials: true
                 },
                 crossDomain: true,
                 data: function(d) {
-                    d.state = 61;
                     delete d.columns;
                     delete d.order;
                 },
                 dataSrc: function(json) {
-                    resetData(json.data, '61');
-                    return json.data;
-                }
-            },
-            sortClasses: false,
-            drawCallback: function(settings, json) {
-                bindBtnEvent();
-            }
-        });
-
-        var $recheckTaskTable = $("#recheckTaskTable");
-        var recheckDatatable = $recheckTaskTable.DataTable({
-            searching: false,
-            processing: true,
-            language: {
-                "processing": "数据加载中, 请稍后...",
-                "zeroRecords": "记录数为0...",
-                "emptyTable": "记录数为0...",
-                "paginate": {
-                    "first": "首页",
-                    "previous": "上一页",
-                    "next": "下一页",
-                    "last": "尾页"
-                },
-                "lengthMenu": '每页显示 _MENU_ 条记录'
-            },
-            columns: taskColumn,
-            pagingType: "full_numbers",
-            dom: 'rtl<"ecg-table-paginate"p>',
-            serverSide: true,
-            ajax: {
-                url: clinicService + '/getDocList',
-                type: 'GET',
-                xhrFields: {
-                    withCredentials: true
-                },
-                crossDomain: true,
-                data: function(d) {
-                    d.state = 62;
-                    delete d.columns;
-                    delete d.order;
-                },
-                dataSrc: function(json) {
-                    resetData(json.data, '62');
+                    resetData(json.data);
                     return json.data;
                 }
             },

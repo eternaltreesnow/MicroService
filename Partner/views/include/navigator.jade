@@ -15,11 +15,11 @@ div.navbar.navbar-default.navbar-fixed-top.header(role="navigation")
                 li.dropdown(role="presentation")
                     a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                         span.glyphicon.glyphicon-user
-                        span.userName
+                        span.userName #{realName}
                         span.caret
                         ul.dropdown-menu
                             li
-                                a.menu-link(href="#")
+                                a.menu-link(href="/logout")
                                     span.glyphicon.glyphicon-off
                                     &nbsp;退出登录
         - // Sidebar Menu Items
@@ -34,9 +34,9 @@ div.navbar.navbar-default.navbar-fixed-top.header(role="navigation")
                     - child_contract = 'active';
 
                 li(class=child_team)
-                    a(href="#") 团队管理
+                    a(href="/") 团队管理
                 li(class=child_contract)
-                    a(href="#") 医院与契约管理
+                    a(href="/contract/contractManage") 医院管理
         - // Alert Framework
         div.alert.alert-dismissible.fade.common-alert#infoAlert(role="alert")
             p#infoAlertText &nbsp;

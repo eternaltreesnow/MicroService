@@ -29,6 +29,10 @@ router.get('/getPartnerId', (req, res) => {
     Auth.authService(req, res, team.getPartnerIdByUserId);
 });
 
+router.get('/getTeamList', (req, res) => {
+    Auth.auth(req, res, '', team.getTeamList);
+});
+
 // 添加团队
 router.post('/addTeam', (req, res) => {
 

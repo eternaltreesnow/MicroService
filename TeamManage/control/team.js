@@ -3,6 +3,7 @@
 const Q = require('q');
 const Logger = require('../util/logger');
 const Define = require('../util/define');
+const Session = require('../util/session');
 
 const teamModel = require('../model/team');
 
@@ -50,6 +51,40 @@ Team.getPartnerIdByUserId = function(req, res) {
         }, error => {
             Logger.console(error);
             result.desc = error;
+            res.send(result);
+        });
+};
+
+Team.getTeamList = function(req, res) {
+    // 获取session中的用户数据
+    let userData = Session.getUserData(req);
+    let partnerId;
+    if(userData) {
+        partnerId = userData.userId;
+    }
+
+    let draw = req.query.draw;
+    let start = req.query.start;
+    let length = req.query.length;
+
+    let result = {
+        status: KeyDefine.RESULT_SUCCESS,
+        draw: draw,
+        data: [],
+        recordsFiltered: 0
+    };
+
+    teamModel.count(partnerId)
+        .then(countResult => {
+            result.recordsFiltered = countResult.data;
+            return teamModel.getList(partnerId, start, length);
+        })
+        .then(teamResult => {
+            result.data = teamResult.data;
+            res.send(result);
+        })
+        .catch(error => {
+            Logger.console(error);
             res.send(result);
         });
 };

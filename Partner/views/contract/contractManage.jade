@@ -1,0 +1,33 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'contract'
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li 医院管理
+
+    div.container-fluid
+        b.table-title.pull-left 医院列表
+        a.btn.btn-primary.btn-sm.pull-right(href="/contract/addContract")
+            span.glyphicon.glyphicon-plus
+            &nbsp;添加医院
+    div.container-fluid.table-container
+        table.table.table-striped.table-hover.table-bordered#contractTable(cellspacing="0", width="100%")
+            thead
+                tr
+                    th #
+                    th 用户名
+                    th 医院名称
+                    th 负责人
+                    th 状态
+                    th 操作
+            tbody
+
+block script
+    script(src="/lib/DataTables-1.10.8/js/jquery.dataTables.min.js")
+    script(src="/lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js")
+    script(src="/lib/bootstrap-datetimepicker/moment/moment.js")
+    script.
+        var userManage = "#{UserManage}";
+        seajs.use('js/contractManage');
