@@ -1,0 +1,36 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'team'
+block title
+    title 添加团队 | 合伙人
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li 团队管理
+            li.active 添加团队
+    div.container-fluid(style="max-width: 1000px;")
+        form.form-horizontal#teamForm
+            legend
+                b 添加团队
+            div.panel.panel-default
+                div.panel-heading
+                    div.panel-title 团队基本信息
+                div.panel-body
+                    div.form-group
+                        label.col-lg-3.control-label 团队名称 :
+                        div.col-lg-7
+                            input(type="text", id="teamName", class="form-control", placeholder="请输入团队名称...")
+                    div.form-group
+                        label.col-lg-3.control-label 负责医生 :
+                        div.col-lg-7
+                            input(type="text", id="leaderId", class="form-control", placeholder="请输入负责医生id...")
+        div.form-group
+            div.col-lg-8.col-lg-offset-3
+                a.btn.btn-primary#submitBtn(href="javascript:void(0);") 创建团队
+                a.btn.btn-default#cancerBtn(href="/") 取消
+
+block script
+    script.
+        var teamManage = "#{TeamManage}";
+        seajs.use('js/addTeam');

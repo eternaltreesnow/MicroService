@@ -1,0 +1,82 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'contract'
+block title
+    title 添加契约 | 合伙人
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li 契约管理
+            li.active 添加契约
+    div.container-fluid
+        form.form-horizontal#contractForm
+            legend
+                b 添加契约
+            div.panel.panel-default
+                div.panel-heading
+                    div.panel-title 基层医院 - 账户信息
+                div.panel-body
+                    div.form-group
+                        label.col-lg-3.control-label 用户名 :
+                        div.col-lg-7
+                            input(type="text", id="username", name="username", class="form-control", placeholder="请输入用户名...")
+                    div.form-group
+                        label.col-lg-3.control-label 密码 :
+                        div.col-lg-7
+                            input(type="password", id="password", name="password", class="form-control", placeholder="请输入密码...")
+                    div.form-group
+                        label.col-lg-3.control-label 重复密码 :
+                        div.col-lg-7
+                            input(type="password", id="rePassword", name="rePassword", class="form-control", placeholder="请重复输入密码...")
+            div.panel.panel-default
+                div.panel-heading
+                    div.panel-title 基层医院 - 基本信息
+                div.panel-body
+                    div.form-group
+                        label.col-lg-3.control-label 医院名称 :
+                        div.col-lg-7
+                            input(type="text", id="realName", name="realName", class="form-control", placeholder="请输入医院名称...")
+                    div.form-group
+                        label.col-lg-3.control-label 分级 :
+                        div.col-lg-3
+                            select#grade.form-control(name="grade")
+                                option(value="1", selected="selected") 一级
+                                option(value="2") 二级
+                                option(value="3") 三级
+                                option(value="0") 特级
+                        div.col-lg-4
+                            select#level.form-control(name="level")
+                                option(value="0", selected="selected") 特等
+                                option(value="1") 甲等
+                                option(value="2") 乙等
+                                option(value="3") 丙等
+                    div.form-group
+                        label.col-lg-3.control-label 医院负责人 :
+                        div.col-lg-7
+                            input(type="text", id="chargeName", name="chargeName", class="form-control", placeholder="请输入负责人姓名...")
+                    div.form-group
+                        label.col-lg-3.control-label 身份证号 :
+                        div.col-lg-7
+                            input(type="text", id="idCode", name="idCode", class="form-control", placeholder="请输入负责人身份证号...")
+                    div.form-group
+                        label.col-lg-3.control-label 联系电话 :
+                        div.col-lg-7
+                            input(type="text", id="telephone", name="telephone", class="form-control", placeholder="请输入联系电话...")
+                    div.form-group
+                        label.col-lg-3.control-label 联系地址 :
+                        div.col-lg-7
+                            input(type="text", id="address", name="address", class="form-control", placeholder="请输入联系地址...")
+                    div.form-group
+                        label.col-lg-3.control-label 常用邮箱 :
+                        div.col-lg-7
+                            input(type="text", id="email", name="email", class="form-control", placeholder="请输入常用邮箱...")
+        div.form-group
+            div.col-lg-8.col-lg-offset-3
+                a.btn.btn-primary#submitBtn(href="javascript:void(0);") 提交
+                a.btn.btn-default#cancerBtn(href="/contract/contractManage") 取消
+
+block script
+    script.
+        var userManage = "#{UserManage}";
+        seajs.use('js/addContract');

@@ -44,7 +44,7 @@ UserModel.add = function(user) {
                 } else {
                     result.code = KeyDefine.RESULT_SUCCESS;
                     result.desc = 'Success in INSERT ' + KeyDefine.TABLE_NAME;
-                    result.data = rows[0];
+                    result.data = rows.insertId;
                     defer.resolve(result);
                 }
             });
@@ -131,6 +131,141 @@ UserModel.modifyStatus = function(userId, status) {
                     Logger.console('Success in UPDATE ' + KeyDefine.TABLE_NAME + ': userId=' + userId);
                     result.code = KeyDefine.RESULT_SUCCESS;
                     result.desc = 'Success in UPDATE ' + KeyDefine.TABLE_NAME + ': userId=' + userId;
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
+UserModel.hospCount = function(partnerId) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_QUERY,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'User Model: Unknowed error',
+        data: 0
+    };
+
+    let queryOption = sqlQuery.select()
+                        .from('contract')
+                        .from(KeyDefine.TABLE_NAME, 'userId', 'hospitalId', { joinType: 'left' })
+                        .count()
+                        .where('contract', {
+                            partnerId: partnerId
+                        })
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else {
+                    Logger.console(rows);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.data = rows[0]['COUNT(*)'];
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
+UserModel.getHospList = function(partnerId, start, length) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_QUERY,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'User Model: Unknowed error',
+        data: []
+    };
+
+    let queryOption = sqlQuery.select()
+                        .from('contract')
+                        .select('contractId', 'status')
+                        .from(KeyDefine.TABLE_NAME, 'userId', 'hospitalId', { joinType: 'left' })
+                        .select('userId', 'username', 'realName', 'chargeName')
+                        .where('contract', {
+                            partnerId: partnerId
+                        })
+                        .limit(start + ', ' + length)
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else if(rows.length <= 0) {
+                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Empty in QUERY' + KeyDefine.TABLE_NAME;
+                    defer.resolve(result);
+                } else {
+                    Logger.console('Success in QUERY ' + KeyDefine.TABLE_NAME);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Success in QUERY ' + KeyDefine.TABLE_NAME;
+                    result.data = rows;
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
+UserModel.addContract = function(contract) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_INSERT,
+        target: 'contract',
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'User Model: Connection error',
+        data: null
+    };
+
+    let insertOption = sqlQuery.insert()
+                        .into('contract')
+                        .set(contract)
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(insertOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in INSERT contract');
+                    Logger.console(err);
+                    defer.reject(err)
+                } else if(rows.affectedRows === 0) {
+                    Logger.console('Failed in INSERT contract');
+                    result.code = KeyDefine.RESULT_ADD_NONE;
+                    result.desc = 'Failed in INSERT contract';
+                    defer.resolve(result);
+                } else {
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Success in INSERT contract';
+                    result.data = rows.insertId;
                     defer.resolve(result);
                 }
             });

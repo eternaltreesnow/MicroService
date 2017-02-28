@@ -35,8 +35,24 @@ router.get('/getTeamList', (req, res) => {
 
 // 添加团队
 router.post('/addTeam', (req, res) => {
-
+    Auth.auth(req, res, '', team.addTeam);
 });
+
+// 获取teamId并判断是否为队长
+router.get('/checkTeam', (req, res) => {
+    Logger.console('Get Req /checkTeam');
+    Auth.authService(req, res, team.checkTeam);
+});
+
+// 获取团队基本信息
+router.get('/getTeamInfo', (req, res) => {
+    Auth.auth(req, res, '', team.getTeamInfo);
+});
+
+// 获取团队成员列表
+router.get('/getMemberList', (req, res) => {
+    Auth.auth(req, res, '', team.getMemberList);
+})
 
 // 删除团队
 router.post('/deleteTeam', (req, res) => {

@@ -67,4 +67,14 @@ router.post('/stopUser', (req, res) => {
     // Auth.auth(req, res, user.stopUser);
 });
 
+// 获取医院列表
+router.get('/getHospList', (req, res) => {
+    Auth.auth(req, res, '', user.getHospList);
+});
+
+// 添加医院与契约
+router.post('/addContract', (req, res) => {
+    Auth.auth(req, res, '', user.addContract);
+});
+
 module.exports = router;

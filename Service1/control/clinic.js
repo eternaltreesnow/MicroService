@@ -267,7 +267,7 @@ Clinic.getTechList = function(req, res) {
     // state = 3: 待拉取检查单
     if(state == 3) {
         let method = 'GET';
-        let uri = KeyDefine.TeamManageUri + '/getPartnerId';
+        let uri = KeyDefine.TeamManage + '/getPartnerId';
         let param = {
             "userId": techId
         };

@@ -3,7 +3,7 @@ define(function(require) {
 
     $(document).ready(function() {
         var teamColumn = [{
-            "data": "clinicId"
+            "data": "teamId"
         }, {
             "data": "name"
         }, {
@@ -58,33 +58,50 @@ define(function(require) {
 
         function resetData(data, state) {
             for(var i = 0; i < data.length; i++) {
-                data[i]['clinicId'] = i + 1 + '<input type="hidden" value="' + data[i]['clinicId'] + '">';
-                if(state == '61') {
-                    data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>';
+                let teamId = data[i]['teamId'];
+                data[i]['teamId'] = i + 1 + '<input type="hidden" value="' + teamId + '">';
+                data[i]['edit'] = '<a href="/team/editTeam?id=' + teamId + '" class="btn btn-primary btn-xs">编辑</a>'
+                                + '<a href="javascript:void(0);" class="btn btn-warning btn-xs" data-link="delete">删除</a>';
+                if(data[i]['state'] == 1) {
+                    data[i]['state'] = '正常使用';
                 } else {
-                    data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="recheck">审核</a>';
+                    data[i]['state'] = '已停用';
                 }
-                data[i]['addTime'] = moment(parseFloat(data[i]['addTime'])).format('YYYY-MM-DD HH:mm');
             }
         }
 
         function bindBtnEvent() {
-            // 处理"初审审核"按钮事件
-            var $linkCheck = $('[data-link="check"]');
-            $linkCheck.unbind();
-            $linkCheck.on('click', function() {
+            // 处理"删除"按钮事件
+            var $linkDelete = $('[data-link="delete"]');
+            $linkDelete.unbind();
+            $linkDelete.on('click', function() {
                 var $this = $(this);
                 var id = $this.parents('tr').children(':first').children('input').val();
-                document.location = '/clinic/censorDetail?id=' + id + '&state=6';
-            });
-
-            // 处理"重审审核"按钮事件
-            var $linkRecheck = $('[data-link="recheck"]');
-            $linkRecheck.unbind();
-            $linkRecheck.on('click', function() {
-                var $this = $(this);
-                var id = $this.parents('tr').children(':first').children('input').val();
-                document.location = '/clinic/censorDetail?id=' + id + '&state=6';
+                $.ajax({
+                    type: 'POST',
+                    url: teamManage + '/deleteTeam',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    data: {
+                        id: id
+                    },
+                    success: function(data) {
+                        if (data.code == 200) {
+                            setAlert.alert('团队删除成功...', 'danger', 3000);
+                            teamDatatable.ajax.reload(function(json) {
+                                bindBtnEvent();
+                            });
+                        } else {
+                            console.log(data.desc);
+                            setAlert.alert('团队删除失败...', 'danger', 3000);
+                        }
+                    },
+                    error: function(error) {
+                        setAlert.alert('网络错误, 请稍后重试...', 'danger', 3000);
+                    }
+                });
             });
         }
     });

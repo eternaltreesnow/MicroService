@@ -2,30 +2,30 @@ define(function(require) {
     var setAlert = require('alert');
 
     $(document).ready(function() {
-        var $submitModal = $("#submitModal");
+        var $teamName = $("#teamName");
+        var $leaderId = $("#leaderId");
+
         var $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function() {
-            var formdata = new FormData($("#checklistForm")[0]);
             $.ajax({
                 type: 'POST',
-                url: clinicService + '/clinic',
-                cache: false,
-                data: formdata,
-                processData: false,
-                contentType: false,
+                url: teamManage + '/addTeam',
+                data: {
+                    teamName: $teamName.val(),
+                    leaderId: $leaderId.val()
+                },
                 xhrFields: {
                     withCredentials: true
                 },
                 crossDomain: true,
                 success: function(data) {
-                    console.log(data);
                     if (data.code == 200) {
-                        $submitModal.modal({
-                            backdrop: 'static',
-                            show: true
-                        });
+                        setAlert.alert("添加团队成功....", 'success', 3000);
+                        setTimeout(function() {
+                            document.location = '/';
+                        }, 1000);
                     } else {
-                        setAlert.alert(data, 'danger', 3000);
+                        setAlert.alert("添加团队失败....", 'danger', 3000);
                     }
                 },
                 error: function(error) {

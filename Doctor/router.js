@@ -58,8 +58,8 @@ router.get('/team/teamManage', (req, res) => {
 });
 
 // 医生详情页
-router.get('/team/docDetail', (req, res) => {
-    Auth.auth(req, res, '', teamControl.docDetail);
+router.get('/team/memberDetail', (req, res) => {
+    Auth.auth(req, res, '', teamControl.memberDetail);
 });
 
 // 技师详情页

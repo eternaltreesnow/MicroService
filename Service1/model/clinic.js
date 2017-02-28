@@ -48,7 +48,7 @@ clinicModel.add = function(clinic) {
                 } else {
                     result.code = KeyDefine.RESULT_SUCCESS;
                     result.desc = 'Success in INSERT ' + KeyDefine.TABLE_NAME;
-                    result.data = rows[0];
+                    result.data = rows.insertId;
                     defer.resolve(result);
                 }
             });

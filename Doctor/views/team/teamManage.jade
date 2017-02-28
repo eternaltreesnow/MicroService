@@ -1,0 +1,106 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'team'
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li 团队管理
+
+        div.container.task-form
+            form.form-horizontal#taskForm
+                input#teamId(type="hidden", value!=teamId)
+                input#isLeader(type="hidden", value!=isLeader)
+                div.panel.panel-default
+                    div.panel-heading
+                        h4.panel-title 团队信息
+                    div.panel-body
+                        div.form-group
+                            label.col-lg-3.control-label(for="") 团队名称 :
+                            div.col-lg-8
+                                div.form-control#teamName
+                        div.form-group
+                            label.col-lg-3.control-label(for="") 合伙人 :
+                            div.col-lg-8
+                                div.form-control#partnerName
+                        div.form-group
+                            label.col-lg-3.control-label(for="") 状态 :
+                            div.col-lg-8
+                                div.form-control#status
+
+        div.container-fluid
+            b.table-title.pull-left 医生列表
+            - if(isLeader)
+                a.btn.btn-primary.pull-right#addDocBtn(href="javascript:void(0);") 添加医生
+        div.container-fluid.table-container
+            table.table.table-striped.table-hover.table-bordered#doctorTable(cellspacing="0", width="100%")
+                thead
+                    tr
+                        th #
+                        th 姓名
+                        th 工号
+                        th 身份证号码
+                        th 联系电话
+                        th 联系地址
+                        th 常用邮箱
+                        th 专业
+                        th 状态
+                        th 操作
+                tbody
+
+        div.container-fluid
+            b.table-title.pull-left 技师列表
+            - if(isLeader)
+                a.btn.btn-primary.pull-right#addTechBtn(href="javascript:void(0);") 添加技师
+        div.container-fluid.table-container
+            table.table.table-striped.table-hover.table-bordered#techTable(cellspacing="0", width="100%")
+                thead
+                    tr
+                        th #
+                        th 姓名
+                        th 工号
+                        th 身份证号码
+                        th 联系电话
+                        th 联系地址
+                        th 常用邮箱
+                        th 专业
+                        th 状态
+                        th 操作
+                tbody
+
+block modal
+    div.modal.fade#addDocModal
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                    h4.modal-title 添加医生
+                div.modal-body
+                    p 请输入医生id:
+                    input(type="text", class="form-control", id="docId", placeholder="请输入医生id...")
+                div.modal-footer
+                    a.btn.btn-default(data-dismiss="modal") 返回列表
+                    a.btn.btn-primary#addDocModalBtn(href="javascript:void(0);") 确认添加
+
+    div.modal.fade#addTechModal
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                    h4.modal-title 添加技师
+                div.modal-body
+                    p 请输入技师id:
+                    input(type="text", class="form-control", id="techId", placeholder="请输入技师id...")
+                div.modal-footer
+                    a.btn.btn-default(data-dismiss="modal") 返回列表
+                    a.btn.btn-primary#addTechModalBtn(href="javascript:void(0);") 确认添加
+
+block script
+    script(src="/lib/DataTables-1.10.8/js/jquery.dataTables.min.js")
+    script(src="/lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js")
+    script(src="/lib/bootstrap-datetimepicker/moment/moment.js")
+    script.
+        var teamManage = "#{TeamManage}";
+        seajs.use('js/teamManage');
