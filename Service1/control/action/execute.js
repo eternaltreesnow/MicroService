@@ -112,11 +112,11 @@ let ActionFunc = {
      * @param  {Object} req        http请求request
      * @return {Promise}
      */
-    "publishReportDoc": (clinicData, actionData, userData, req) => {
+    "submitDoc": (clinicData, actionData, userData, req) => {
         let defer = Q.defer();
         let result = {
             code: KeyDefine.RESULT_FAILED,
-            desc: 'Action publishReportDoc: '
+            desc: 'Action submitDoc: '
         };
         // 调用multer中间件上传report文件
         let upload = multer('report').single('report');
