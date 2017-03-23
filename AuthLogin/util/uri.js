@@ -1,5 +1,5 @@
 module.exports = {
-    "AuthLogin" : 'http://localhost:10001', // AuthLogin服务Uri
+    "AuthLogin" : 'http://localhost:10000', // AuthLogin服务Uri
     "ClinicService" : 'http://localhost:10002', // ClinicService服务Uri
     "UserManage" : 'http://localhost:10003', // UserManage服务Uri
     "TeamManage" : 'http://localhost:10004', // TeamManage服务Uri
