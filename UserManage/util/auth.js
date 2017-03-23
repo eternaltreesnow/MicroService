@@ -9,19 +9,18 @@
 const http = require('http');
 const Logger = require('./logger');
 const Define = require('./define');
+const Uri = require('./uri');
 const Cache = require('./cache')();
 const session = require('./session');
-const Request = require('request');
-const querystring = require('querystring');
 
 let KeyDefine = new Define();
 
 // 登录, 授权, 验证相关Uri
 const authUrl = {
-    login: KeyDefine.AuthLogin + '/login',
-    verify: KeyDefine.AuthLogin + '/verify',
-    serviceAuth: KeyDefine.AuthLogin + '/service/auth',
-    serviceVerify: KeyDefine.AuthLogin + '/service/verify'
+    login: Uri.AuthLogin + '/login',
+    verify: Uri.AuthLogin + '/verify',
+    serviceAuth: Uri.AuthLogin + '/service/auth',
+    serviceVerify: Uri.AuthLogin + '/service/verify'
 };
 
 let Auth = {};
@@ -119,14 +118,10 @@ Auth.authService = function(req, res, callback) {
         callback(req, res);
     } else {
         // 将serviceName和accessToken请求到verify接口进行验证
-        let query_params = querystring.stringify({
-            service_name: serviceName,
-            access_token: accessToken
-        });
-
-        Request(authUrl.serviceVerify + '?' + query_params, function(error, response, body) {
-            if(!error && response.statusCode == 200) {
-                let data = JSON.parse(body);
+        let request = http.get(authUrl.serviceVerify + '?service_name=' + serviceName + '&access_token=' + accessToken, (response) => {
+            response.setEncoding('utf8');
+            response.on('data', (data) => {
+                data = JSON.parse(data);
                 // 验证成功，将Service对应的Token写入Cache
                 if(data.code === KeyDefine.RESULT_SUCCESS) {
                     Logger.console('Service verify successfully');
@@ -138,32 +133,10 @@ Auth.authService = function(req, res, callback) {
                     failedResult.url = data.url;
                     res.send(failedResult);
                 }
-            } else {
-                Logger.console(error);
-                failedResult.desc = 'Verify error';
-                res.send(failedResult);
-            }
+            });
+        }).on('error', (e) => {
+            Logger.console(e);
         });
-
-        // let request = http.get(authUrl.serviceVerify + '?service_name=' + serviceName + '&access_token=' + accessToken, (response) => {
-        //     response.setEncoding('utf8');
-        //     response.on('data', (data) => {
-        //         data = JSON.parse(data);
-        //         // 验证成功，将Service对应的Token写入Cache
-        //         if(data.code === KeyDefine.RESULT_SUCCESS) {
-        //             Logger.console('Service verify successfully');
-        //             session.set(data.data.serviceName, JSON.stringify(data.data));
-        //             callback(req, res);
-        //         // 验证失败，返回失败码
-        //         } else {
-        //             Logger.console('Service verify failed');
-        //             failedResult.url = data.url;
-        //             res.send(failedResult);
-        //         }
-        //     });
-        // }).on('error', (e) => {
-        //     Logger.console(e);
-        // });
     }
 };
 

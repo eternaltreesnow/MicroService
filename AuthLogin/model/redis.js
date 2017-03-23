@@ -4,10 +4,16 @@ const redis = require('redis');
 const Q = require('q');
 const Logger = require('../util/logger');
 
+// const RDS_CONFIG = {
+//     host: '54.187.245.212',
+//     port: 6379,
+//     password: 'ecg-cloud',
+//     prefix: 'session:'
+// };
 const RDS_CONFIG = {
-    host: '54.187.245.212',
+    host: '127.0.0.1',
     port: 6379,
-    password: 'ecg-cloud',
+    password: '',
     prefix: 'session:'
 };
 

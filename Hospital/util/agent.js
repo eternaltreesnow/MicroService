@@ -11,6 +11,7 @@ const Request = require('request');
 const querystring = require('querystring');
 const Logger = require('./logger');
 const Define = require('./define');
+const Uri = require('./uri');
 const Cache = require('./cache')();
 const session = require('./session');
 
@@ -107,7 +108,7 @@ Agent.auth = function(callback) {
             'content-type': 'application/x-www-form-urlencoded'
         },
         method: 'POST',
-        uri: KeyDefine.AuthLoginUri + '/service/auth',
+        uri: Uri.AuthLogin + '/service/auth',
         body: param
     };
 

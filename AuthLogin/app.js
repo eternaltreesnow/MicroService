@@ -26,12 +26,25 @@ app.set('views', __dirname + '/views');
 app.use(Express.static('public'));
 
 // initial session store config
+// app.use(session({
+//     secret: 'ecg-cloud',
+//     store: new redisStore({
+//         host: '54.187.245.212',
+//         port: 6379,
+//         pass: 'ecg-cloud',
+//         prefix: 'session:'
+//     }),
+//     cookie: {
+//         maxAge: 20 * 60 * 1000 // 过期时间(ms)
+//     }
+// }));
+
 app.use(session({
     secret: 'ecg-cloud',
     store: new redisStore({
-        host: '54.187.245.212',
+        host: '127.0.0.1',
         port: 6379,
-        pass: 'ecg-cloud',
+        pass: '',
         prefix: 'session:'
     }),
     cookie: {

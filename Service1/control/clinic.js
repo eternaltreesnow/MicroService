@@ -3,6 +3,7 @@
 const Q = require('q');
 const Logger = require('../util/logger');
 const Define = require('../util/define');
+const Uri = require('../util/uri');
 const multer = require('../util/multer-util');
 const Session = require('../util/session');
 const Agent = require('../util/agent');
@@ -185,7 +186,7 @@ Clinic.getDocList = function(req, res) {
     // state = 3: 待拉取检查单
     if(state == 3) {
         let method = 'GET';
-        let uri = KeyDefine.TeamManageUri + '/getPartnerId';
+        let uri = Uri.TeamManage + '/getPartnerId';
         let param = {
             "userId": doctorId
         };
@@ -210,7 +211,7 @@ Clinic.getDocList = function(req, res) {
     // state = 6(1): 初审检查单
     } else if(state == 61) {
         let method = 'GET';
-        let uri = KeyDefine.TeamManageUri + '/getTeamId';
+        let uri = Uri.TeamManage + '/getTeamId';
         let param = {
             "userId": doctorId
         };
@@ -267,7 +268,7 @@ Clinic.getTechList = function(req, res) {
     // state = 3: 待拉取检查单
     if(state == 3) {
         let method = 'GET';
-        let uri = KeyDefine.TeamManage + '/getPartnerId';
+        let uri = Uri.TeamManage + '/getPartnerId';
         let param = {
             "userId": techId
         };
@@ -394,7 +395,7 @@ Clinic.occupyClinic = function(req, res) {
 
     // 获取teamId
     let method = 'GET';
-    let uri = KeyDefine.TeamManageUri + '/getTeamId';
+    let uri = Uri.TeamManage + '/getTeamId';
     let param = {
         "userId": userId
     };

@@ -9,6 +9,7 @@
 const http = require('http');
 const Logger = require('./logger');
 const Define = require('./define');
+const Uri = require('./uri');
 const Cache = require('./cache')();
 const session = require('./session');
 
@@ -16,10 +17,10 @@ let KeyDefine = new Define();
 
 // 登录, 授权, 验证相关Uri
 const authUrl = {
-    login: KeyDefine.AuthLogin + '/login',
-    verify: KeyDefine.AuthLogin + '/verify',
-    serviceAuth: KeyDefine.AuthLogin + '/service/auth',
-    serviceVerify: KeyDefine.AuthLogin + '/service/verify'
+    login: Uri.AuthLogin + '/login',
+    verify: Uri.AuthLogin + '/verify',
+    serviceAuth: Uri.AuthLogin + '/service/auth',
+    serviceVerify: Uri.AuthLogin + '/service/verify'
 };
 
 let Auth = {};

@@ -3,6 +3,7 @@
 const Q = require('q');
 const Logger = require('../util/logger');
 const Define = require('../util/define');
+const Uri = require('../util/uri');
 const Session = require('../util/session');
 const Agent = require('../util/agent');
 
@@ -20,7 +21,7 @@ Team.teamManage = function(req, res) {
 
     // 判断是否为队长
     let method = 'GET';
-    let uri = KeyDefine.TeamManage + '/checkTeam';
+    let uri = Uri.TeamManage + '/checkTeam';
     let param = {
         "userId": userId
     };

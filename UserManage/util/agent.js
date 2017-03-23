@@ -11,6 +11,7 @@ const Request = require('request');
 const querystring = require('querystring');
 const Logger = require('./logger');
 const Define = require('./define');
+const Uri = require('./uri');
 const Cache = require('./cache')();
 const session = require('./session');
 
@@ -46,7 +47,6 @@ Agent.request = function(method, uri, params, callback) {
         Request(uri + '?' + query_params, function(error, res, body) {
             if(!error && res.statusCode == 200) {
                 let info = JSON.parse(body);
-                Logger.console(info);
                 // 验证失败，则执行授权方法
                 if(info.code === KeyDefine.VALID_INVALID_SERVICE) {
                     Agent.auth(function(tag) {
@@ -108,7 +108,7 @@ Agent.auth = function(callback) {
             'content-type': 'application/x-www-form-urlencoded'
         },
         method: 'POST',
-        uri: KeyDefine.AuthLoginUri + '/service/auth',
+        uri: Uri.AuthLogin + '/service/auth',
         body: param
     };
 
