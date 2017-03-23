@@ -1,10 +1,11 @@
+let baseUrl = 'https://4wpf56tmg1.execute-api.ap-northeast-1.amazonaws.com/ecg_cloud/';
 module.exports = {
-    "AuthLogin" : 'http://localhost:10001', // AuthLogin服务Uri
-    "ClinicService" : 'http://localhost:10002', // ClinicService服务Uri
-    "UserManage" : 'http://localhost:10003', // UserManage服务Uri
-    "TeamManage" : 'http://localhost:10004', // TeamManage服务Uri
-    "DoctorCli" : 'http://localhost:10005', // DoctorCli服务Uri
-    "TechnicianCli" : 'http://localhost:10006', // TechnicianCli服务Uri
-    "HospitalCli" : 'http://localhost:10007', // HospitalCli服务Uri
-    "PartnerCli" : 'http://localhost:10008', // PartnerCli服务Uri
+    "AuthLogin" : baseUrl + 'AuthLogin', // AuthLogin服务Uri
+    "ClinicService" : baseUrl + 'ClinicService', // ClinicService服务Uri
+    "UserManage" : baseUrl + 'UserManage', // UserManage服务Uri
+    "TeamManage" : baseUrl + 'TeamManage', // TeamManage服务Uri
+    "DoctorCli" : baseUrl + 'DoctorCli', // DoctorCli服务Uri
+    "TechnicianCli" : baseUrl + 'TechnicianCli', // TechnicianCli服务Uri
+    "HospitalCli" : baseUrl + 'HospitalCli', // HospitalCli服务Uri
+    "PartnerCli" : baseUrl + 'PartnerCli', // PartnerCli服务Uri
 }
