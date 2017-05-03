@@ -18,15 +18,39 @@ block content
                 div.panel-heading
                     div.panel-title 病人信息
                 div.panel-body
+                    input(type="hidden", id="patientId", name="patientId")
                     div.form-group
-                        label.col-lg-3.control-label 病人id :
+                        label.col-lg-3.control-label 选择病人 :
                         div.col-lg-8
-                            input(type="text", id="patientId", name="patientId", class="form-control", placeholder="病人id...")
+                            div.input-group
+                                input(type="text", id="inputSearchId", class="form-control", placeholder="请输入身份证/病人号进行搜索...")
+                                a.input-group-addon#searchBtn(href="javascript:void(0);")
+                                    span.glyphicon.glyphicon-search
+                    div.form-group
+                        label.col-lg-3.control-label 身份证号 :
+                        div.col-lg-8
+                            input(type="text", id="inputIdCard", class="form-control", placeholder="身份证号..." readonly="readonly")
+                    div.form-group
+                        label.col-lg-3.control-label 姓名 :
+                        div.col-lg-8
+                            input(type="text", id="inputName", class="form-control", placeholder="姓名..." readonly="readonly")
+                    div.form-group
+                        label.col-lg-3.control-label 病人号 :
+                        div.col-lg-2
+                            input(type="text", id="inputNumber", class="form-control", placeholder="病人号..." readonly="readonly")
+                        label.col-lg-2.control-label 性别 :
+                        div.col-lg-3
+                            input(type="text", id="inputGender", class="form-control", placeholder="性别..." readonly="readonly")
                 div.panel-body
+                    div.form-group
+                        label.col-lg-3.control-label 检查类型 :
+                        div.col-lg-8
+                            select.form-control#selectType(name="type")
+                                option(value="1") 动态心电
                     div.form-group
                         label.col-lg-3.control-label 心电数据文件 :
                         div.col-lg-8
-                            input(type="file", id="inputFile", name="ecg-file")
+                            input(type="file", id="inputFile", name="ecg-file", class="form-control")
         div.form-group
             div.col-lg-8.col-lg-offset-3
                 a.btn.btn-primary#submitBtn(href="javascript:void(0);") 提交
@@ -43,6 +67,24 @@ block modal
                 div.modal-footer
                     a.btn.btn-default(data-dismiss="modal") 返回继续添加
                     a.btn.btn-primary(href="javascript:void(0);") 查看检查单列表
+    div.modal.fade#searchModal
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                    h4.modal-title 搜索结果
+                div.modal-body
+                    table.table.table-striped.table-hover
+                        thead
+                            tr
+                                th id
+                                th 身份证号
+                                th 病人号
+                                th 姓名
+                                th 性别
+                                th
+                        tbody#searchResultBody
 
 block script
     script(src="/lib/bootstrap-datetimepicker/moment/moment.js")

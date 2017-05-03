@@ -69,33 +69,24 @@ block content
                 tbody
 
 block modal
-    div.modal.fade#addDocModal
+    div.modal.fade#addMemModal
         div.modal-dialog
             div.modal-content
                 div.modal-header
                     button.close(type="button", data-dismiss="modal", aria-label="Close")
                         span(aria-hidden="true") &times;
-                    h4.modal-title 添加医生
+                    h4.modal-title 添加成员
                 div.modal-body
-                    p 请输入医生id:
-                    input(type="text", class="form-control", id="docId", placeholder="请输入医生id...")
-                div.modal-footer
-                    a.btn.btn-default(data-dismiss="modal") 返回列表
-                    a.btn.btn-primary#addDocModalBtn(href="javascript:void(0);") 确认添加
-
-    div.modal.fade#addTechModal
-        div.modal-dialog
-            div.modal-content
-                div.modal-header
-                    button.close(type="button", data-dismiss="modal", aria-label="Close")
-                        span(aria-hidden="true") &times;
-                    h4.modal-title 添加技师
-                div.modal-body
-                    p 请输入技师id:
-                    input(type="text", class="form-control", id="techId", placeholder="请输入技师id...")
-                div.modal-footer
-                    a.btn.btn-default(data-dismiss="modal") 返回列表
-                    a.btn.btn-primary#addTechModalBtn(href="javascript:void(0);") 确认添加
+                    table.table.table-striped.table-hover
+                        thead
+                            tr
+                                th id
+                                th 身份证号
+                                th 姓名
+                                th 联系电话
+                                th 常用邮箱
+                                th
+                        tbody#searchResultBody
 
 block script
     script(src="/lib/DataTables-1.10.8/js/jquery.dataTables.min.js")
@@ -103,4 +94,6 @@ block script
     script(src="/lib/bootstrap-datetimepicker/moment/moment.js")
     script.
         var teamManage = "#{TeamManage}";
+        var clinicService = "#{ClinicService}";
+        var userManage = "#{UserManage}";
         seajs.use('js/teamManage');

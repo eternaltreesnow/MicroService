@@ -226,6 +226,6 @@ Team.getMemberList = function(req, res) {
             Logger.console(error);
             res.send(result);
         });
-}
+};
 
 module.exports = Team;

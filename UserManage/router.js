@@ -42,29 +42,27 @@ router.get('/testservice_client', (req, res) => {
 
 // 新增用户
 router.post('/user', (req, res) => {
-    Auth.auth(req, res, user.addUser);
+    Auth.auth(req, res, '', user.addUser);
 });
 
 // 删除用户
 router.delete('/user', (req, res) => {
-    Auth.auth(req, res, user.delUser);
+    Auth.auth(req, res, '', user.delUser);
 });
 
 // 获取用户
 router.get('/user/:id', (req, res) => {
-    Auth.auth(req, res, info.getUser);
+    Auth.auth(req, res, '', info.getUser);
 });
 
 // 启用用户
 router.post('/startUser', (req, res) => {
-    user.startUser(req, res);
-    // Auth.auth(req, res, user.startUser);
+    Auth.auth(req, res, '', user.startUser);
 });
 
 // 停用用户
 router.post('/stopUser', (req, res) => {
-    user.stopUser(req, res);
-    // Auth.auth(req, res, user.stopUser);
+    Auth.auth(req, res, '', user.stopUser);
 });
 
 // 获取医院列表
@@ -72,9 +70,24 @@ router.get('/getHospList', (req, res) => {
     Auth.auth(req, res, '', user.getHospList);
 });
 
+// 获取医生列表
+router.get('/getDocList', (req, res) => {
+    Auth.auth(req, res, '', user.getDocList);
+});
+
+// 获取技师列表
+router.get('/getTechList', (req, res) => {
+    Auth.auth(req, res, '', user.getTechList);
+});
+
 // 添加医院与契约
 router.post('/addContract', (req, res) => {
     Auth.auth(req, res, '', user.addContract);
+});
+
+// 添加团队成员
+router.post('/addMember', (req, res) => {
+    Auth.auth(req, res, '', user.addMember);
 });
 
 module.exports = router;

@@ -116,6 +116,7 @@ User.modifyStatus = function(userId, status) {
     return defer.promise;
 };
 
+// 获取基层医院列表
 User.getHospList = function(req, res) {
     // 获取session中的用户数据
     let userData = Session.getUserData(req);
@@ -139,6 +140,62 @@ User.getHospList = function(req, res) {
         .then(countResult => {
             result.recordsFiltered = countResult.data;
             return userModel.getHospList(partnerId, start, length);
+        })
+        .then(userResult => {
+            result.data = userResult.data;
+            res.send(result);
+        })
+        .catch(error => {
+            Logger.console(error);
+            res.send(result);
+        });
+};
+
+// 获取医生列表
+User.getDocList = function(req, res) {
+    let draw = req.query.draw;
+    let start = req.query.start;
+    let length = req.query.length;
+
+    let result = {
+        status: KeyDefine.RESULT_SUCCESS,
+        draw: draw,
+        data: [],
+        recordsFiltered: 0
+    };
+
+    userModel.docTechCount(1)
+        .then(countResult => {
+            result.recordsFiltered = countResult.data;
+            return userModel.getDocTechList(1, start, length);
+        })
+        .then(userResult => {
+            result.data = userResult.data;
+            res.send(result);
+        })
+        .catch(error => {
+            Logger.console(error);
+            res.send(result);
+        });
+};
+
+// 获取技师列表
+User.getTechList = function(req, res) {
+    let draw = req.query.draw;
+    let start = req.query.start;
+    let length = req.query.length;
+
+    let result = {
+        status: KeyDefine.RESULT_SUCCESS,
+        draw: draw,
+        data: [],
+        recordsFiltered: 0
+    };
+
+    userModel.docTechCount(2)
+        .then(countResult => {
+            result.recordsFiltered = countResult.data;
+            return userModel.getDocTechList(2, start, length);
         })
         .then(userResult => {
             result.data = userResult.data;
@@ -209,6 +266,39 @@ User.addContract = function(req, res) {
                 result.desc = 'User data error';
                 res.send(result);
             }
+        });
+};
+
+User.addMember = function(req, res) {
+    let result = {
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'User Control: Unknowed error',
+        data: null
+    };
+    let userId;
+    let teamId;
+    if(req.body) {
+        userId = req.body.userId || 0;
+        teamId = req.body.teamId || 0;
+    } else {
+        res.send(result);
+    }
+
+    let user = {
+        teamId: teamId
+    };
+
+    Logger.console(user);
+    userModel.set(userId, user)
+        .then(userResult => {
+            Logger.console(userResult);
+            result.code = userResult.code;
+            result.desc = userResult.desc;
+            res.send(result);
+        })
+        .catch(error => {
+            Logger.console(error);
+            res.send(result);
         });
 };
 

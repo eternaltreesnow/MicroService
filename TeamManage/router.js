@@ -86,7 +86,7 @@ router.post('/modifyLeader', (req, res) => {
 
 // 添加团队成员
 router.post('/addMember', (req, res) => {
-
+    Auth.auth(req, res, '', team.addMember);
 });
 
 module.exports = router;

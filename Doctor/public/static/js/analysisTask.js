@@ -37,7 +37,7 @@ define(function(require) {
             dom: 'rtl<"ecg-table-paginate"p>',
             serverSide: true,
             ajax: {
-                url: 'http://localhost:10002/getDocList',
+                url: clinicService + '/getDocList',
                 type: 'GET',
                 xhrFields: {
                     withCredentials: true
@@ -80,7 +80,7 @@ define(function(require) {
             dom: 'rtl<"ecg-table-paginate"p>',
             serverSide: true,
             ajax: {
-                url: 'http://localhost:10002/getDocList',
+                url: clinicService + '/getDocList',
                 type: 'GET',
                 xhrFields: {
                     withCredentials: true
@@ -144,7 +144,7 @@ define(function(require) {
 
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:10002/occupyClinic',
+                    url: clinicService + '/occupyClinic',
                     xhrFields: {
                         withCredentials: true
                     },
@@ -189,7 +189,7 @@ define(function(require) {
             $cancelModalBtn.on('click', function() {
                 $.ajax({
                     type: 'POST',
-                    url: '/cancelTask',
+                    url: clinicService + '/cancelTask',
                     data: {
                         id: $cancelModalTaskId.val()
                     },

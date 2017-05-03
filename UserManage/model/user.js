@@ -55,7 +55,7 @@ UserModel.add = function(user) {
     return defer.promise;
 };
 
-UserModel.set = function(user) {
+UserModel.set = function(userId, user) {
     let defer = Q.defer();
 
     let result = {
@@ -68,6 +68,9 @@ UserModel.set = function(user) {
     let updateOption = sqlQuery.update()
                         .into(KeyDefine.TABLE_NAME)
                         .set(user)
+                        .where({
+                            userId: userId
+                        })
                         .build();
 
     DBPool.getConnection()
@@ -201,6 +204,96 @@ UserModel.getHospList = function(partnerId, start, length) {
                         .select('userId', 'username', 'realName', 'chargeName')
                         .where('contract', {
                             partnerId: partnerId
+                        })
+                        .limit(start + ', ' + length)
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else if(rows.length <= 0) {
+                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Empty in QUERY' + KeyDefine.TABLE_NAME;
+                    defer.resolve(result);
+                } else {
+                    Logger.console('Success in QUERY ' + KeyDefine.TABLE_NAME);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Success in QUERY ' + KeyDefine.TABLE_NAME;
+                    result.data = rows;
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
+UserModel.docTechCount = function(roleId) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_QUERY,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'User Model: Unknowed error',
+        data: 0
+    };
+
+    let queryOption = sqlQuery.select()
+                        .from(KeyDefine.TABLE_NAME)
+                        .where({
+                            roleId: roleId,
+                            teamId: 0
+                        })
+                        .count()
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else {
+                    Logger.console(rows);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.data = rows[0]['COUNT(*)'];
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
+UserModel.getDocTechList = function(roleId, start, length) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_QUERY,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'User Model: Unknowed error',
+        data: []
+    };
+
+    let queryOption = sqlQuery.select()
+                        .from(KeyDefine.TABLE_NAME)
+                        .where({
+                            roleId: roleId,
+                            teamId: 0
                         })
                         .limit(start + ', ' + length)
                         .build();

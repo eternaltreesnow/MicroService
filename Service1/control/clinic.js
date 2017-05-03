@@ -81,6 +81,8 @@ Clinic.addClinic = function(req, res) {
         data: null
     };
 
+    Logger.console(req.body.patientId);
+
     // 上传心电数据文件并重命名
     let upload = multer('ecg-file').single('ecg-file');
     upload(req, res, (err) => {
@@ -103,6 +105,7 @@ Clinic.addClinic = function(req, res) {
                         hospitalId: userData.userId,
                         state: 2
                     };
+                    Logger.console(clinic);
                     // 新建检查单
                     return clinicModel.add(clinic);
                 } else {

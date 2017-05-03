@@ -72,6 +72,10 @@ router.get('/getPatientList', (req, res) => {
     Auth.auth(req, res, '', patient.getPatientList);
 });
 
+router.post('/patient', (req, res) => {
+    Auth.auth(req, res, '', patient.addPatient);
+});
+
 router.get('/deletePatient', (req, res) => {
     Auth.auth(req, res, '', patient.deletePatient)
 });

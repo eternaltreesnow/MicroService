@@ -12,6 +12,49 @@ KeyDefine.TABLE_NAME = 'patient';
 
 let Patient = {};
 
+Patient.add = function(patient) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_INSERT,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'Patient Model: Unknowed error',
+        data: null
+    };
+
+    let insertOption = sqlQuery.insert()
+                        .into(KeyDefine.TABLE_NAME)
+                        .set(patient)
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(insertOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in INSERT ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else if(rows.affectedRows === 0) {
+                    Logger.console('Failed in INSERT ' + KeyDefine.TABLE_NAME);
+                    result.code = KeyDefine.RESULT_ADD_NONE;
+                    result.desc = 'Failed in INSERT ' + KeyDefine.TABLE_NAME;
+                    defer.resolve(result);
+                } else {
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Success in INSERT ' + KeyDefine.TABLE_NAME;
+                    result.data = rows.insertId;
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
 Patient.count = function(hospitalId) {
     let defer = Q.defer();
 

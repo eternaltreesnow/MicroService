@@ -131,7 +131,7 @@ clinicModel.get = function(clinicId, state) {
     } else if(state == 6) {
         queryOption = sqlQuery.select()
                         .from(KeyDefine.TABLE_NAME)
-                        .select('addTime', 'file', 'description', 'report')
+                        .select('addTime', 'file', 'description', 'report', 'reportTime')
                         .from('patient', 'patientId', 'patientId', { joinType: 'left' })
                         .select('name', 'gender', 'birth', 'height', 'weight')
                         .where(KeyDefine.TABLE_NAME, {

@@ -1,0 +1,95 @@
+// - extends 继承 layout.jade
+extends ../layout.jade
+block vars
+    - var nav_parent = 'patient'
+block title
+    title 病人管理 | 基层医院
+block content
+    div.path-navigation
+        ol.breadcrumb
+            li 病人管理
+            li.active 添加病人
+    div.container.upload-form
+        form.form-horizontal#patientForm
+            div.panel.panel-default
+                div.panel-heading
+                    div.panel-title 基本信息
+                div.panel-body
+                    div.form-group
+                        label.col-lg-3.control-label 病人号 :
+                        div.col-lg-7
+                            input(type="text", id="inputId", name="patientNum", class="form-control", placeholder="请输入病人号...")
+                    div.form-group
+                        label.col-lg-3.control-label 身份证号 :
+                        div.col-lg-7
+                            input(type="text", id="inputIdCode", name="idCode", class="form-control", placeholder="请输入身份证号...")
+                    div.form-group
+                        label.col-lg-3.control-label 姓名 :
+                        div.col-lg-7
+                            input(type="text", id="inputName", name="name", class="form-control", placeholder="请输入姓名...")
+                    div.form-group
+                        label.col-lg-3.control-label 性别 :
+                        div.col-lg-7
+                            select.form-control#inputGender(name="gender")
+                                option(value="男") 男
+                                option(value="女") 女
+            div.panel.panel-default
+                div.panel-heading
+                    div.panel-title 更多信息
+                div.panel-body
+                    div.form-group
+                        label.col-lg-3.control-label 身高 :
+                        div.col-lg-2
+                            div.input-group
+                                input(type="text", id="inputHeight", name="height", class="form-control", placeholder="")
+                                div.input-group-addon CM
+                        label.col-lg-2.control-label 体重 :
+                        div.col-lg-2
+                            div.input-group
+                                input(type="text", id="inputWeight", name="weight", class="form-control", placeholder="")
+                                div.input-group-addon KG
+                    div.form-group
+                        label.col-lg-3.control-label 社保卡号 :
+                        div.col-lg-7
+                            input(type="text", id="inputMedicareNum", name="medicareNum", class="form-control", placeholder="请输入社保卡号...")
+                    div.form-group
+                        label.col-lg-3.control-label 联系方式 :
+                        div.col-lg-7
+                            input(type="text", id="inputTelephone", name="telephone", class="form-control", placeholder="请输入联系方式...")
+                    div.form-group
+                        label.col-lg-3.control-label 通讯地址 :
+                        div.col-lg-7
+                            input(type="text", id="inputAddress", name="address", class="form-control", placeholder="请输入通讯地址...")
+                    div.form-group
+                        label.col-lg-3.control-label 病房号 :
+                        div.col-lg-2
+                            input(type="text", id="inputWardNum", name="wardNum", class="form-control", placeholder="")
+                        label.col-lg-2.control-label 病床号 :
+                        div.col-lg-2
+                            input(type="text", id="inputBedNum", name="bedNum", class="form-control", placeholder="")
+                    div.form-group
+                        label.col-lg-3.control-label 备注信息 :
+                        div.col-lg-7
+                            textarea.form-control#inputRemark(name="remark", rows="4")
+            div.form-group
+                div.col-lg-8.col-lg-offset-3
+                    a.btn.btn-primary#submitBtn(href="javascript:void(0);") 提交
+block modal
+    div.modal.fade#successModal
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                    h4.modal-title 添加成功
+                div.modal-body
+                    p 添加病人成功...
+                div.modal-footer
+                    a.btn.btn-default(href="/patient/addPatient") 返回继续添加
+                    a.btn.btn-primary(href="/patient/patientManage") 查看病人列表
+
+block script
+    script.
+        var clinicService = "#{ClinicService}";
+        seajs.use('js/addPatient');
+

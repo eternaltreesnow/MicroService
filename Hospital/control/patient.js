@@ -3,6 +3,7 @@
 const Q = require('q');
 const Logger = require('../util/logger');
 const Define = require('../util/define');
+const Session = require('../util/session');
 const clinicModel = require('../model/clinic');
 const patientModel = require('../model/patient');
 
@@ -12,17 +13,29 @@ let Patient = {};
 
 // 病人管理页
 Patient.patientManage = function(req, res) {
-    res.render('patient/patientManage');
+    let userData = Session.getUserData(req);
+    res.render('patient/patientManage', {
+        realName: userData.realName,
+        userId: userData.userId
+    });
 };
 
 // 添加病人页
 Patient.addPatient = function(req, res) {
-    res.render('patient/addPatient');
+    let userData = Session.getUserData(req);
+    res.render('patient/addPatient', {
+        realName: userData.realName,
+        userId: userData.userId
+    });
 };
 
 // 编辑病人页
 Patient.editPatient = function(req, res) {
-    res.render('patient/editPatient');
+    let userData = Session.getUserData(req);
+    res.render('patient/editPatient', {
+        realName: userData.realName,
+        userId: userData.userId
+    });
 };
 
 // 删除病人

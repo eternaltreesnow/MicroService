@@ -15,6 +15,7 @@ Verify.verify = function(req, res) {
         data: {},
         url: 'http://' + req.headers.host + '/login'
     };
+    Logger.console('debugger 1');
     let sessionId = req.query.sessionId;
     Logger.console('Verify Control: sessionId = ' + sessionId);
 

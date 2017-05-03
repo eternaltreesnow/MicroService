@@ -15,7 +15,7 @@ define(function(require) {
 
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:10002/clinic',
+            url: clinicService + '/clinic',
             xhrFields: {
                 withCredentials: true
             },
@@ -49,7 +49,7 @@ define(function(require) {
             var formdata = new FormData($("#taskForm")[0]);
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:10002/report',
+                url: clinicService + '/report',
                 cache: false,
                 data: formdata,
                 processData: false,
@@ -62,7 +62,7 @@ define(function(require) {
                     if (data.code == 200) {
                         setAlert.alert('心电分析报告上传成功', 'success', 3000);
                         setTimeout(function() {
-                            document.location = '/';
+                            document.location = clinicService;
                         }, 1000);
                     } else {
                         console.log(data);
