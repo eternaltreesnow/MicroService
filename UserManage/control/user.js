@@ -116,6 +116,37 @@ User.modifyStatus = function(userId, status) {
     return defer.promise;
 };
 
+// 获取用户列表
+User.getUserList = function(req, res) {
+    // 获取session中的用户数据
+    let userData = Session.getUserData(req);
+
+    let draw = req.query.draw;
+    let start = req.query.start;
+    let length = req.query.length;
+
+    let result = {
+        status: KeyDefine.RESULT_SUCCESS,
+        draw: draw,
+        data: [],
+        recordsFiltered: 0
+    };
+
+    userModel.userCount()
+        .then(countResult => {
+            result.recordsFiltered = countResult.data;
+            return userModel.getUserList(start, length);
+        })
+        .then(userResult => {
+            result.data = userResult.data;
+            res.send(result);
+        })
+        .catch(error => {
+            Logger.console(error);
+            res.send(result);
+        });
+};
+
 // 获取基层医院列表
 User.getHospList = function(req, res) {
     // 获取session中的用户数据

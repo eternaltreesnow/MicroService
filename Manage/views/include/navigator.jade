@@ -1,0 +1,48 @@
+// Navigation
+div.navbar.navbar-default.navbar-fixed-top.header(role="navigation")
+    - // Brand and toggle get grouped for better mobile display
+    div.container
+        div.navbar-header
+            button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#navbar", aria-expanded="false", aria-controls="navbar")
+                span.sr-only Toggle Navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            a.navbar-brand.navbar-logo(href="#")
+                span.navbar-logo-txt ECG Cloud Platform
+        div.navbar-collapse.collapse#navbar
+            ul.nav.navbar-nav.navbar-right
+                li.dropdown(role="presentation")
+                    a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
+                        span.glyphicon.glyphicon-user
+                        span.userName #{realName}
+                        span.caret
+                        ul.dropdown-menu
+                            li
+                                a.menu-link(href="/logout")
+                                    span.glyphicon.glyphicon-off
+                                    &nbsp;退出登录
+        - // Sidebar Menu Items
+        div.collapse.navbar-collapse.navbar-ex1-collapse
+            ul.nav.side-nav
+                - // 定义导航栏状态
+                - var child_user = '';
+                - var child_role = '';
+                - var child_operation = '';
+                if nav_parent == 'user'
+                    - child_user = 'active';
+                else if nav_parent == 'role'
+                    - child_role = 'active';
+                else if nav_parent == 'operation'
+                    - child_role = 'active';
+
+                li(class=child_user)
+                    a(href="/") 用户管理
+                li(class=child_role)
+                    a(href="/role/roleManage") 角色管理
+                li(class=child_operation)
+                    a(href="/operation/operationManage") 操作管理
+        - // Alert Framework
+        div.alert.alert-dismissible.fade.common-alert#infoAlert(role="alert")
+            p#infoAlertText &nbsp;
+

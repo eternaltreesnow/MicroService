@@ -1,0 +1,50 @@
+doctype html
+html(lang="zh-CN")
+    block vars
+    include include/uri
+    head
+        meta(http-equiv="Content-Type", content="text/html, charset=UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+        link(rel="icon", href="/static/img/logo.png")
+        block title
+            title 心电云分析平台
+        - // Bootstrap CSS
+        link(rel="stylesheet", href="/lib/bootstrap-3.3.5-dist/flatly/bootstrap.min.css")
+        - // jQuery UI
+        link(rel="stylesheet", href="/lib/jquery-ui-1.11.4/jquery-ui.min.css")
+        - // Normalize.css
+        link(rel="stylesheet", href="/lib/normalize.css")
+        - // Layout
+        link(rel="stylesheet", href="/static/css/layout.css")
+        - // Plugin
+        link(rel="stylesheet", href="/static/css/plugin.css")
+        - // Local css
+        block css
+
+        - // HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
+        - // Warning: Respond.js doesn't work if you view the page via file://
+        // [if lt IE 9]>
+            <script src="/lib/html5shiv.min.js"></script>
+            <script src="/lib/respond.min.js"></script>
+            <![endif]
+    body
+        - // Navigator
+        include include/navigator
+        - // Content
+        div.row.main-page
+            block content
+        - // Modal
+        block modal
+        - // jQuery-2.0.3
+        script(src="/lib/jquery-2.0.3.min.js")
+        - // Bootstrap
+        script(src="/lib/bootstrap-3.3.5-dist/js/bootstrap.min.js")
+        - // jQuery-UI
+        script(src="/lib/jquery-ui-1.11.4/jquery-ui.min.js")
+        - // SeaJS
+        script(src="/static/sea.js")
+        script(src="/static/seajs-css.js")
+        - // Local script
+        block script
+

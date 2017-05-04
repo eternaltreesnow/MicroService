@@ -65,6 +65,11 @@ router.post('/stopUser', (req, res) => {
     Auth.auth(req, res, '', user.stopUser);
 });
 
+// 获取用户列表
+router.get('/getUserList', (req, res) => {
+    Auth.auth(req, res, '', user.getUserList);
+});
+
 // 获取医院列表
 router.get('/getHospList', (req, res) => {
     Auth.auth(req, res, '', user.getHospList);

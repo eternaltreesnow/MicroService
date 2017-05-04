@@ -144,6 +144,91 @@ UserModel.modifyStatus = function(userId, status) {
     return defer.promise;
 };
 
+UserModel.userCount = function() {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_QUERY,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'User Model: Unknowed error',
+        data: 0
+    };
+
+    let queryOption = sqlQuery.select()
+                        .from(KeyDefine.TABLE_NAME)
+                        .count()
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else {
+                    Logger.console(rows);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.data = rows[0]['COUNT(*)'];
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
+UserModel.getUserList = function(start, length) {
+    let defer = Q.defer();
+
+    let result = {
+        request: KeyDefine.ACTION_QUERY,
+        target: KeyDefine.TABLE_NAME,
+        code: KeyDefine.RESULT_FAILED,
+        desc: 'User Model: Unknowed error',
+        data: []
+    };
+
+    let queryOption = sqlQuery.select()
+                        .from(KeyDefine.TABLE_NAME)
+                        .select()
+                        .from('role', 'roleId', 'roleId', { joinType: 'left' })
+                        .select('remark')
+                        .limit(start + ', ' + length)
+                        .build();
+
+    DBPool.getConnection()
+        .then(connection => {
+            connection.query(queryOption, (err, rows) => {
+                connection.release();
+                if(err) {
+                    Logger.console('Error in QUERY ' + KeyDefine.TABLE_NAME);
+                    Logger.console(err);
+                    defer.reject(err);
+                } else if(rows.length <= 0) {
+                    Logger.console('Empty in QUERY ' + KeyDefine.TABLE_NAME);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Empty in QUERY' + KeyDefine.TABLE_NAME;
+                    defer.resolve(result);
+                } else {
+                    Logger.console('Success in QUERY ' + KeyDefine.TABLE_NAME);
+                    result.code = KeyDefine.RESULT_SUCCESS;
+                    result.desc = 'Success in QUERY ' + KeyDefine.TABLE_NAME;
+                    result.data = rows;
+                    defer.resolve(result);
+                }
+            });
+        }, error => {
+            defer.reject(error);
+        });
+
+    return defer.promise;
+};
+
 UserModel.hospCount = function(partnerId) {
     let defer = Q.defer();
 
